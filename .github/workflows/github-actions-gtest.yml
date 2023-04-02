@@ -1,0 +1,21 @@
+name: GitHub Actions Google Test
+run-name: ${{ github.actor }} is pushing into ${{ github.ref }} 🚀
+on:
+   pull_request:
+     branches: [ master ]
+     paths-ignore:
+      - 'README.md'
+      - 'CHANGELOG.md'
+      - '.github/**'
+      - '.gitignore'
+jobs:
+  Perform-Unit-Test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install gtest manually
+      run: sudo apt-get -y install clang && sudo apt-get -y install cmake
+    - uses: actions/checkout@v3
+    - name: Build gTest
+      run:  make gTest
+    - name: Run Test
+      run: cd gTest/build && ./runTest
