@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:38 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 01:52:11 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 17:59:01 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ ft::ListenSocket::ListenSocket(int domain, int type, int protocol, u_long interf
 	start_listen();
 }
 
-ft::ListenSocket::ListenSocket(int domain, int type, int protocol, int port, char *address, int backlog)
+ft::ListenSocket::ListenSocket(int domain, int type, int protocol, int port, const char *address, int backlog)
 :BindSocket(domain, type, protocol, port, address), _backlog(backlog)
 {
 	start_listen();

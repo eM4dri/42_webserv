@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 02:04:09 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 18:20:15 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,14 @@ ft::AServer::AServer(int domain, int type, int protocol, u_long interface, int p
 {
 	_socket = new ListenSocket(domain, type, protocol, interface, port, backlog);
 }
-ft::AServer::AServer(int domain, int type, int protocol, int port, char *address, int backlog){
+ft::AServer::AServer(int domain, int type, int protocol, int port, const char *address, int backlog){
 	_socket = new ListenSocket(domain, type, protocol, port, address, backlog);
+}
+
+//Destructor
+ft::AServer::~AServer()
+{
+	delete _socket;
 }
 
 //Getters

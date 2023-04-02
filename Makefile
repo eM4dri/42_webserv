@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/02 02:14:45 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/02 12:27:12 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ OBJ_FILES	= $(SRC_FILES:.cpp=.o)
 INC_DIR = ./src/
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
+BUILD_DIR = ./gTest/build/
 
 # Paths
 INCLUDES = $(addprefix $(INC_DIR), $(INCLUDES_FILES))
@@ -82,15 +83,21 @@ $(NAME): $(OBJ)
 # clean rule
 clean:
 			@rm -Rf $(OBJ_DIR)
+			@rm -Rf $(BUILD_DIR)
 			@echo "\033[1;34m[INFO]\033[0m Objects removed!"
 
 # fclean rule
 fclean:		clean
 			@rm -f $(NAME)
 			@echo "$(NAME) removed!"
-
+ 
 # re rule
 re:			fclean all
 
+# gTest rule
+gTest:
+			cmake -S ./gTest -B $(BUILD_DIR)
+			cmake --build $(BUILD_DIR)
+
 # phony
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re gTest

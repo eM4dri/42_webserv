@@ -1,3 +1,5 @@
 *.o
 .vscode
 webserv
+ex01
+gTest/build

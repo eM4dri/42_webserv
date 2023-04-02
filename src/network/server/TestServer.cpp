@@ -13,13 +13,9 @@
 #include "TestServer.hpp"
 #define WELCOME_MESSAGE "Hello from server"
 
-//Constructor
-ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10)
-{
-	launch();
-}
-
-void ft::TestServer::accepter()
+//Private
+//Functions to handle connections
+void ft::TestServer::_accepter()
 {
 	ListenSocket* wsSocket = get_listening_socket();
 	struct sockaddr_in	wsAddress = wsSocket->get_address();
@@ -28,25 +24,33 @@ void ft::TestServer::accepter()
 	read(_clientSocket, _buffer, BUFFER_SIZE);
 }
 
-void ft::TestServer::handler()
+void ft::TestServer::_handler()
 {
 	std::cout << _buffer << std::endl;
 }
 
-void ft::TestServer::responder()
+void ft::TestServer::_responder()
 {
 	write(_clientSocket, WELCOME_MESSAGE, strlen(WELCOME_MESSAGE));
 	close(_clientSocket);
 }
 
+//Public
+//Constructor
+ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10)
+{
+	launch();
+}
+
+//Function to  launch server
 void ft::TestServer::launch(void)
 {
 	while (true)
 	{
 		std::cout << " ====== WAITING ====== " << std::endl;
-		accepter();
-		handler();
-		responder();
+		_accepter();
+		_handler();
+		_responder();
 		std::cout << " ======= DONE ======== " << std::endl;
 	}
 }
