@@ -14,7 +14,7 @@
 #define WELCOME_MESSAGE "Hello from server"
 
 //Constructor
-ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, 80, INADDR_ANY, 10)
+ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10)
 {
 	launch();
 }
@@ -39,7 +39,7 @@ void ft::TestServer::responder()
 	close(_clientSocket);
 }
 
-void ft::TestServer::launch()
+void ft::TestServer::launch(void)
 {
 	while (true)
 	{

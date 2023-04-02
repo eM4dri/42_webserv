@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:41 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 02:23:15 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 10:56:17 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class TestServer: public AServer{
 		TestServer();
 
 		//Function to  launch server
-		void launch();
+		void launch(void);
 };
 
 }//Namespace ft
