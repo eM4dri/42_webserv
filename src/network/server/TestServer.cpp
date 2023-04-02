@@ -42,6 +42,12 @@ ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 
 	launch();
 }
 
+// ft::TestServer::~TestServer()
+// {
+// 	ft::ListenSocket *socket = get_listening_socket();
+// 	delete socket;	
+// }
+
 //Function to  launch server
 void ft::TestServer::launch(void)
 {

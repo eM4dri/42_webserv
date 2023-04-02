@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 18:20:15 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:11:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ ft::AServer::AServer(int domain, int type, int protocol, int port, const char *a
 }
 
 //Destructor
-ft::AServer::~AServer()
-{
-	delete _socket;
-}
+// ft::AServer::~AServer()
+// {
+// 	delete _socket;
+// }
 
 //Getters
 ft::ListenSocket* ft::AServer::get_listening_socket()

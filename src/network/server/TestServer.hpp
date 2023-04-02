@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:41 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 11:58:54 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:09:49 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class TestServer: public AServer{
 	public:
 		//Constructor
 		TestServer();
+		// ~TestServer();
 
 		//Function to  launch server
 		void launch(void);

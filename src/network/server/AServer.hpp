@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 18:20:21 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/02 19:13:33 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ class AServer{
 		AServer(int domain, int type, int protocol, u_long interface, int port, int backlog);
 		AServer(int domain, int type, int protocol, int port, const char *address, int backlog);
 		//Destructor
-		~AServer();
+		// virtual ~AServer(){
+		// 	delete _socket;
+		// };
 
 		//Virtual function to launch server
 		virtual void launch(void) = 0;
