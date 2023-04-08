@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 16:08:27 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:40:24 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ class ASocket{
 		virtual int connect_to(int socketfd, struct sockaddr_in address) = 0;
 
 		//Getters
-		int	get_socketfd() const;
-		struct sockaddr_in	get_address() const;
-		int	get_connectionStatus() const;
+		int	const & get_socketfd() const;
+		struct sockaddr_in	const & get_address() const;
+		int	const & get_connectionStatus() const;
 
 		//Setters
 		void set_connectionStatus(int status);

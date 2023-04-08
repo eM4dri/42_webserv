@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/02 12:27:12 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/08 18:28:06 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,8 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/server/fdlibc-server.hpp		\
 					network/server/AServer.hpp				\
 					network/server/TestServer.hpp			\
+					network/server/SelectServer.hpp			\
+					network/server/PollServer.hpp			\
 					network/socket/fdlibc-socket.hpp		\
 					network/socket/ASocket.hpp				\
 					network/socket/BindSocket.hpp			\
@@ -45,6 +47,8 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 SRC_FILES	= 	main.cpp								\
 				network/server/AServer.cpp				\
 				network/server/TestServer.cpp			\
+				network/server/SelectServer.cpp			\
+				network/server/PollServer.cpp			\
 				network/socket/ASocket.cpp				\
 				network/socket/BindSocket.cpp			\
 				network/socket/ListenSocket.cpp			\
