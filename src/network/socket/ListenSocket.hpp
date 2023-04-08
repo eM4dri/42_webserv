@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:41 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 17:58:46 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:41:46 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ class ListenSocket: public BindSocket{
 		void start_listen();
 
 		//Getters
-		int	get_listenfd() const;
-		int	get_backlog() const;
+		int	const & get_listenfd() const;
+		int	const & get_backlog() const;
 
 };
 
