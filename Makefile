@@ -78,7 +78,7 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.cpp $(INCLUDES)
 $(NAME): $(OBJ)
 	@echo "\033[0;33mCompiling... Wait a sec.\033[0;39m"
 	@$(GCC) $(OBJ) $(FLAGS) -lm -o $(NAME)
-	@echo "\033[0;32m$(NAME) generated!\033[0;37m"
+	@echo "\033[0;32m$(NAME) generated!\033[0m"
 
 # clean rule
 clean:
