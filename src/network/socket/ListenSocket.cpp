@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:38 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 17:59:01 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/08 11:42:02 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void ft::ListenSocket::start_listen(){
 }
 
 //Gettters
-int	ft::ListenSocket::get_listenfd() const{
+int const &	ft::ListenSocket::get_listenfd() const{
 	return _listenfd;
 }
-int	ft::ListenSocket::get_backlog() const{
+int const &	ft::ListenSocket::get_backlog() const{
 	return _backlog;
 }
 

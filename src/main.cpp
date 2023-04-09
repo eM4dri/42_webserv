@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 10:55:00 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/08 19:03:16 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // 	system("leaks containers");
 // }
 
-int main(void)
+int main(int argc, char **argv)
 {
 	{
 		std::cout << "Starting..." << std::endl;
@@ -36,8 +36,16 @@ int main(void)
 		std::cout << "Success!" << std::endl;
 	}
 	{
-		ft::TestServer T;
+		if (argc == 1) // Test Simple server 
+			ft::TestServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
+			
+		else if (!strcmp(argv[1], "select")) // Test Select server 
+			ft::SelectServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
+			
+		else if (!strcmp(argv[1], "poll")) // Test Poll server 
+			ft::PollServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
 	}
+
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/02 19:13:33 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/08 18:57:55 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ namespace ft
 
 class AServer{
 	private:
-		ListenSocket *		_socket;
+		ListenSocket	*_listeningSocket;
 
 		//Virtual functions to handle connections
 		virtual void _accepter() = 0;
-		virtual void _handler() = 0;
-		virtual void _responder() = 0;
+		// virtual void _handler() = 0;
+		// virtual void _responder() = 0;
 
 	public:
 		//Constructor
@@ -40,7 +40,7 @@ class AServer{
 		virtual void launch(void) = 0;
 
 		//Getters
-		ListenSocket* get_listening_socket();
+		ListenSocket const & get_listening_socket() const;
 };
 
 }//Namespace ft

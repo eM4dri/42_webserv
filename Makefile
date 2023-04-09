@@ -35,6 +35,8 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/server/fdlibc-server.hpp		\
 					network/server/AServer.hpp				\
 					network/server/TestServer.hpp			\
+					network/server/SelectServer.hpp			\
+					network/server/PollServer.hpp			\
 					network/socket/fdlibc-socket.hpp		\
 					network/socket/ASocket.hpp				\
 					network/socket/BindSocket.hpp			\
@@ -47,6 +49,8 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 SRC_FILES	= 	main.cpp								\
 				network/server/AServer.cpp				\
 				network/server/TestServer.cpp			\
+				network/server/SelectServer.cpp			\
+				network/server/PollServer.cpp			\
 				network/socket/ASocket.cpp				\
 				network/socket/BindSocket.cpp			\
 				network/socket/ListenSocket.cpp			\
@@ -83,7 +87,7 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.cpp $(INCLUDES)
 $(NAME): $(OBJ)
 	@echo "\033[0;33mCompiling... Wait a sec.\033[0;39m"
 	@$(GCC) $(OBJ) $(FLAGS) -lm -o $(NAME)
-	@echo "\033[0;32m$(NAME) generated!\033[0;37m"
+	@echo "\033[0;32m$(NAME) generated!\033[0m"
 
 # clean rule
 clean:

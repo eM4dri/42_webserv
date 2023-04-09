@@ -17,11 +17,11 @@
 //Functions to handle connections
 void ft::TestServer::_accepter()
 {
-	ListenSocket* wsSocket = get_listening_socket();
-	struct sockaddr_in	wsAddress = wsSocket->get_address();
+	ListenSocket wsSocket = get_listening_socket();
+	struct sockaddr_in	wsAddress = wsSocket.get_address();
 	int wsAddressLen = sizeof(wsAddress);
-	_clientSocket = accept(wsSocket->get_socketfd(), (struct sockaddr *)&wsAddress, (socklen_t*)&wsAddressLen);
-	read(_clientSocket, _buffer, BUFFER_SIZE);
+	_currentClientSocket = accept(wsSocket.get_socketfd(), (struct sockaddr *)&wsAddress, (socklen_t*)&wsAddressLen);
+	read(_currentClientSocket, _buffer, BUFFER_SIZE);
 }
 
 void ft::TestServer::_handler()
@@ -31,13 +31,18 @@ void ft::TestServer::_handler()
 
 void ft::TestServer::_responder()
 {
-	write(_clientSocket, WELCOME_MESSAGE, strlen(WELCOME_MESSAGE));
-	close(_clientSocket);
+	write(_currentClientSocket, WELCOME_MESSAGE, strlen(WELCOME_MESSAGE));
+	close(_currentClientSocket);
 }
 
 //Public
 //Constructor
 ft::TestServer::TestServer() : AServer(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10)
+{
+	launch();
+}
+ft::TestServer::TestServer(int domain, int type, int protocol, u_long interface, int port, int backlog) 
+	: AServer(domain, type, protocol, interface, port, backlog)
 {
 	launch();
 }
