@@ -6,15 +6,11 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/06 20:36:44 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/09 21:16:43 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-!	This included .hpp is temporary.
-?	We should make it include another library that has all the #defines and #includes.
-*/
-#include "request_header_parsing.hpp"
+#include "general.hpp"
 
 std::vector <std::string> cpp_split(std::string full_line, char splitter)
 {
