@@ -24,7 +24,7 @@ class PollServer: public AServer{
 	public:
 		//Constructor
 		PollServer(int domain, int type, int protocol, u_long interface, int port, int backlog);
-		~PollServer();	// not necesary
+		~PollServer();
 
 		//Function to  launch server
 		void launch(void);
