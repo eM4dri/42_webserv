@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
+#    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/08 18:28:06 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/09 21:16:21 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,9 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/socket/ASocket.hpp				\
 					network/socket/BindSocket.hpp			\
 					network/socket/ListenSocket.hpp			\
-					network/socket/ConnectSocket.hpp
+					network/socket/ConnectSocket.hpp		\
+					parsing/request_header_parsing.hpp		\
+					general.hpp
 
 # Source and object files
 SRC_FILES	= 	main.cpp								\
@@ -52,7 +54,9 @@ SRC_FILES	= 	main.cpp								\
 				network/socket/ASocket.cpp				\
 				network/socket/BindSocket.cpp			\
 				network/socket/ListenSocket.cpp			\
-				network/socket/ConnectSocket.cpp
+				network/socket/ConnectSocket.cpp		\
+				parsing/request_header_parsing.cpp		\
+				utils.cpp
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)
 
@@ -75,6 +79,7 @@ obj:
 	@mkdir -p $(OBJ_DIR)network/
 	@mkdir -p $(OBJ_DIR)network/socket/
 	@mkdir -p $(OBJ_DIR)network/server/
+	@mkdir -p $(OBJ_DIR)parsing/
 $(OBJ_DIR)%.o:$(SRC_DIR)%.cpp $(INCLUDES)
 	@$(GCC) $(FLAGS) -I $(INC_DIR) -o $@ -c $<
 
