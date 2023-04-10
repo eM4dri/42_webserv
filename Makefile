@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
+#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/09 21:16:21 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/04/10 21:08:23 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SANITIZE =
 # SANITIZE = -fsanitize=address
 
 # version
-VERSION = -std=c++98
+VERSION = -std=c++98 -MMD
 
 # Namespace in use
 NAMESPACE =
