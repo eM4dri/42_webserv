@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-04-09 - Edu
+### Changed
+- Simplifying server (server.cpp & server.hpp) contains a version of pollserver including socket, ipaddress, port, and backlog and handle the process of socket>bind>listen as starting the server
+
 ## 2023-04-08 - Edu
 ### Changed
 - PollServer modified with cpp's std::vector instead of c linked list
