@@ -33,25 +33,25 @@ class AServerForTest : public ft::AServer
 TEST(AServerTest, InterfaceConstructor)
 {
     AServerForTest *interfaceServer = new AServerForTest(AF_INET, SOCK_STREAM, ANY_PROTOCOL, INADDR_ANY, MOCK_PORT, MOCK_BACKLOG);
-    ft::ListenSocket *listenSocket = interfaceServer->get_listening_socket();
-    EXPECT_GE(listenSocket->get_socketfd(), MIN_VALID_SOCKETFD);
-    // EXPECT_NE(listenSocket->get_connectionStatus(), SUCCESS);
-    // EXPECT_EQ(listenSocket->get_connectionStatus(), ERROR);
-    EXPECT_EQ(listenSocket->get_backlog(), MOCK_BACKLOG);
-    EXPECT_EQ(listenSocket->get_listenfd(), SUCCESS);
-    EXPECT_NE(listenSocket->get_listenfd(), ERROR);
+    ft::ListenSocket listenSocket = interfaceServer->get_listening_socket();
+    EXPECT_GE(listenSocket.get_socketfd(), MIN_VALID_SOCKETFD);
+    // EXPECT_NE(listenSocket.get_connectionStatus(), SUCCESS);
+    // EXPECT_EQ(listenSocket.get_connectionStatus(), ERROR);
+    EXPECT_EQ(listenSocket.get_backlog(), MOCK_BACKLOG);
+    EXPECT_EQ(listenSocket.get_listenfd(), SUCCESS);
+    EXPECT_NE(listenSocket.get_listenfd(), ERROR);
     delete interfaceServer;
 }
 
 TEST(AServerTest, AddressConstructor)
 {
     AServerForTest *addressServer = new AServerForTest(AF_INET, SOCK_STREAM, ANY_PROTOCOL, MOCK_PORT, MOCK_HOST_ADDR, MOCK_BACKLOG);
-    ft::ListenSocket *listenSocket = addressServer->get_listening_socket();
-    EXPECT_GE(listenSocket->get_socketfd(), MIN_VALID_SOCKETFD);
-    // EXPECT_NE(listenSocket->get_connectionStatus(), SUCCESS);
-    // EXPECT_EQ(listenSocket->get_connectionStatus(), ERROR);
-    EXPECT_EQ(listenSocket->get_backlog(), MOCK_BACKLOG);
-    EXPECT_EQ(listenSocket->get_listenfd(), SUCCESS);
-    EXPECT_NE(listenSocket->get_listenfd(), ERROR);
+    ft::ListenSocket listenSocket = addressServer->get_listening_socket();
+    EXPECT_GE(listenSocket.get_socketfd(), MIN_VALID_SOCKETFD);
+    // EXPECT_NE(listenSocket.get_connectionStatus(), SUCCESS);
+    // EXPECT_EQ(listenSocket.get_connectionStatus(), ERROR);
+    EXPECT_EQ(listenSocket.get_backlog(), MOCK_BACKLOG);
+    EXPECT_EQ(listenSocket.get_listenfd(), SUCCESS);
+    EXPECT_NE(listenSocket.get_listenfd(), ERROR);
     delete addressServer;
 }
