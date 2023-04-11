@@ -1,4 +1,5 @@
 *.o
+*.d
 .vscode
 webserv
 ex01
