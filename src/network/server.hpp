@@ -33,6 +33,7 @@ class server{
 		
 		int								_server_fd;
 		struct sockaddr_in				_address;
+		socklen_t						_address_len;
 		std::vector<struct pollfd> 		_poll_fds;
 		bool							_listening;
 		

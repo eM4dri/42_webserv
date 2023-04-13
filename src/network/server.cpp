@@ -24,9 +24,10 @@
 #define RETRY_BIND_MSG "Retry bind ..."
 #define NOT_BINDED_MSG "socket_fd could not be binded on"
 #define WELCOME_MESSAGE "Hello from server\n"
-#define NEW_CONNECTION "webserver: new connection on socket "
+#define NEW_CONNECTION "webserver: new client connects on socket "
 #define CLIENT_HUNGUP "client hung up"
 #define CLIENT_SAYS(Client) "client " << Client << ": "
+#define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << _server_fd << " is listening on " << address << ":" << port
 
 //Public
 //Constructor
@@ -41,7 +42,10 @@ server::server(const char *address, int port, int backlog)
 	if (_listening == false)
 		_stop();
 	else
+	{
+		LOG(SEVER_LISTENING(_server_fd, address, port));
 		_start();
+	}
 }
 
 server::~server()
@@ -53,16 +57,18 @@ server::~server()
 //Function to init server
 bool server::_init_server(const char *address, int port, int backlog)
 {
-	std::memset(&_address, 0,sizeof(_address));
+	size_t address_sizeof = sizeof(_address);
+	std::memset(reinterpret_cast<void *>(&_address), 0, address_sizeof);
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = inet_addr( address );
 	_address.sin_port = htons(port);
+	_address_len = static_cast<socklen_t>(address_sizeof);
 
 	_server_fd = socket(PF_INET, SOCK_STREAM, 0);
 
 	short retrys = BINDING_RETRYS;
-	
-	while ( -1 == bind(_server_fd, (struct sockaddr *)&_address, sizeof(_address)) && retrys-- ){
+	const struct sockaddr * ws_address =  reinterpret_cast<struct sockaddr *>(&_address);
+	while ( -1 == bind(_server_fd, ws_address, _address_len) && retrys-- ){
 		LOG(RETRY_BIND_MSG);
 		sleep(TIME_TO_RETRY);
 	}
@@ -88,7 +94,7 @@ void server::_start(void)
 	fcntl(webServer.fd, F_SETFL, O_NONBLOCK);
 	while (true)
 	{
-		if ( -1 == poll(&_poll_fds[0], _poll_fds.size(), -1) )
+		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) )
 		{
 			LOG_ERROR("poll");
 			exit(1);
@@ -123,11 +129,11 @@ void server::_stop(void)
 		_listening = false;
 	}
 }
-
+ 
 //Functions to handle connections
 void server::_accepter()
 {
-	int client_fd = accept(_server_fd, (struct sockaddr *)&_address, (socklen_t*)&_address);
+	int client_fd = accept(_server_fd, reinterpret_cast<struct sockaddr *>(&_address), &_address_len);
 	if (client_fd == -1)
 	{
 		LOG_ERROR("accept");
@@ -144,7 +150,7 @@ void server::_accepter()
 void server::_handler(std::vector<struct pollfd>::iterator it)
 {
 	char 	buffer[BUFFER_SIZE];
-	size_t nbytes = recv(it->fd, buffer, sizeof buffer, 0);
+	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof buffer, 0);
 	if ( nbytes < 0 )   // got error
 	{
 		LOG_ERROR("recv");
@@ -166,8 +172,8 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 
 void server::_responder(int client_fd)
 {
-	const size_t len = strlen(WELCOME_MESSAGE);
-	send(client_fd, WELCOME_MESSAGE, len, 0);
+	const size_t len = std::strlen(WELCOME_MESSAGE);
+	send(client_fd, reinterpret_cast<const void *>(WELCOME_MESSAGE), len, 0);
 }
 
 void server::_echo(int fd, char const *str, size_t nbytes)
