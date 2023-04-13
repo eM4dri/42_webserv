@@ -1,28 +1,28 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   TestServer.cpp									  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: emadriga <emadriga@student.42.fr>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2023/04/01 17:15:12 by emadriga		  #+#	#+#			 */
-/*   Updated: 2023/04/02 01:17:10 by emadriga		 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PollServer.cpp                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/11 12:14:34 by emadriga          #+#    #+#             */
+/*   Updated: 2023/04/11 12:46:35 by emadriga         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "PollServer.hpp"
 #include <iostream>
 #include <poll.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
 #define WELCOME_MESSAGE "Hello from server\n"
 #define INITIAL_POLL_FD_SIZE 5
-
 
 //Public
 //Constructor
 namespace ft
 {
-
 
 PollServer::PollServer(int domain, int type, int protocol, u_long interface, int port, int backlog) 
 	: AServer(domain, type, protocol, interface, port, backlog)
@@ -36,7 +36,10 @@ PollServer::PollServer(int domain, int type, int protocol, u_long interface, int
 }
 
 PollServer::~PollServer()
-{}
+{
+	if (poll_fds.size() > 0)
+		poll_fds.clear();
+}
 
 //Function to  launch server
 void PollServer::launch(void)
@@ -122,4 +125,4 @@ void PollServer::_echo(int fd, char const *str, size_t nbytes)
 	}
 }
 
-}
+}	// Nammespace ft
