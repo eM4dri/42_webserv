@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "SelectServer.hpp"
+#include <stdlib.h>
+#include <stdio.h>
 #define WELCOME_MESSAGE "Hello from server\n"
 #define BUFFER_SIZE 256
 
