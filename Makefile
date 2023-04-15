@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/10 21:08:23 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/11 20:36:34 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,8 @@ FLAGS	= -Wall -Wextra -Werror $(VERSION) $(SANITIZE) -g -O3 -pedantic $(NAMESPAC
 # compiling flags
 
 # sanitize
-SANITIZE =
-# SANITIZE = -fsanitize=address
+#SANITIZE =
+SANITIZE = -fsanitize=address
 
 # version
 VERSION = -std=c++98 -MMD
@@ -32,6 +32,8 @@ NAMESPACE =
 
 # Header files
 INCLUDES_FILES =	network/fdlibc-network.hpp				\
+					utils/log.hpp							\
+					network/server.hpp						\
 					network/server/fdlibc-server.hpp		\
 					network/server/AServer.hpp				\
 					network/server/TestServer.hpp			\
@@ -47,6 +49,7 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 
 # Source and object files
 SRC_FILES	= 	main.cpp								\
+				network/server.cpp						\
 				network/server/AServer.cpp				\
 				network/server/TestServer.cpp			\
 				network/server/SelectServer.cpp			\

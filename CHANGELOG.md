@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 - `responses/responses.cpp` has some functions to retrieve files and generate a valid header to be sent to the client.
 
+## 2023-04-13 - Edu
+### Changed
+- Made cast explicit on server (server.cpp & server.hpp)
+
+## 2023-04-09 - Edu
+## Added   
+- Added utils/log.hpp to handle logs
+### Changed
+- Simplifying server (server.cpp & server.hpp) contains a version of pollserver including socket, ipaddress, port, and backlog and handle the process of socket>bind>listen as starting the server
+
 ## 2023-04-08 - Edu
 ### Changed
 - PollServer modified with cpp's std::vector instead of c linked list
