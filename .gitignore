@@ -6,3 +6,4 @@ ex01
 gTest/build
 a.out
 obj/
+.DS_Store

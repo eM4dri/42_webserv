@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/09 18:07:13 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/15 17:50:42 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <ctime>
+#include <sys/stat.h>
+#include <sys/types.h>
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //*		~~~~~~~ Text coloring ~~~~~~~
@@ -48,5 +52,13 @@ enum e_methods
 	POST,
 	DELETE
 };
+
+struct s_request_info
+{
+	short method;
+	std::string path;
+	std::string http_version;
+};
+
 
 #endif

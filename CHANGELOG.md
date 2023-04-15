@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-04-15 -- Jorge
+### Added 
+- `responses/responses.cpp` has some functions to retrieve files and generate a valid header to be sent to the client.
+
 ## 2023-04-08 - Edu
 ### Changed
 - PollServer modified with cpp's std::vector instead of c linked list
@@ -13,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - First parsing of the request and error management.
 - `general.hpp` file that will be used by the other `.hpp` files to avoid including external functions multiple times.
-- Utils file with a C++ equivalent `ft_split` fucntion. More useful functions are expected.
+- Utils file with a C++ equivalent `ft_split` function. More useful functions are expected.
 
 Most things are individual functions, meaning the general program hasn't changed and the functions are not being used.
 
