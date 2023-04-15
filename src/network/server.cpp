@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
-#include <iostream>
+#include <iostream>			// std::cout, std::endl
 #include <fcntl.h>
 #include <stdlib.h>
-#include <cstring>
+#include <cstring>			// std::memset
 #include <unistd.h>
 #include "utils/log.hpp"
 
@@ -29,11 +29,11 @@
 #define CLIENT_SAYS(Client) "client " << Client << ": "
 #define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << _server_fd << " is listening on " << address << ":" << port
 
-//Public
-//Constructor
 namespace ft
 {
 
+//Public
+//Constructor
 server::server(const char *address, int port, int backlog)
 	: _server_fd(-1), _listening(false)
 {
@@ -85,7 +85,7 @@ bool server::_init_server(const char *address, int port, int backlog)
 }
 
 //Function to start server
-void server::_start(void)
+void server::_start()
 {
 	struct pollfd webServer;
 	webServer.fd = _server_fd;
