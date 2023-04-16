@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/15 21:20:52 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/16 17:07:20 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,19 @@ Filetypes::~Filetypes()
 
 std::string Filetypes::get(const std::string &tosearch)
 {
+	if (full_list[tosearch] == "")
+		return(DEFAULT_VALUE);
 	return (full_list[tosearch]);
+}
+
+std::string Filetypes::get_suffix(const std::string &tosearch)
+{
+	unsigned int search_it = tosearch.size() - 1;
+	while (search_it > 0)
+	{
+		if (tosearch[search_it] == '.')
+			return(full_list[tosearch.substr(search_it + 1, tosearch.size() - 1)]);
+		search_it--;
+	}
+	return(DEFAULT_VALUE);
 }

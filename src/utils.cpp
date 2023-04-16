@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/15 21:30:53 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/16 19:46:51 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,28 @@ std::vector <std::string> cpp_split(std::string full_line, char splitter)
 		begin = end;
 	}
 	return (line_vector);
+}
+
+std::string file_reader(const std::string &filename)
+{
+	std::string		body;
+	std::ifstream	file_instream;
+	std::string		file_content_buff;
+	file_instream.open(filename);
+
+	if (!file_instream.is_open())
+	{
+		//	COMPLAIN
+		return ("");
+	}
+	else
+	{
+		while(std::getline(file_instream, file_content_buff))
+		{
+			body.append(file_content_buff);
+			body.append("\n");
+		}
+		return (body);
+	}
+	file_instream.close();
 }

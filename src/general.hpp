@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/15 21:31:30 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/16 19:45:50 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@
 #define TXT_BOLD_CYAN "\033[1;36m"
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#define FILETYPES "../conf/mime.types"
 
 enum e_methods
 {
@@ -63,5 +62,6 @@ struct s_request_info
 };
 
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
+std::string file_reader(const std::string &filename);
 
 #endif
