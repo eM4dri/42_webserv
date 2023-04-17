@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/16 17:24:52 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/17 19:11:59 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define FILETYPES_HPP
 
 #include "../general.hpp"
-#define FILETYPES "../../conf/mime.types"
+#define FILETYPES "conf/mime.types"
 #define DEFAULT_VALUE ""
 
 /*

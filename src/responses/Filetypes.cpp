@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filetypes.cpp                                      :+:      :+:    :+:   */
+/*   Filetypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/16 17:07:20 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/17 17:15:57 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Filetypes.hpp"
+#include "utils/log.hpp"
 
 Filetypes::Filetypes()
 {
@@ -34,7 +35,9 @@ Filetypes::Filetypes()
 			else
 				full_list[*idx] = line_couple[0];
 		}
-	}
+	}	
+	for (std::map<std::string,std::string>::iterator it=full_list.begin(); it!=full_list.end(); ++it)
+		LOG( "(" << it->first << ", " << it->second << ")" );
 }
 
 

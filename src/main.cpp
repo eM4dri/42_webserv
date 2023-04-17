@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/13 11:38:18 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/17 20:00:03 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 #include <iostream>
 #include "utils/log.hpp"
 #include "network/server.hpp"
+#include "conf/conf.hpp"
+#include "responses/Filetypes.hpp"
+#include "responses/responses.hpp"
 #include <cstring>
 
 // void ft_leaks(void)
@@ -41,17 +44,27 @@ int main(int argc, char **argv)
 
 		std::cout << "Success!" << std::endl;
 	}
+	if (argc > 1 && !std::strcmp(argv[1], "server"))
 	{
-		if (argc == 1) // Test Simple server 
-			ft::server T("0.0.0.0", 8080, 5);
-			
-		else if (!std::strcmp(argv[1], "select")) // Test Select server 
-			ft::SelectServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
-			
-		else if (!std::strcmp(argv[1], "poll")) // Test Poll server 
-			ft::PollServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
+		ft::server server("0.0.0.0", 8080, 5);
 	}
-
+	if (argc == 1 || !std::strcmp(argv[1], "conf"))
+	{
+		LOG(std::endl << " *\t Test Load *.conf \t* ");
+		ft::conf newconf("conf/example.conf");
+	}
+	if (argc == 1 || !std::strcmp(argv[1], "mime"))
+	{
+		
+		LOG(std::endl << " *\t Test Load mime.types \t* ");
+		Filetypes filetypes;
+	}
+	if (argc ==  1 || !std::strcmp(argv[1], "error"))
+	{
+		LOG(std::endl << " *\t Test return error message \t* ");
+		LOG(return_error_message(404));
+	}
+		
 
 	return (0);
 }
