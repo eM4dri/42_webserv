@@ -175,43 +175,58 @@ std::string get_date(time_t in_time)
 
 std::string get_file(std::string filename, std::string &mod_date)
 {
-	std::ifstream	file_instream;
-	std::string		file_content_buff;
 	std::string		file_content;
-	file_instream.open(filename);
 	struct stat file_info;
 
-	if (!file_instream.is_open())
-	{
-		//	COMPLAIN
-	}
-	else
-	{
-		while(std::getline(file_instream, file_content_buff))
-		{
-			file_content.append(file_content_buff);
-			file_content.append("\n");
-		}
-
-		std::cout << file_content;
-	}
+	file_content = file_reader(filename);
 	if (stat(filename.c_str(), &file_info))
 	{
 		//	COMPLAIN
 	}
 	else
 		mod_date = get_date(file_info.st_mtime);
-
-	file_instream.close();
 	return(file_content);
 }
 
-std::string return_content(int status_code, std::string filetype, std::string filename)
+std::string return_error_message(int status_code)
+{
+	std::string		error_reason;
+	std::string		retvalue;
+	std::string		body  = file_reader(ERROR_TEMPLATE);
+
+	error_reason.append(std::to_string(status_code));
+	error_reason.append(" ");
+	error_reason.append(getMessageFromCode(status_code));
+
+	if (body.size() > 2)
+	{
+		body.replace(body.find("{PAGE_TITLE}", 0), sizeof("{PAGE_TITLE}") - 1, error_reason);
+		body.replace(body.find("{H1_TITLE}", 0), sizeof("{H1_TITLE}") - 1, error_reason);
+	}
+
+	retvalue.append("HTTP/1.1 ");
+	retvalue.append(std::to_string(status_code));
+	retvalue.append(" ");
+	retvalue.append(getMessageFromCode(status_code));
+	retvalue.append("\nDate: ");
+	retvalue.append(get_date());
+	retvalue.append("\nServer: WTF IDK LOL");
+	retvalue.append("\nContent-Length: ");
+	retvalue.append(std::to_string(body.length()));
+	retvalue.append("\nContent-Type: ");
+	retvalue.append("text/html");
+
+	retvalue.append("\n\n");
+	retvalue.append(body);
+	return(retvalue);
+}
+
+std::string return_content(int status_code, std::string filename)
 {
 	std::string retvalue = "HTTP/1.1 ";
 	std::string mod_date;
 	std::string body = get_file(filename, mod_date);
-
+	Filetypes	get_filetype;
 
 	retvalue.append(std::to_string(status_code));
 	retvalue.append(" ");
@@ -221,6 +236,8 @@ std::string return_content(int status_code, std::string filetype, std::string fi
 	retvalue.append("\nServer: WTF IDK LOL");
 	retvalue.append("\nContent-Length: ");
 	retvalue.append(std::to_string(body.length()));
+	retvalue.append("\nContent-Type: ");
+	retvalue.append(get_filetype.get_suffix(filename));
 	retvalue.append("\nLast-Modified: ");
 	retvalue.append(mod_date);
 
