@@ -5,9 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2023-04-15 -- Jorge
+## 2023-04-16 - Jorge
+### Added
+- `Filetypes::get_suffix()` will now get the file suffix directly. It's been applied to the header generator.
+	(!) We need to decide what to return if the file type isn't known.
+- `return_error_message()` recieves an error code and will generate a whole response for it.
+- `file_reader()` in `utils.cpp`.
+Moved `Filetypes.*pp`to the `responses` directory.
+
+## 2023-04-15 - Jorge
 ### Added 
 - `responses/responses.cpp` has some functions to retrieve files and generate a valid header to be sent to the client.
+- New class `Filetypes` used to retrieve the appropriate `Content-Type` parameter for the HTTP/1.1 header.
 
 ## 2023-04-13 - Edu
 ### Changed
