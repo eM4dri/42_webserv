@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/17 19:34:39 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/18 16:37:53 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "utils/log.hpp"
 #include <iostream>
 #include <cstdlib>
+#include <sstream>
 
 #define ERROR_OPENING_FILE "Error opening file"
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
@@ -26,7 +27,7 @@ namespace ft
 conf::conf( const char* filename )
 {
 	std::ifstream ifs;
-	
+
 	ifs.open (filename, std::ifstream::in);
 	// std::ifstream ifs (filename);
 	std::string	line;
@@ -41,7 +42,8 @@ conf::conf( const char* filename )
 	for (std::map<std::string,std::string>::iterator it=_conf.begin(); it!=_conf.end(); ++it)
 		LOG( "(" << it->first << ", " << it->second << ")" );
 	LOG( "(" << _ip << ", " << _port << ")" );
-	
+	LOG("Accepted methods " << _methods);
+
 }
 
 //Destructor
@@ -75,6 +77,10 @@ void conf::_processLine(std::string line)
 				else
 					_setPort(line.substr(value_ini, first_two_dots - value_ini));
 			}
+			else if(key == "methods")
+			{
+				_setAcceptedMethods(line.substr(value_ini, first_semicolon - value_ini));
+			}
 			else
 			{
 				std::string value = line.substr(value_ini, first_semicolon - value_ini);
@@ -97,5 +103,30 @@ void conf::_setPort(std::string str_port)
 	else
 		_port = 0;
 }
+
+void conf::_setAcceptedMethods(std::string accepted_methods)
+{
+	short	bit;
+	std::map<int, std::string> accepted;
+	accepted[GET] = "GET";
+	accepted[POST] = "POST";
+	accepted[DELETE] = "DELETE";
+	bit = 0;
+	_methods = 0;
+	std::stringstream ss(accepted_methods);
+	std::string method;
+	while (std::getline(ss, method, ' ')){
+		bit = 0;
+		for (std::map<int, std::string>::const_iterator it = accepted.begin(); it!=accepted.end(); it++ )
+		{
+			if ( method == it->second )
+				_methods |= (1<<bit);
+			bit++;
+		}
+	}
+
+}
+
+
 
 }	// Nammespace ft

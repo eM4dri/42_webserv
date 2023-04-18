@@ -103,7 +103,7 @@ void server::_start()
 		{
 			// Check if someone's ready to read
 			if (it->revents & POLLIN)   // We got one!!
-			{ 
+			{
 				if (it == _poll_fds.begin())  // If listener is ready to read, handle new connection
 					_accepter();
 				else	// If not the listener, we're just a regular client
@@ -124,12 +124,12 @@ void server::_stop(void)
 		_poll_fds.clear();
 	}
 	if ( _listening == true )
-	{	
+	{
 		close(_server_fd);
 		_listening = false;
 	}
 }
- 
+
 //Functions to handle connections
 void server::_accepter()
 {
