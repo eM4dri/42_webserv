@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/17 20:00:03 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/20 19:56:58 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "utils/log.hpp"
 #include "network/server.hpp"
 #include "conf/conf.hpp"
+#include "conf/server_configuration.hpp"
 #include "responses/Filetypes.hpp"
 #include "responses/responses.hpp"
 #include <cstring>
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
 	}
 	if (argc == 1 || !std::strcmp(argv[1], "mime"))
 	{
-		
+
 		LOG(std::endl << " *\t Test Load mime.types \t* ");
 		Filetypes filetypes;
 	}
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
 		LOG(std::endl << " *\t Test return error message \t* ");
 		LOG(return_error_message(404));
 	}
-		
+
 
 	return (0);
 }
