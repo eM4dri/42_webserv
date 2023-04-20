@@ -173,26 +173,12 @@ std::string get_date(time_t in_time)
 	return (retval);
 }
 
-std::string get_file(std::string filename, std::string &mod_date)
-{
-	std::string		file_content;
-	struct stat file_info;
-
-	file_content = file_reader(filename);
-	if (stat(filename.c_str(), &file_info))
-	{
-		//	COMPLAIN
-	}
-	else
-		mod_date = get_date(file_info.st_mtime);
-	return(file_content);
-}
-
 std::string return_error_message(int status_code)
 {
 	std::string		error_reason;
 	std::string		retvalue;
-	std::string		body  = file_reader(ERROR_TEMPLATE);
+	int				status;
+	std::string		body  = file_reader(ERROR_TEMPLATE, &status);
 
 	error_reason.append(std::to_string(status_code));
 	error_reason.append(" ");
@@ -219,6 +205,37 @@ std::string return_error_message(int status_code)
 	retvalue.append("\n\n");
 	retvalue.append(body);
 	return(retvalue);
+}
+
+void file_status_custom_error(int file_status)
+{
+	if (file_status == ENOENT)			//?	File Not found
+		return_error_message(404);
+	else if (file_status == EACCES)		//?	Permission denied
+		return_error_message(500);
+	else if (file_status == EISDIR)		//?	Is a directory
+	{
+		//TODO
+	}
+	else
+		return_error_message(501);
+
+}
+
+std::string get_file(std::string filename, std::string &mod_date)
+{
+	std::string		file_content;
+	struct stat file_info;
+	int			file_status = 0;
+
+	file_content = file_reader(filename, &file_status);
+	if (stat(filename.c_str(), &file_info))
+	{
+		//	COMPLAIN
+	}
+	else
+		mod_date = get_date(file_info.st_mtime);
+	return(file_content);
 }
 
 std::string return_content(int status_code, std::string filename)

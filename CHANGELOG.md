@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-04-20 - Jorge
+### Added
+- Function `create_directory_index()` used to return an `html`-formatted string in case the user requests a directory instead of a file. *[Still work in progress]*
+
+### Changed
+- Function `get_file()` now sets a variable indicating the status of the file given (`file not found`, `unauthorized` or `is a directory`).
+
 ## 2023-04-16 - Jorge
 ### Added
 - `Filetypes::get_suffix()` will now get the file suffix directly. It's been applied to the header generator.

@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/06 20:38:41 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/18 19:17:26 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ bool	check_first_line_validity(std::string firstline)
 		std::cerr << std::endl;
 		return (false);
 	}
-	if (params[2] != "HTTP1.1")
+	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
 		std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
 		for (unsigned long i = 0; i < params.size(); i++)
