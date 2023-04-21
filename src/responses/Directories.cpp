@@ -5,6 +5,8 @@ std::string create_directory_index(std::string path)
 	DIR			*directorylist;
 	dirent		*directoryitem;
 	std::string retval;
+	struct stat fileinfo;
+	std::string fullpath;
 
 	directorylist = opendir(path.c_str());
 
@@ -36,6 +38,10 @@ std::string create_directory_index(std::string path)
 
 	while (directoryitem)
 	{
+		fullpath = path;
+		fullpath.append(directoryitem->d_name);
+		if (stat(fullpath.c_str(), &fileinfo))
+			perror(fullpath.c_str());
 		retval.append("<tr>");
 		retval.append("<td>");
 		if (directoryitem->d_type == 4)
@@ -49,9 +55,13 @@ std::string create_directory_index(std::string path)
 		retval.append(directoryitem->d_name);
 		retval.append("\">");
 		retval.append(directoryitem->d_name);
-		retval.append("</a></td><td>");
-		retval.append("(To do)");
-		retval.append("</td><td>---- (To do) ----</td>");
+		retval.append("</a></td><td style=\"padding:0 20px 0 20px;\">");
+		if (directoryitem->d_type == 8)
+			retval.append(bytes_metric_formatting(fileinfo.st_size));
+		retval.append("</td><td style=\"padding:0 20px 0 20px;\">");
+		retval.append(get_date((time_t)fileinfo.st_mtimespec.tv_sec, false));
+		retval.append("</td>");
+
 
 		retval.append("</tr>\n");
 		directoryitem = readdir(directorylist);

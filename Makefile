@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/20 20:36:15 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/04/21 18:31:09 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ SRC_FILES	= 	main.cpp								\
 				responses/responses.cpp					\
 				responses/Filetypes.cpp					\
 				responses/Directories.cpp				\
+				to_string.cpp							\
 				utils.cpp
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)

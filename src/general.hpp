@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/20 20:42:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/21 20:20:27 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <sstream>
 #include <algorithm>
 #include <ctime>
+#include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
@@ -64,5 +65,9 @@ struct s_request_info
 
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
 std::string file_reader(const std::string &filename, int *status);
+std::string to_string(int number);
+std::string bytes_metric_formatting(long size);
+std::string get_date(time_t in_time, bool is_gmt);
+
 
 #endif
