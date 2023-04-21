@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/21 20:36:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/22 00:24:02 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 /*
 ?	Function will split an std::string into new strings contained in an
 ?	std::vector, splitting every time a char is found.
-*	Consecutive splitting characters are ignored, so they don't create extra strings. 
+*	Consecutive splitting characters are ignored, so they don't create extra strings.
 */
 std::vector <std::string> cpp_split(std::string full_line, char splitter)
 {
 	std::vector <std::string> line_vector;
 	std::string::iterator begin = full_line.begin();
 	std::string::iterator end = full_line.begin();
-	
+
 	while (end != full_line.end() && *end == splitter)
 	{
 		end++;
@@ -56,7 +56,7 @@ std::string file_reader(const std::string &filename, int *status)
 	std::string		body;
 	std::ifstream	file_instream;
 	std::string		file_content_buff;
-	file_instream.open(filename);
+	file_instream.open(filename.c_str());
 
 	if (!file_instream.is_open())
 	{

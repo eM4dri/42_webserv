@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Makefile now include con compile `mkdir -p $(@D)` wich creates directories needed by itself without asking explicit
 - Makefile now include flag `-MMD` wich created d files in ./obj with the list of files needed to compile every object
 
+### Fixed
+- Include `<cstring> // std::strcmp` & `<iomanip> // std::setprecision` on general.hpp
+- Define MACRO `st_mtime` on Directory.hpp to be able to handle time thorugh several OS following [THIS](https://stackoverflow.com/questions/11373505/getting-the-last-modified-date-of-a-file-in-c)
+- C function `open` uses const char * as input instead of std::string fixed with c_str
+
 ## 2023-04-21 - Jorge
 ### Added
 - Function `to_string()` used to replace C++11's `std::to_string()`.
