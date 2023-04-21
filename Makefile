@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/20 19:58:02 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/21 23:31:26 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/socket/ConnectSocket.hpp		\
 					parsing/request_header_parsing.hpp		\
 					conf/conf.hpp							\
+					conf/serverconf.hpp						\
+					conf/location.hpp						\
 					responses/Filetypes.hpp					\
 					responses/responses.hpp					\
 					general.hpp
-					# conf/sever_configuration.hpp			\
-					# conf/location.hpp						\
 
 # Source and object files
 SRC_FILES	= 	main.cpp								\
@@ -68,8 +68,6 @@ SRC_FILES	= 	main.cpp								\
 				responses/Filetypes.cpp							\
 				responses/responses.cpp							\
 				utils.cpp
-				# conf/location.cpp						\
-				# conf/sever_configuration.cpp			\
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)
 

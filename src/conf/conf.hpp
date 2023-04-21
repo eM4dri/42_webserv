@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/20 19:58:29 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/21 23:28:10 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 # define CONF_HPP
 # include <string>		// std::string
 # include <vector>		// std::vector
-# include <set>		// std::vector
-// # include "server_configuration.hpp"
+# include <set>			// std::set
+# include "serverconf.hpp"
+
 namespace ft
 {
 
-enum accepted_methods
-	{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
-static const char *logLevel[] =
-{ "GET", "POST", "DELETE"};
+// enum accepted_methods
+// 	{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
+// static const char *logLevel[] =
+// { "GET", "POST", "DELETE"};
 
-// class server_configuration;
+class serverconf;
 
 class conf{
 	public:
@@ -36,7 +37,7 @@ class conf{
 
 		//Getters
 		std::string		getIp() const;
-		uint16_t		getPort() const;
+		unsigned short		getPort() const;
 
 	private:
 		conf();
@@ -46,21 +47,33 @@ class conf{
 		void _processLine(std::string line);
 		void _validate_conf();
 		void _load_valid_conf_keys();
+		void _load_acepted_methods();
 		void _print_processed_conf();
 		void _load_configuration();
 
-		void _setPort(std::string str_port);
 		void _setAcceptedMethods(std::string accepted_methods);
+		void _parse_server_directive(std::pair <std::string,std::string> conf, serverconf *server);
+		void _parse_listen(std::string listen, serverconf *server);
+		void _parse_root(std::string root, serverconf *server);
+		void _parse_location_directive(std::pair <std::string,std::string> conf, location *location);
+		void _parse_path(std::string path, location *location);
+		void _parse_methods(std::string methods, location *location);
+		void _parse_autoindex(std::string autoindex, location *location);
+		void _parse_client_max_body_size(std::string client_max_body_size, location *location);
+		void _parse_index(std::string index, location *location);
+		void _parse_redirect(std::string redirect, location *location);
 
+		std::vector<serverconf>				servers;
 
 	private:
-		std::string							_address;
-		uint16_t							_port;
-		uint16_t							_methods;
-		std::set<std::string>				_valid_conf_keys;
-		// std::map<std::string,std::string> 		_conf;
+		// std::string											_address;
+		// unsigned short										_port;
+		// unsigned short										_methods;
+		// std::string											_root;
+		std::set<std::string>								_valid_conf_keys;
+		std::vector<std::string>							_accepted_methods;
+
 		std::vector<std::pair <std::string,std::string> >	_conf;
-		// std::set<server_configuration>						_servers;
 };
 
 }//Namespace ft
