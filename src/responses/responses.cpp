@@ -121,80 +121,35 @@ std::string get_date()
 
 	retval.append(wdays[gmt_time->tm_wday]);
 	retval.append(", ");
-	retval.append(std::to_string(gmt_time->tm_mday));
+	retval.append(to_string(gmt_time->tm_mday));
 	retval.append(" ");
 	retval.append(ymonths[gmt_time->tm_mon]);
 	retval.append(" ");
-	retval.append(std::to_string(gmt_time->tm_year + 1900));
+	retval.append(to_string(gmt_time->tm_year + 1900));
 	retval.append(" ");
 	if (gmt_time->tm_hour < 10)
 		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_hour));
+	retval.append(to_string(gmt_time->tm_hour));
 	retval.append(":");
 	if (gmt_time->tm_min < 10)
 		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_min));
+	retval.append(to_string(gmt_time->tm_min));
 	retval.append(":");
 	if (gmt_time->tm_sec < 10)
 		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_sec));
+	retval.append(to_string(gmt_time->tm_sec));
 	retval.append(" GMT");
 	return (retval);
-}
-
-std::string get_date(time_t in_time)
-{
-	std::string	retval;
-	std::string wdays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-	std::string ymonths[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
-	tm *gmt_time = gmtime(&in_time);
-
-	retval.append(wdays[gmt_time->tm_wday]);
-	retval.append(", ");
-	retval.append(std::to_string(gmt_time->tm_mday));
-	retval.append(" ");
-	retval.append(ymonths[gmt_time->tm_mon]);
-	retval.append(" ");
-	retval.append(std::to_string(gmt_time->tm_year + 1900));
-	retval.append(" ");
-	if (gmt_time->tm_hour < 10)
-		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_hour));
-	retval.append(":");
-	if (gmt_time->tm_min < 10)
-		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_min));
-	retval.append(":");
-	if (gmt_time->tm_sec < 10)
-		retval.append("0");
-	retval.append(std::to_string(gmt_time->tm_sec));
-	retval.append(" GMT");
-	return (retval);
-}
-
-std::string get_file(std::string filename, std::string &mod_date)
-{
-	std::string		file_content;
-	struct stat file_info;
-
-	file_content = file_reader(filename);
-	if (stat(filename.c_str(), &file_info))
-	{
-		//	COMPLAIN
-	}
-	else
-		mod_date = get_date(file_info.st_mtime);
-	return(file_content);
 }
 
 std::string return_error_message(int status_code)
 {
 	std::string		error_reason;
 	std::string		retvalue;
-	std::string		body  = file_reader(ERROR_TEMPLATE);
+	int				status;
+	std::string		body  = file_reader(ERROR_TEMPLATE, &status);
 
-	error_reason.append(std::to_string(status_code));
+	error_reason.append(to_string(status_code));
 	error_reason.append(" ");
 	error_reason.append(getMessageFromCode(status_code));
 
@@ -205,20 +160,51 @@ std::string return_error_message(int status_code)
 	}
 
 	retvalue.append("HTTP/1.1 ");
-	retvalue.append(std::to_string(status_code));
+	retvalue.append(to_string(status_code));
 	retvalue.append(" ");
 	retvalue.append(getMessageFromCode(status_code));
 	retvalue.append("\nDate: ");
 	retvalue.append(get_date());
 	retvalue.append("\nServer: WTF IDK LOL");
 	retvalue.append("\nContent-Length: ");
-	retvalue.append(std::to_string(body.length()));
+	retvalue.append(to_string(body.length()));
 	retvalue.append("\nContent-Type: ");
 	retvalue.append("text/html");
 
 	retvalue.append("\n\n");
 	retvalue.append(body);
 	return(retvalue);
+}
+
+void file_status_custom_error(int file_status)
+{
+	if (file_status == ENOENT)			//?	File Not found
+		return_error_message(404);
+	else if (file_status == EACCES)		//?	Permission denied
+		return_error_message(500);
+	else if (file_status == EISDIR)		//?	Is a directory
+	{
+		//TODO
+	}
+	else
+		return_error_message(501);
+
+}
+
+std::string get_file(std::string filename, std::string &mod_date)
+{
+	std::string		file_content;
+	struct stat file_info;
+	int			file_status = 0;
+
+	file_content = file_reader(filename, &file_status);
+	if (stat(filename.c_str(), &file_info))
+	{
+		//	COMPLAIN
+	}
+	else
+		mod_date = get_date(file_info.st_mtime, true);
+	return(file_content);
 }
 
 std::string return_content(int status_code, std::string filename)
@@ -228,14 +214,14 @@ std::string return_content(int status_code, std::string filename)
 	std::string body = get_file(filename, mod_date);
 	Filetypes	get_filetype;
 
-	retvalue.append(std::to_string(status_code));
+	retvalue.append(to_string(status_code));
 	retvalue.append(" ");
 	retvalue.append(getMessageFromCode(status_code));
 	retvalue.append("\nDate: ");
 	retvalue.append(get_date());
 	retvalue.append("\nServer: WTF IDK LOL");
 	retvalue.append("\nContent-Length: ");
-	retvalue.append(std::to_string(body.length()));
+	retvalue.append(to_string(body.length()));
 	retvalue.append("\nContent-Type: ");
 	retvalue.append(get_filetype.get_suffix(filename));
 	retvalue.append("\nLast-Modified: ");

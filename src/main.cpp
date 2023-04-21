@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/21 23:53:34 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/22 00:30:05 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "responses/Filetypes.hpp"
 #include "responses/responses.hpp"
 #include <cstring>
+#include "responses/responses.hpp"
 
 // void ft_leaks(void)
 // {
@@ -48,22 +49,28 @@ int main(int argc, char **argv)
 	{
 		ft::server server("0.0.0.0", 8080, 5);
 	}
-	if (argc == 1 || !std::strcmp(argv[1], "conf"))
+	if (argc > 1 && !std::strcmp(argv[1], "conf"))
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
 		ft::conf newconf("conf/example.conf");
 	}
-	if (argc == 1 || !std::strcmp(argv[1], "mime"))
+	if (argc > 1 && !std::strcmp(argv[1], "mime"))
 	{
 		LOG(std::endl << " *\t Test Load mime.types \t* ");
 		Filetypes filetypes;
 	}
-	if (argc ==  1 || !std::strcmp(argv[1], "error"))
+	if (argc >  1 && !std::strcmp(argv[1], "error"))
 	{
 		LOG(std::endl << " *\t Test return error message \t* ");
 		LOG(return_error_message(404));
 	}
-
+	if (argc >  1 && !std::strcmp(argv[1], "html"))
+	{
+		std::string result;
+		std::cout << "Showing the content of the generated html file showing the index of a directory." << std::endl;
+		result = create_directory_index("src/");
+		std::cout << result << std::endl;
+	}
 
 	return (0);
 }

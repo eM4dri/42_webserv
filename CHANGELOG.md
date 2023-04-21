@@ -13,9 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -- `serverconf.hpp` class with every directive of a server in the configuration file
 -- `conf.hpp` & `conf.cpp` class to parse the configuration file, handling errors properly
 - Added some test on main to show it working `./webser conf`
+
 ### Changed
 - Makefile now include con compile `mkdir -p $(@D)` wich creates directories needed by itself without asking explicit
 - Makefile now include flag `-MMD` wich created d files in ./obj with the list of files needed to compile every object
+
+## 2023-04-21 - Jorge
+### Added
+- Function `to_string()` used to replace C++11's `std::to_string()`.
+
+### Fixed
+- Function `create_directory_index()` now shows the correct modification date and file size.
+
+## 2023-04-20 - Jorge
+### Added
+- Function `create_directory_index()` used to return an `html`-formatted string in case the user requests a directory instead of a file. *[Still work in progress]*
+
+### Changed
+- Function `get_file()` now sets a variable indicating the status of the file given (`file not found`, `unauthorized` or `is a directory`).
 
 ## 2023-04-16 - Jorge
 ### Added

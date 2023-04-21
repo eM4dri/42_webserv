@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/21 23:31:26 by emadriga         ###   ########.fr        #
+#    Updated: 2023/04/22 00:27:13 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME	= webserv
 # compiler
 GCC		= clang++
 
-FLAGS	= -Wall -Wextra -Werror $(VERSION) $(SANITIZE) -g -O3 -pedantic $(NAMESPACE) $(SHOW_CONS_DEST)
+FLAGS	= -Wall -Wextra -Werror $(VERSION) $(SANITIZE) -g3  -pedantic $(NAMESPACE) $(SHOW_CONS_DEST)
 
 # compiling flags
 
@@ -65,8 +65,10 @@ SRC_FILES	= 	main.cpp								\
 				network/socket/ConnectSocket.cpp		\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
-				responses/Filetypes.cpp							\
-				responses/responses.cpp							\
+				responses/responses.cpp					\
+				responses/Filetypes.cpp					\
+				responses/Directories.cpp				\
+				to_string.cpp							\
 				utils.cpp
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)
