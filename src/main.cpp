@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/13 11:38:18 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/20 20:38:00 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "utils/log.hpp"
 #include "network/server.hpp"
 #include <cstring>
+#include "responses/responses.hpp"
 
 // void ft_leaks(void)
 // {
@@ -41,7 +42,7 @@ int main(int argc, char **argv)
 
 		std::cout << "Success!" << std::endl;
 	}
-	{
+/*	{
 		if (argc == 1) // Test Simple server 
 			ft::server T("0.0.0.0", 8080, 5);
 			
@@ -50,6 +51,12 @@ int main(int argc, char **argv)
 			
 		else if (!std::strcmp(argv[1], "poll")) // Test Poll server 
 			ft::PollServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
+	}*/
+	{
+		std::string result;
+		std::cout << "Showing the content of the generated html file showing the index of a directory." << std::endl;
+		result = create_directory_index("src/");
+		std::cout << result << std::endl;
 	}
 
 
