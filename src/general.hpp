@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/22 16:03:05 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/23 17:10:09 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <cstring>			// std::strcmp
+#include <iomanip>			// std::setprecision
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //*		~~~~~~~ Text coloring ~~~~~~~

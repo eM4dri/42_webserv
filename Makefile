@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/22 16:02:48 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/04/23 17:10:16 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME	= webserv
 # compiler
 GCC		= clang++
 
-FLAGS	= -Wall -Wextra -Werror $(VERSION) $(SANITIZE) -g -O3 -pedantic $(NAMESPACE) $(SHOW_CONS_DEST)
+FLAGS	= -Wall -Wextra -Werror $(VERSION) $(SANITIZE) -g3  -pedantic $(NAMESPACE) $(SHOW_CONS_DEST)
 
 # compiling flags
 
@@ -45,6 +45,9 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/socket/ListenSocket.hpp			\
 					network/socket/ConnectSocket.hpp		\
 					parsing/request_header_parsing.hpp		\
+					conf/conf.hpp							\
+					conf/serverconf.hpp						\
+					conf/location.hpp						\
 					responses/Filetypes.hpp					\
 					responses/responses.hpp					\
 					general.hpp
@@ -61,6 +64,7 @@ SRC_FILES	= 	main.cpp								\
 				network/socket/ListenSocket.cpp			\
 				network/socket/ConnectSocket.cpp		\
 				parsing/request_header_parsing.cpp		\
+				conf/conf.cpp							\
 				responses/responses.cpp					\
 				responses/Filetypes.cpp					\
 				responses/Directories.cpp				\
@@ -84,13 +88,8 @@ OBJ = $(addprefix $(OBJ_DIR), $(OBJ_FILES))
 all: obj $(NAME)
 
 obj:
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(OBJ_DIR)network/
-	@mkdir -p $(OBJ_DIR)network/socket/
-	@mkdir -p $(OBJ_DIR)network/server/
-	@mkdir -p $(OBJ_DIR)parsing/
-	@mkdir -p $(OBJ_DIR)responses/
 $(OBJ_DIR)%.o:$(SRC_DIR)%.cpp $(INCLUDES)
+	@mkdir -p $(@D)
 	@$(GCC) $(FLAGS) -I $(INC_DIR) -o $@ -c $<
 
 # Compiling
@@ -109,7 +108,7 @@ clean:
 fclean:		clean
 			@rm -f $(NAME)
 			@echo "$(NAME) removed!"
- 
+
 # re rule
 re:			fclean all
 
