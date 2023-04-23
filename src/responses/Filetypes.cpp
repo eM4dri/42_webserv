@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/17 17:15:57 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/23 17:25:03 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ Filetypes::Filetypes()
 				full_list[*idx] = line_couple[0];
 		}
 	}	
-	for (std::map<std::string,std::string>::iterator it=full_list.begin(); it!=full_list.end(); ++it)
-		LOG( "(" << it->first << ", " << it->second << ")" );
 }
 
 
