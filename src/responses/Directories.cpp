@@ -1,5 +1,11 @@
 #include "../general.hpp"
 
+#ifdef __APPLE__
+#ifndef st_mtime
+#define st_mtime st_mtimespec.tv_sec
+#endif
+#endif
+
 std::string create_directory_index(std::string path)
 {
 	DIR			*directorylist;
@@ -19,14 +25,14 @@ std::string create_directory_index(std::string path)
 	retval.append(path);
 	retval.append("</h1>\n<hr>");
 
-	if (!strcmp(directoryitem->d_name, ".."))
+	if (!std::strcmp(directoryitem->d_name, ".."))
 	{
 		retval.append("\t<table>\n");
 		retval.append("\t\t<tbody>\n");
 		retval.append("\t\t\t<tr><td>🔙</td> <td><a href=\"./..\">[parent directory]</a></td><tr>\n");
 		retval.append("\t\t</tbody>\n");
 		retval.append("\t</table>\n");
-		
+
 		directoryitem = readdir(directorylist);
 	}
 
@@ -59,7 +65,7 @@ std::string create_directory_index(std::string path)
 		if (directoryitem->d_type == 8)
 			retval.append(bytes_metric_formatting(fileinfo.st_size));
 		retval.append("</td><td style=\"padding:0 20px 0 20px;\">");
-		retval.append(get_date((time_t)fileinfo.st_mtimespec.tv_sec, false));
+		retval.append(get_date((time_t)fileinfo.st_mtime, false));
 		retval.append("</td>");
 
 
