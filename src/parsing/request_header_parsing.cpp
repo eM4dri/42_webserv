@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/23 20:21:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/24 20:03:03 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ std::string correct_path(std::string orig_path)
 		retval.append(*curr_route_aux);
 		curr_route_aux++;
 	}
+	if (retval[0] == '/')
+		retval = retval.substr(1, retval.size() - 1);
 	return (retval);
 	
 }

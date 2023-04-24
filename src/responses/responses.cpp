@@ -176,34 +176,38 @@ std::string return_error_message(int status_code)
 	return(retvalue);
 }
 
-void file_status_custom_error(int file_status)
+std::string file_status_custom_error(int file_status)
 {
+	std::string retval;
 	if (file_status == ENOENT)			//?	File Not found
-		return_error_message(404);
+		retval = return_error_message(404);
 	else if (file_status == EACCES)		//?	Permission denied
-		return_error_message(500);
+		retval = return_error_message(500);
 	else if (file_status == EISDIR)		//?	Is a directory
 	{
 		//TODO
 	}
 	else
-		return_error_message(501);
-
+		retval = return_error_message(501);
+	return (retval);
 }
 
-std::string get_file(std::string filename, std::string &mod_date)
+std::string get_file(std::string filename, std::string &mod_date, int *status)
 {
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
 
 	file_content = file_reader(filename, &file_status);
-	if (stat(filename.c_str(), &file_info))
+	stat(filename.c_str(), &file_info);
+	if (file_status)
 	{
-		//	COMPLAIN
+		*status = file_status;
+		return("");
 	}
 	else
 		mod_date = get_date(file_info.st_mtime, true);
+	*status = 0;
 	return(file_content);
 }
 
@@ -211,9 +215,15 @@ std::string return_content(int status_code, std::string filename)
 {
 	std::string retvalue = "HTTP/1.1 ";
 	std::string mod_date;
-	std::string body = get_file(filename, mod_date);
+	int status = 0;
+	std::string body = get_file(filename, mod_date, &status);
 	Filetypes	get_filetype;
 
+	if (status)
+	{
+		retvalue = file_status_custom_error(status);
+		return (retvalue);
+	}
 	retvalue.append(to_string(status_code));
 	retvalue.append(" ");
 	retvalue.append(getMessageFromCode(status_code));
