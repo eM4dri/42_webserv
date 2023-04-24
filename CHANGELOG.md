@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-04-24 - Jorge
+### Added
+- `method_get()` calls `return_content()` and gets the full response for a **GET** request.
+	- If the requested file cannot be opened for some reason, it returns a standard `404`/`500`/`501` response.
+	- There's a test in `main.cpp` to try it out with the parameter `gettest`. There's still a lot of testing left.
+	- **Note:** Only the first line of the request is taken into account for now.
+
+## 2023-04-23 - Jordi 🌹
+### Added
+- Added some example files and tests in the `main`.
+
+Fixed a few bugs on the path corrector and header parsing.
+
 ## 2023-04-22 - Edu
 ### Added
 - `example.conf` a configuration file structured following ningx conf file structure rules.
