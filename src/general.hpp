@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/23 17:10:09 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/25 15:57:34 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ enum e_methods
 	DELETE
 };
 
+/**
+*	@param method short
+*	@param path std::string
+*	@param http_version std::string
+*/
 struct s_request_info
 {
 	short method;

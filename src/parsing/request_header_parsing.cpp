@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/09 21:22:51 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/24 20:03:03 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ bool	check_valid_path(std::string path)
 std::string correct_path(std::string orig_path)
 {
 	std::vector <std::string> routes = cpp_split(orig_path, '/');
-	std::vector<std::string>::iterator curr_route = routes.end();
+	std::vector<std::string>::iterator curr_route = routes.end() - 1;
 	std::vector<std::string>::iterator curr_route_aux = routes.end();
 	std::string retval;
 	int level = 0;
@@ -69,7 +69,6 @@ std::string correct_path(std::string orig_path)
 		else
 			curr_route--;
 	}
-	curr_route++;
 	curr_route_aux = curr_route;
 
 	while (curr_route != routes.end())
@@ -91,6 +90,8 @@ std::string correct_path(std::string orig_path)
 		retval.append(*curr_route_aux);
 		curr_route_aux++;
 	}
+	if (retval[0] == '/')
+		retval = retval.substr(1, retval.size() - 1);
 	return (retval);
 	
 }
@@ -155,7 +156,7 @@ bool	check_first_line_validity(std::string firstline, struct s_request_info &hea
 		if (params[0] == "DELETE")
 			header_struct.method = DELETE;
 	}
-	if (params[2] != "HTTP1.1")
+	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
 		std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
 		for (unsigned long i = 0; i < params.size(); i++)
@@ -185,11 +186,13 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 	std::string body;
 	for (std::vector<std::string>::iterator vector_iter = line_vector.begin() + 1; vector_iter != line_vector.end(); vector_iter++) 
 	{
+		body = "";
 		pair = cpp_split(*vector_iter, ':');
 		for (std::vector<std::string>::iterator pair_iter = pair.begin() + 1; pair_iter != pair.end(); pair_iter++)
 		{
 			body.append(*pair_iter);
-			body.append(":");
+			if (pair_iter + 1 != pair.end())
+				body.append(":");
 		}
 		if (body[0] == ' ')
 			body.erase(0, 1);
