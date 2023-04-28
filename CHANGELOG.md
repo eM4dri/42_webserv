@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-04-25 - Jorge
+### Improved
+- We now consider the request to start at the established SERVER_ROOT (stored in `general.hpp` for now), and check if the request attempts to exit said ROOT.
+
+*(Not tested on a Linux machine)* Fixed fsanitize crash when executing `./webserv dirpage`.
+
 ## 2023-04-24 - Jorge
 ### Added
 - `method_get()` calls `return_content()` and gets the full response for a **GET** request.

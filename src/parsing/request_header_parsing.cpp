@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/24 20:03:03 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/25 17:05:32 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ std::string correct_path(std::string orig_path)
 		else
 			curr_route--;
 	}
+	if (*curr_route == "~")
+		curr_route++;
 	curr_route_aux = curr_route;
 
 	while (curr_route != routes.end())
@@ -80,9 +82,14 @@ std::string correct_path(std::string orig_path)
 			else
 				level--;
 		}
-		else if (*curr_route != ".")
+		else if (*curr_route == ".")
+			routes.erase(curr_route);
+		else
+		{
 			level++;
-		curr_route++;
+			curr_route++;
+		}
+
 	}
 	while (curr_route_aux != routes.end())
 	{
@@ -172,7 +179,10 @@ bool	check_first_line_validity(std::string firstline, struct s_request_info &hea
 	}
 	else
 		header_struct.http_version = "HTTP1.1";
-	header_struct.path = correct_path(params[1]);
+	header_struct.path = SERVER_ROOT;
+	header_struct.path.append(correct_path(params[1]));
+	std::cout << ">>> PATH: '" << header_struct.path << "'" << std::endl;
+	// header_struct.path = correct_path(params[1]);
 	return (true);
 }
 

@@ -1,4 +1,4 @@
-GET test_files/sample_page.html HTTP/1.1
+GET test_files/sample_page/sample_webpage.html HTTP/1.1
 User-Agent: Mozilla/4.0 (compatible; MSIE5.01; Windows NT)
 Host: www.tutorialspoint.com
 Accept-Language: en-us

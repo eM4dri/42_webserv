@@ -77,6 +77,6 @@ std::string create_directory_index(std::string path)
 	retval.append("\t</table>\n");
 	retval.append("</body>\n");
 	retval.append("</html>\n");
-
+	closedir(directorylist);
 	return (retval);
 }
