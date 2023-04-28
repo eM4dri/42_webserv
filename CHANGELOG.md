@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## 2023-04-28 - Jorge
+### Added
+- `method_get()` now identifies if the file given is a file and displays a webpage with all the files inside.
+	- We'll need to check if we must show ALL the files in a directory or not (maybe hidden files or files without permission).
+	- It doesn't check if the chosen directory allows showing the full list of files or not, which should be configured from `example.conf`.
+
+### Current bugs
+- **Segfault** when only a `/` is requested as a path on `getdirtest`.
+- `create_directory_index()` is unable to properly identify whether the requested directory is the server's root in order to hide the `parent directory` button.
+
 ## 2023-04-25 - Jorge
 ### Improved
 - We now consider the request to start at the established SERVER_ROOT (stored in `general.hpp` for now), and check if the request attempts to exit said ROOT.

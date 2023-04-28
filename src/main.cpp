@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/24 20:06:01 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/28 19:11:07 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,23 @@ int main(int argc, char **argv)
 		std::string body;
 		int read_status;
 
-		std::string file_read = file_reader("test_files/get_request", &read_status);
+		std::string file_read = file_reader("test_files/get_request", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
 		if (read_status)
-			std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
+			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
+		header_parser(file_read, header_struct, header_map, body);
+
+		method_get(header_struct);
+	}
+	if (argc >  1 && !std::strcmp(argv[1], "getdirtest"))
+	{
+		struct s_request_info header_struct;
+		std::map<std::string, std::string> header_map;
+		std::string body;
+		int read_status;
+
+		std::string file_read = file_reader("test_files/get_request_dir", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
+		if (read_status)
+			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
 		header_parser(file_read, header_struct, header_map, body);
 
 		method_get(header_struct);
