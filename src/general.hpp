@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/25 16:18:23 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/30 20:47:26 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ enum e_methods
 *	@param method short
 *	@param path std::string
 *	@param http_version std::string
+*	@warning UNDER DESTRUCTION
 */
 struct s_request_info
 {
@@ -76,6 +77,6 @@ std::string file_reader(const std::string &filename, int *status);
 std::string to_string(int number);
 std::string bytes_metric_formatting(long size);
 std::string get_date(time_t in_time, bool is_gmt);
-
+std::vector <std::string> cpp_split(std::string full_line, char splitter);
 
 #endif
