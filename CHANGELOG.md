@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## 2023-04-30 - Edu
+### Added
+- New `server.hpp` parameters constructor using `serverconf.hpp` (test on main using `./webserv serverconf`)
+- Listen directive validation before parsing on `conf.cpp`
+### Changed
+- Minor changes on `conf.cpp`, name and references instead of copy values
+### Fixed
+- Close directory on Directories.cpp
+
 ## 2023-04-24 - Jorge
 ### Added
 - `method_get()` calls `return_content()` and gets the full response for a **GET** request.
