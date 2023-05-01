@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/30 23:24:46 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/01 12:44:20 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,18 +123,21 @@ void conf::_parse_redirect(const std::string &redirect, location *location)
 
 void conf::_parse_location_directive(const std::pair <std::string,std::string> &directive, location *location)
 {
+	std::stringstream ss(directive.second);
+	std::string directive_val;
+	std::getline(ss, directive_val, ';');
 	if (directive.first == "location")
-		_parse_path(directive.second, location);
+		_parse_path(directive_val, location);
 	else if (directive.first == "index")
-		_parse_index(directive.second, location);
+		_parse_index(directive_val, location);
 	else if (directive.first == "client_max_body_size")
-		_parse_client_max_body_size(directive.second, location);
+		_parse_client_max_body_size(directive_val, location);
 	else if (directive.first == "autoindex")
-		_parse_autoindex(directive.second, location);
+		_parse_autoindex(directive_val, location);
 	else if (directive.first == "redirect")
-		_parse_redirect(directive.second, location);
+		_parse_redirect(directive_val, location);
 	else if (directive.first == "methods")
-		_parse_methods(directive.second, location);
+		_parse_methods(directive_val, location);
 }
 
 
@@ -224,10 +227,13 @@ void conf::_parse_root(const std::string &root, serverconf *server)
 
 void conf::_parse_server_directive(const std::pair<std::string,std::string> &directive, serverconf *server)
 {
+	std::stringstream ss(directive.second);
+	std::string directive_val;
+	std::getline(ss, directive_val, ';');
 	if (directive.first == "listen")
-		_parse_listen(directive.second, server);
+		_parse_listen(directive_val, server);
 	if (directive.first == "root")
-		_parse_root(directive.second, server);
+		_parse_root(directive_val, server);
 }
 
 void _set_server_defaults(serverconf *server)
@@ -269,10 +275,7 @@ void conf::_load_configuration()
 			if (curly_braces_level == OPEN_SERVER)
 				_set_server_defaults(&server);
 			else if (curly_braces_level == OPEN_LOCATION)
-			{
 				_set_location_defaults(&location);
-
-			}
 		}
 		if (curly_braces_level == OPEN_SERVER)
 			_parse_server_directive(*it, &server);
@@ -287,13 +290,13 @@ void conf::print_loaded_conf()
 	for (std::vector<serverconf>::iterator it= this->servers.begin(); it!= this->servers.end(); ++it){
 		LOG("Listen\t"<<it->address <<":"<< it->port );
 		for (std::map<std::string, location>::iterator it2=it->locations.begin(); it2!=it->locations.end(); ++it2){
-			LOG(it2->first);
-			LOG("autoindex\t " << it2->second.autoindex);
-			LOG("client_max_body_size\t " << it2->second.client_max_body_size);
-			LOG("index\t " << it2->second.index);
-			LOG("methods\t " << it2->second.methods);
-			LOG("redirect\t " << it2->second.redirect);
-			LOG("path\t " << it2->second.path);
+			LOG("\tLocation " << it2->first);
+			LOG("\t\tpath\t " << it2->second.path);
+			LOG("\t\tautoindex\t " << it2->second.autoindex);
+			LOG("\t\tclient_max_body_size\t " << it2->second.client_max_body_size);
+			LOG("\t\tindex\t " << it2->second.index);
+			LOG("\t\tmethods\t " << it2->second.methods);
+			LOG("\t\tredirect\t " << it2->second.redirect);
 		}
 	}
 }
