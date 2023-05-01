@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/30 21:08:51 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/01 20:22:49 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,23 @@ class Request
 			std::string unparsed;
 		};
 
+		Request(const std::string input);
+		Request(Request &tocopy);
+
 	//*	Parsing
 		void header_parser();
-		
 		bool check_request_validity(std::string fullheader);
 		bool check_first_line_validity(std::string firstline);
 
+	//*	Getters
+		const std::string &get_fullrequest() const;
+		const int get_method() const;
+		const std::string get_method_txt() const;
+		const std::string &get_path_raw() const;
+		const std::string &get_path_rel() const;
+		const std::string &get_path_abs() const;
+		const std::map<std::string, std::string> get_headermap() const;
+		const std::string &get_body() const;
 	private:
 		const std::string fullrequest;
 		int method;
@@ -48,10 +59,5 @@ class Request
 
 
 };
-
-int main()
-{
-	Request hi;
-}
 
 #endif

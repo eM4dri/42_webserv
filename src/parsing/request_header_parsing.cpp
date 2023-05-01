@@ -6,11 +6,10 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/30 21:16:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:31:24 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "request_header_parsing.hpp"
 #include "../requests/Request.hpp"
 
 /*
@@ -146,8 +145,6 @@ bool	Request::check_first_line_validity(std::string firstline)
 	path.absolute = SERVER_ROOT;
 	path.absolute.append("/");
 	path.absolute.append(path.relative);
-	std::cout << ">>> PATH: '" << path.absolute << "'" << std::endl;
-	// header_struct.path = correct_path(params[1]);
 	return (true);
 }
 

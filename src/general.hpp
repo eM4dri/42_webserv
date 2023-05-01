@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/30 20:47:26 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:50:13 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 #define TXT_BOLD_CYAN "\033[1;36m"
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#define SERVER_ROOT "./test_files/"
+#define SERVER_ROOT "test_files"
 
 enum e_methods
 {
