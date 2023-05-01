@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/13 11:38:18 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/24 20:06:01 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,14 @@
 #include <iostream>
 #include "utils/log.hpp"
 #include "network/server.hpp"
+#include "conf/conf.hpp"
+#include "responses/Filetypes.hpp"
+#include "responses/responses.hpp"
 #include <cstring>
+#include "responses/responses.hpp"
+#include "parsing/request_header_parsing.hpp"
+#include "general.hpp"
+#include "actuators/methods.hpp"
 
 // void ft_leaks(void)
 // {
@@ -41,16 +48,69 @@ int main(int argc, char **argv)
 
 		std::cout << "Success!" << std::endl;
 	}
+	if (argc > 1 && !std::strcmp(argv[1], "server"))
 	{
-		if (argc == 1) // Test Simple server 
-			ft::server T("0.0.0.0", 8080, 5);
-			
-		else if (!std::strcmp(argv[1], "select")) // Test Select server 
-			ft::SelectServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
-			
-		else if (!std::strcmp(argv[1], "poll")) // Test Poll server 
-			ft::PollServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
+		ft::server server("0.0.0.0", 8080, 5);
 	}
+	if (argc > 1 && !std::strcmp(argv[1], "conf"))
+	{
+		LOG(std::endl << " *\t Test Load *.conf \t* ");
+		ft::conf newconf("conf/example.conf");
+	}
+	if (argc > 1 && !std::strcmp(argv[1], "mime"))
+	{
+		LOG(std::endl << " *\t Test Load mime.types \t* ");
+		Filetypes filetypes;
+		std::cout << "html:  "<< filetypes.get("html") << std::endl;
+		std::cout << "png:  "<< filetypes.get("png") << std::endl;
+		std::cout << "mp3:  "<< filetypes.get("mp3") << std::endl;
+		std::cout << "zip:  "<< filetypes.get("zip") << std::endl;
+		std::cout << "pdf:  "<< filetypes.get("pdf") << std::endl;
+		std::cout << "fdf:  "<< filetypes.get("fdf") << std::endl;
+		std::cout << "gif:  "<< filetypes.get("gif") << std::endl;
+	}
+	if (argc >  1 && !std::strcmp(argv[1], "error"))
+	{
+		LOG(std::endl << " *\t Test return error message \t* ");
+		LOG(return_error_message(404));
+	}
+	if (argc >  1 && !std::strcmp(argv[1], "dirpage"))
+	{
+		std::string result;
+		std::cout << "Showing the content of the generated html file showing the index of a directory." << std::endl;
+		result = create_directory_index("src/");
+		std::cout << result << std::endl;
+	}
+	if (argc >  1 && !std::strcmp(argv[1], "headerparser"))
+	{
+		struct s_request_info header_struct;
+		std::map<std::string, std::string> header_map;
+		std::string body;
+		int read_status;
+
+		header_parser(file_reader("test_files/post_request", &read_status), header_struct, header_map, body);
+		std::cout << "Method: " << header_struct.method << std::endl;
+		std::cout << "Path: " << header_struct.path << std::endl;
+		std::cout << "HTTP: " << header_struct.http_version << std::endl;
+		for (std::map<std::string,std::string>::iterator it = header_map.begin(); it != header_map.end(); ++it)
+			std::cout << "- '" << it->first << "': '" << it->second << "'" << std::endl;
+		std::cout << TXT_COLOR_CYAN << "--- BODY ---" << TXT_RESET << std::endl << body << std::endl;
+	}
+	if (argc >  1 && !std::strcmp(argv[1], "gettest"))
+	{
+		struct s_request_info header_struct;
+		std::map<std::string, std::string> header_map;
+		std::string body;
+		int read_status;
+
+		std::string file_read = file_reader("test_files/get_request", &read_status);
+		if (read_status)
+			std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
+		header_parser(file_read, header_struct, header_map, body);
+
+		method_get(header_struct);
+	}
+
 
 
 	return (0);

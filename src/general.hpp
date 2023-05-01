@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/16 19:45:50 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/23 18:20:43 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,12 @@
 #include <sstream>
 #include <algorithm>
 #include <ctime>
+#include <sstream>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <dirent.h>
+#include <cstring>			// std::strcmp
+#include <iomanip>			// std::setprecision
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //*		~~~~~~~ Text coloring ~~~~~~~
@@ -54,6 +58,11 @@ enum e_methods
 	DELETE
 };
 
+/**
+*	@param method short
+*	@param path std::string
+*	@param http_version std::string
+*/
 struct s_request_info
 {
 	short method;
@@ -62,6 +71,10 @@ struct s_request_info
 };
 
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
-std::string file_reader(const std::string &filename);
+std::string file_reader(const std::string &filename, int *status);
+std::string to_string(int number);
+std::string bytes_metric_formatting(long size);
+std::string get_date(time_t in_time, bool is_gmt);
+
 
 #endif

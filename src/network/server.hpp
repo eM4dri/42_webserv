@@ -12,9 +12,9 @@
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
-# include <vector>
-# include <poll.h>
-# include <arpa/inet.h>
+# include <arpa/inet.h>		// sockaddr_in, socklen_t
+# include <poll.h>			// pollfd
+# include <vector>			// std::vector
 
 
 namespace ft
@@ -41,10 +41,10 @@ class server{
 		bool _init_server(const char *address, int port, int backlog);
 
 		//Function to start server
-		void _start(void);
+		void _start();
 
 		//Function to stop server
-		void _stop(void);
+		void _stop();
 
 		//Functions to handle connections
 		void _accepter();
