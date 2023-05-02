@@ -17,8 +17,12 @@
 #include <cstring>			// std::memset
 #include <unistd.h>
 #include "utils/log.hpp"
+#include "responses/responses.hpp"
+#include "parsing/request_header_parsing.hpp"
+#include "general.hpp"
+#include "actuators/methods.hpp"
 
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 1024
 #define BINDING_RETRYS 10
 #define TIME_TO_RETRY 5
 #define RETRY_BIND_MSG "Retry bind ..."
@@ -35,22 +39,8 @@ namespace ft
 
 //Public
 //Constructor
-server::server(const char *address, int port, int backlog)
-	: _server_fd(-1), _listening(false)
-{
-	_listening = _init_server(address, port, backlog);
-
-	if (_listening == false)
-		_stop();
-	else
-	{
-		LOG(SEVER_LISTENING(_server_fd, address, port));
-		_start();
-	}
-}
-
 server::server(const serverconf &conf)
-	: _server_fd(-1), _listening(false)
+	: _server_fd(-1), _listening(false), _conf(conf)
 {
 	_listening = _init_server(conf.address.c_str(), conf.port, BACKLOG);
 	if (_listening == false)
@@ -158,7 +148,6 @@ void server::_accepter()
 	client.events = POLLIN;  // Check ready-to-read
 	_poll_fds.push_back(client);
 	LOG( NEW_CONNECTION << client.fd); //TODO -> molaría printear la IP si las funciones nos dejan
-	_responder(client.fd);
 }
 
 void server::_handler(std::vector<struct pollfd>::iterator it)
@@ -181,14 +170,28 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 	{
 		buffer[nbytes] = '\0';
 		LOG2( CLIENT_SAYS(it->fd) << buffer );
-		_echo(it->fd, buffer, nbytes);
+		_responder(it->fd);
+		// _echo(it->fd, buffer, nbytes);
 	}
 }
 
 void server::_responder(int client_fd)
 {
-	const size_t len = std::strlen(WELCOME_MESSAGE);
-	send(client_fd, reinterpret_cast<const void *>(WELCOME_MESSAGE), len, 0);
+	// const size_t len = std::strlen(WELCOME_MESSAGE);
+	// send(client_fd, reinterpret_cast<const void *>(WELCOME_MESSAGE), len, 0);
+	struct s_request_info header_struct;
+	std::map<std::string, std::string> header_map;
+	std::string body;
+	int read_status;
+
+	std::string file_read = file_reader("test_files/get_request", &read_status);
+	if (read_status)
+		std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
+	header_parser(file_read, header_struct, header_map, body);
+
+	std::string content = return_content(200, header_struct.path);
+
+	send(client_fd, content.c_str(), content.length(), 0);
 }
 
 void server::_echo(int fd, char const *str, size_t nbytes)

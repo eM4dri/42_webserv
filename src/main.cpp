@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/30 17:34:44 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:18:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,6 @@ int main(int argc, char **argv)
 		(void)ld;
 
 		std::cout << "Success!" << std::endl;
-	}
-	if (argc > 1 && !std::strcmp(argv[1], "server"))
-	{
-		ft::server server("0.0.0.0", 8080, 5);
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "conf"))
 	{
