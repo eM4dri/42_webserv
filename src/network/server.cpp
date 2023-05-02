@@ -28,6 +28,7 @@
 #define CLIENT_HUNGUP "client hung up"
 #define CLIENT_SAYS(Client) "client " << Client << ": "
 #define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << _server_fd << " is listening on " << address << ":" << port
+#define BACKLOG 256
 
 namespace ft
 {
@@ -44,6 +45,19 @@ server::server(const char *address, int port, int backlog)
 	else
 	{
 		LOG(SEVER_LISTENING(_server_fd, address, port));
+		_start();
+	}
+}
+
+server::server(const serverconf &conf)
+	: _server_fd(-1), _listening(false)
+{
+	_listening = _init_server(conf.address.c_str(), conf.port, BACKLOG);
+	if (_listening == false)
+		_stop();
+	else
+	{
+		LOG(SEVER_LISTENING(_server_fd, conf.address, conf.port));
 		_start();
 	}
 }
@@ -159,6 +173,7 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 	if ( nbytes == 0 )  // connection closed by client
 	{
 		LOG( CLIENT_SAYS(it->fd) << CLIENT_HUNGUP );
+		//TODO Should we not close conection inmediatly, after he closes?
 		close(it->fd); // Bye!
 		_poll_fds.erase(it);
 	}

@@ -14,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Reworked
 - The requests will be reprogrammed so they are treated as an object. This might take some days to be completed.
 
+## 2023-04-30 - Edu
+### Added
+- New `server.hpp` parameters constructor using `serverconf.hpp` (test on main using `./webserv serverconf`)
+- Listen directive validation before parsing on `conf.cpp`
+### Changed
+- Minor changes on `conf.cpp`, name and references instead of copy values
+### Fixed
+- Close directory on Directories.cpp
+
 ## 2023-04-28 - Jorge
 ### Added
 - `method_get()` now identifies if the file given is a file and displays a webpage with all the files inside.

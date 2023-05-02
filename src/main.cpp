@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/01 18:21:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:08:37 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ int main(int argc, char **argv)
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
 		ft::conf newconf("conf/example.conf");
+		newconf.print_loaded_conf();
+	}
+	if (argc > 1 && !std::strcmp(argv[1], "serverconf"))
+	{
+		ft::conf newconf("conf/example.conf");
+		for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
+			ft::server server(*it);
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "mime"))
 	{
