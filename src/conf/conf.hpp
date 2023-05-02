@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/21 23:28:10 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/04/30 22:56:47 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,45 @@ class conf{
 		~conf();
 
 		//Getters
-		std::string		getIp() const;
-		unsigned short		getPort() const;
+		std::vector<serverconf>				servers;
+		void print_loaded_conf();
 
 	private:
 		conf();
 		conf( const conf& copy );
 		conf & operator=( const conf& assign ); // Assignement Operator
 
-		void _processLine(std::string line);
-		void _validate_conf();
-		void _load_valid_conf_keys();
-		void _load_acepted_methods();
+		void _process_conf_file(std::ifstream &ifs);
+		void _process_conf_line(std::string &line);
+		void _validate_processed_conf();
 		void _print_processed_conf();
 		void _load_configuration();
 
-		void _setAcceptedMethods(std::string accepted_methods);
-		void _parse_server_directive(std::pair <std::string,std::string> conf, serverconf *server);
-		void _parse_listen(std::string listen, serverconf *server);
-		void _parse_root(std::string root, serverconf *server);
-		void _parse_location_directive(std::pair <std::string,std::string> conf, location *location);
-		void _parse_path(std::string path, location *location);
-		void _parse_methods(std::string methods, location *location);
-		void _parse_autoindex(std::string autoindex, location *location);
-		void _parse_client_max_body_size(std::string client_max_body_size, location *location);
-		void _parse_index(std::string index, location *location);
-		void _parse_redirect(std::string redirect, location *location);
+		//	load parameters to validate conf file
+		void _load_valid_conf_keys();
+		void _load_acepted_methods();
 
-		std::vector<serverconf>				servers;
+		//	parse server directives
+		void _parse_server_directive(const std::pair <std::string,std::string> &directive, serverconf *server);
+		void _parse_listen(const std::string &listen, serverconf *server);
+		void _parse_root(const std::string &root, serverconf *server);
+
+		//	parse location directives
+		void _parse_location_directive(const std::pair <std::string,std::string> &directive, location *location);
+		void _parse_path(const std::string &path, location *location);
+		void _parse_methods(const std::string &methods, location *location);
+		void _parse_autoindex(const std::string &autoindex, location *location);
+		void _parse_client_max_body_size(const std::string &client_max_body_size, location *location);
+		void _parse_index(const std::string &index, location *location);
+		void _parse_redirect(const std::string &redirect, location *location);
 
 	private:
 		// std::string											_address;
 		// unsigned short										_port;
 		// unsigned short										_methods;
 		// std::string											_root;
-		std::set<std::string>								_valid_conf_keys;
-		std::vector<std::string>							_accepted_methods;
+		std::set<std::string>								_valid_conf_keys; // listen, root, methods...
+		std::vector<std::string>							_accepted_methods; // GET, POST, DELETE
 
 		std::vector<std::pair <std::string,std::string> >	_conf;
 };

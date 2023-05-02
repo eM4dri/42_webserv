@@ -15,28 +15,31 @@
 # include <arpa/inet.h>		// sockaddr_in, socklen_t
 # include <poll.h>			// pollfd
 # include <vector>			// std::vector
-
+# include "conf/conf.hpp"
 
 namespace ft
 {
+
+class serverconf;
 
 class server{
 	public:
 		//Constructor
 		server(const char *address, int port, int backlog);
+		server(const serverconf &conf);
 		~server();
-		
+
 	private:
 		server();	// not necesary
 		server( const server & copy );	// not necesary
 		server & operator=( const server & assign );	// not necesary
-		
+
 		int								_server_fd;
 		struct sockaddr_in				_address;
 		socklen_t						_address_len;
 		std::vector<struct pollfd> 		_poll_fds;
 		bool							_listening;
-		
+
 		//Function to init server
 		bool _init_server(const char *address, int port, int backlog);
 
@@ -52,7 +55,7 @@ class server{
 		void _responder(int client_fd);
 		void _echo(int fd, char const *str, size_t nbytes);
 };
-		
+
 
 }//Namespace ft
 
