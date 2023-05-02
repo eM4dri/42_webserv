@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/01 20:22:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:50:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ const std::string &Request::get_fullrequest() const
 	return (fullrequest);
 }
 
-const int Request::get_method() const
+int Request::get_method() const
 {
 	return (method);
 }

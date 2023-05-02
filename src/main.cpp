@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 18:08:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/02 18:53:26 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "responses/responses.hpp"
 #include <cstring>
 #include "responses/responses.hpp"
-#include "parsing/request_header_parsing.hpp"
 #include "general.hpp"
 #include "actuators/methods.hpp"
 #include "requests/Request.hpp"
@@ -99,26 +98,10 @@ int main(int argc, char **argv)
 		std::cout << "Rel path: " << newrequest.get_path_rel() << std::endl;
 		std::cout << "Raw path: " << newrequest.get_path_raw() << std::endl << std::endl;
 		
-		std::cout << "Method: " << newrequest.get_method() << std::endl << std::endl;
+		std::cout << "Method: " << newrequest.get_method_txt() << std::endl << std::endl;
 
 		std::cout << "------ BODY ------" << std::endl;
 		std::cout << newrequest.get_body() << std::endl << std::endl;
-
-
-
-
-
-/*		struct s_request_info header_struct;
-		std::map<std::string, std::string> header_map;
-		std::string body;
-
-		header_parser(file_reader("test_files/post_request", &read_status), header_struct, header_map, body);
-		std::cout << "Method: " << header_struct.method << std::endl;
-		std::cout << "Path: " << header_struct.path << std::endl;
-		std::cout << "HTTP: " << header_struct.http_version << std::endl;
-		for (std::map<std::string,std::string>::iterator it = header_map.begin(); it != header_map.end(); ++it)
-			std::cout << "- '" << it->first << "': '" << it->second << "'" << std::endl;
-		std::cout << TXT_COLOR_CYAN << "--- BODY ---" << TXT_RESET << std::endl << body << std::endl;*/
 	}
 	// if (argc >  1 && !std::strcmp(argv[1], "gettest"))
 	// {

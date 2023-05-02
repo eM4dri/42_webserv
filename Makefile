@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/01 20:43:49 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/02 18:19:02 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,6 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/socket/BindSocket.hpp			\
 					network/socket/ListenSocket.hpp			\
 					network/socket/ConnectSocket.hpp		\
-					parsing/request_header_parsing.hpp		\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
