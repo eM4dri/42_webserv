@@ -176,7 +176,7 @@ std::string return_error_message(int status_code)
 	return(retvalue);
 }
 
-std::string file_status_custom_error(int file_status)
+std::string file_status_custom_error(int file_status, std::string path)
 {
 	std::string retval;
 	if (file_status == ENOENT)			//?	File Not found
@@ -185,7 +185,7 @@ std::string file_status_custom_error(int file_status)
 		retval = return_error_message(500);
 	else if (file_status == EISDIR)		//?	Is a directory
 	{
-		//TODO
+		retval = create_directory_index(path);
 	}
 	else
 		retval = return_error_message(501);
@@ -197,12 +197,18 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
+	int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	stat(filename.c_str(), &file_info);
+	is_dir = stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;
+		return("");
+	}
+	else if (file_info.st_mode & S_IFDIR)
+	{
+		*status = EISDIR;
 		return("");
 	}
 	else
@@ -221,7 +227,7 @@ std::string return_content(int status_code, std::string filename)
 
 	if (status)
 	{
-		retvalue = file_status_custom_error(status);
+		retvalue = file_status_custom_error(status, filename);
 		return (retvalue);
 	}
 	retvalue.append(to_string(status_code));
