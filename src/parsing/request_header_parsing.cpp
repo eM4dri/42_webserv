@@ -6,48 +6,11 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/24 20:03:03 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/01 18:31:24 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "request_header_parsing.hpp"
-
-/*
-!	The error message might not be necessary, but an attempt to access somewhere over the root should be controlled and redirect back to the root.
-!	This function is unused for now.
-*/
-bool	check_valid_path(std::string path)
-{
-	std::vector <std::string> routes = cpp_split(path, '/');
-	std::vector<std::string>::iterator curr_route = routes.begin() + 1;
-	int level = 0;
-
-	while (curr_route != routes.end())
-	{
-		if (*curr_route == "..")
-			level--;
-		else if (*curr_route != ".")
-			level++;
-		if (level < 0)
-		{
-			std::cerr << "Error: Attempted to access files above the root." << std::endl << std::endl;
-			std::vector<std::string>::iterator iter_route = routes.begin() + 1;
-			while (iter_route != routes.end())
-			{
-				std::cerr << "/";
-				if (iter_route == curr_route)
-					std::cerr << TXT_BOLD_RED;
-				std::cerr << *iter_route;
-				std::cerr << TXT_RESET;
-				iter_route++;
-			}
-			std::cerr << std::endl;
-			return (false);
-		}
-		curr_route++;
-	}
-	return (true);
-}
+#include "../requests/Request.hpp"
 
 /*
 ?	This function takes a string that has a path starting from a root and 
@@ -55,7 +18,7 @@ bool	check_valid_path(std::string path)
 ?	If there are, it will delete those attempts remaining within the allowed
 ?	boundaries and returning a string with a safe path.
 */
-std::string correct_path(std::string orig_path)
+static std::string correct_path(const std::string &orig_path)
 {
 	std::vector <std::string> routes = cpp_split(orig_path, '/');
 	std::vector<std::string>::iterator curr_route = routes.end() - 1;
@@ -69,6 +32,8 @@ std::string correct_path(std::string orig_path)
 		else
 			curr_route--;
 	}
+	if (*curr_route == "~")
+		curr_route++;
 	curr_route_aux = curr_route;
 
 	while (curr_route != routes.end())
@@ -80,9 +45,14 @@ std::string correct_path(std::string orig_path)
 			else
 				level--;
 		}
-		else if (*curr_route != ".")
+		else if (*curr_route == ".")
+			routes.erase(curr_route);
+		else
+		{
 			level++;
-		curr_route++;
+			curr_route++;
+		}
+
 	}
 	while (curr_route_aux != routes.end())
 	{
@@ -104,7 +74,7 @@ std::string correct_path(std::string orig_path)
 	*	Valid method ("GET", "POST" and "DELETE").
 	*	The verison is "HTTP1.1".
 */
-bool	check_first_line_validity(std::string firstline, struct s_request_info &header_struct)
+bool	Request::check_first_line_validity(std::string firstline)
 {
 	std::vector <std::string> params = cpp_split(firstline, ' ');
 
@@ -150,11 +120,11 @@ bool	check_first_line_validity(std::string firstline, struct s_request_info &hea
 	else
 	{
 		if (params[0] == "GET")
-			header_struct.method = GET;
+			method = GET;
 		if (params[0] == "POST")
-			header_struct.method = POST;
+			method = POST;
 		if (params[0] == "DELETE")
-			header_struct.method = DELETE;
+			method = DELETE;
 	}
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
@@ -170,9 +140,11 @@ bool	check_first_line_validity(std::string firstline, struct s_request_info &hea
 		std::cerr << TXT_RESET << std::endl;
 		return (false);
 	}
-	else
-		header_struct.http_version = "HTTP1.1";
-	header_struct.path = correct_path(params[1]);
+	path.unparsed = params[1];
+	path.relative = correct_path(params[1]);
+	path.absolute = SERVER_ROOT;
+	path.absolute.append("/");
+	path.absolute.append(path.relative);
 	return (true);
 }
 
@@ -204,10 +176,10 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 /*
 ?	Checks if all fo the testing worked out well.
 */
-bool	check_request_validity(std::string fullrequest, struct s_request_info &header_struct, std::map<std::string, std::string> &header_map)
+bool	Request::check_request_validity(std::string fullheader)
 {
-	std::vector <std::string> line_vector = cpp_split(fullrequest, '\n');
-	if (!check_first_line_validity(line_vector[0], header_struct))
+	std::vector <std::string> line_vector = cpp_split(fullheader, '\n');
+	if (!check_first_line_validity(line_vector[0]))
 		return (false);
 	if (!check_header_validity(line_vector, header_map))
 		return (false);
@@ -220,10 +192,10 @@ bool	check_request_validity(std::string fullrequest, struct s_request_info &head
 ?	the header and the body into a string.
 !	If there's no body, it will be left as an empty string ("").
 */
-void header_parser(std::string fullrequest, struct s_request_info &header_struct, std::map<std::string, std::string> &header_map, std::string &body)
+void Request::header_parser()
 {
 	size_t head_body_separation = fullrequest.find("\n\n");
-	if (!check_request_validity(fullrequest.substr(0, head_body_separation), header_struct, header_map))
+	if (!check_request_validity(fullrequest.substr(0, head_body_separation)))
 	{
 		return ;
 	}
