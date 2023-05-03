@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/02 18:50:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:04:56 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ Request::Request(const std::string input): fullrequest(input)
 }
 
 Request::Request(Request &tocopy): fullrequest(tocopy.fullrequest), \
+method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
+{
+}
+
+Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
 {
 }

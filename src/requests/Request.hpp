@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/02 18:50:29 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/03 17:04:34 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class Request
 
 		Request(const std::string input);
 		Request(Request &tocopy);
+		Request(const Request &tocopy);
 
 	//*	Parsing
 		void header_parser();
