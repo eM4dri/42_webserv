@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/23 18:20:43 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/01 17:50:13 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 #define TXT_BOLD_CYAN "\033[1;36m"
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#define SERVER_ROOT "test_files"
 
 enum e_methods
 {
@@ -62,6 +63,7 @@ enum e_methods
 *	@param method short
 *	@param path std::string
 *	@param http_version std::string
+*	@warning UNDER DESTRUCTION
 */
 struct s_request_info
 {
@@ -75,6 +77,6 @@ std::string file_reader(const std::string &filename, int *status);
 std::string to_string(int number);
 std::string bytes_metric_formatting(long size);
 std::string get_date(time_t in_time, bool is_gmt);
-
+std::vector <std::string> cpp_split(std::string full_line, char splitter);
 
 #endif

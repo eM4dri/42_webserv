@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/23 17:11:34 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:14:24 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,10 @@ std::vector <std::string> cpp_split(std::string full_line, char splitter)
 	std::string::iterator end = full_line.begin();
 
 	while (end != full_line.end() && *end == splitter)
-	{
 		end++;
-		begin++;
-	}
+	begin = end;
 	while (end != full_line.end())
 	{
-
 		while (end != full_line.end() && *end != splitter)
 			end++;
 		if (end != full_line.end())

@@ -25,7 +25,7 @@ std::string create_directory_index(std::string path)
 	retval.append(path);
 	retval.append("</h1>\n<hr>");
 
-	if (!std::strcmp(directoryitem->d_name, ".."))
+	if (!std::strcmp(directoryitem->d_name, ".."))		//!		This condition is not reliable anymore.
 	{
 		retval.append("\t<table>\n");
 		retval.append("\t\t<tbody>\n");
@@ -45,6 +45,7 @@ std::string create_directory_index(std::string path)
 	while (directoryitem)
 	{
 		fullpath = path;
+		fullpath.append("/");
 		fullpath.append(directoryitem->d_name);
 		if (stat(fullpath.c_str(), &fileinfo))
 			perror(fullpath.c_str());
@@ -58,6 +59,8 @@ std::string create_directory_index(std::string path)
 			retval.append("❌ THIS SHOULD NOT BE PRINTED ❌");
 		retval.append("</td><td>");
 		retval.append("<a href=\"./");
+		retval.append(SERVER_ROOT);		//!		Delete when we are able to make GET 
+		retval.append("/");				//! 	requests directly from a browser
 		retval.append(directoryitem->d_name);
 		retval.append("\">");
 		retval.append(directoryitem->d_name);

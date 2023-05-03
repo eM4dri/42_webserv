@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 17:18:37 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:38:23 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 #include "responses/responses.hpp"
 #include <cstring>
 #include "responses/responses.hpp"
-#include "parsing/request_header_parsing.hpp"
 #include "general.hpp"
 #include "actuators/methods.hpp"
+#include "requests/Request.hpp"
 
 // void ft_leaks(void)
 // {
@@ -86,33 +86,47 @@ int main(int argc, char **argv)
 	}
 	if (argc >  1 && !std::strcmp(argv[1], "headerparser"))
 	{
-		struct s_request_info header_struct;
-		std::map<std::string, std::string> header_map;
-		std::string body;
 		int read_status;
 
-		header_parser(file_reader("test_files/post_request", &read_status), header_struct, header_map, body);
-		std::cout << "Method: " << header_struct.method << std::endl;
-		std::cout << "Path: " << header_struct.path << std::endl;
-		std::cout << "HTTP: " << header_struct.http_version << std::endl;
-		for (std::map<std::string,std::string>::iterator it = header_map.begin(); it != header_map.end(); ++it)
-			std::cout << "- '" << it->first << "': '" << it->second << "'" << std::endl;
-		std::cout << TXT_COLOR_CYAN << "--- BODY ---" << TXT_RESET << std::endl << body << std::endl;
-	}
-	if (argc >  1 && !std::strcmp(argv[1], "gettest"))
-	{
-		struct s_request_info header_struct;
-		std::map<std::string, std::string> header_map;
-		std::string body;
-		int read_status;
+		Request newrequest(file_reader("test_files/get_request", &read_status));
 
-		std::string file_read = file_reader("test_files/get_request", &read_status);
-		if (read_status)
-			std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
-		header_parser(file_read, header_struct, header_map, body);
+		std::cout << "Abs path: " << newrequest.get_path_abs() << std::endl;
+		std::cout << "Rel path: " << newrequest.get_path_rel() << std::endl;
+		std::cout << "Raw path: " << newrequest.get_path_raw() << std::endl << std::endl;
 
-		method_get(header_struct);
+		std::cout << "Method: " << newrequest.get_method_txt() << std::endl << std::endl;
+
+		std::cout << "------ BODY ------" << std::endl;
+		std::cout << newrequest.get_body() << std::endl << std::endl;
 	}
+	// if (argc >  1 && !std::strcmp(argv[1], "gettest"))
+	// {
+	// 	struct s_request_info header_struct;
+	// 	std::map<std::string, std::string> header_map;
+	// 	std::string body;
+	// 	int read_status;
+
+	// 	std::string file_read = file_reader("test_files/get_request", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
+	// 	if (read_status)
+	// 		std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
+	// 	header_parser(file_read, header_struct, header_map, body);
+
+	// 	method_get(header_struct);
+	// }
+	// if (argc >  1 && !std::strcmp(argv[1], "getdirtest"))
+	// {
+	// 	struct s_request_info header_struct;
+	// 	std::map<std::string, std::string> header_map;
+	// 	std::string body;
+	// 	int read_status;
+
+	// 	std::string file_read = file_reader("test_files/get_request_dir", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
+	// 	if (read_status)
+	// 		std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
+	// 	header_parser(file_read, header_struct, header_map, body);
+
+	// 	method_get(header_struct);
+	// }
 
 
 
