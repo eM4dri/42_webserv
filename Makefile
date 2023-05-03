@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
+#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/02 18:19:02 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/03 14:41:37 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					responses/Filetypes.hpp					\
 					responses/responses.hpp					\
 					actuators/methods.hpp					\
+					actuators/cgi.hpp						\
 					requests/Request.hpp					\
 					general.hpp
 
@@ -70,6 +71,7 @@ SRC_FILES	= 	main.cpp								\
 				responses/Filetypes.cpp					\
 				responses/Directories.cpp				\
 				actuators/get.cpp						\
+				actuators/cgi.cpp						\
 				to_string.cpp							\
 				requests/Request.cpp					\
 				utils.cpp

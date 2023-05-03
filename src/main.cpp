@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 14:38:23 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:40:04 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "general.hpp"
 #include "actuators/methods.hpp"
 #include "requests/Request.hpp"
+#include "actuators/cgi.hpp"
 
 // void ft_leaks(void)
 // {
@@ -130,5 +131,9 @@ int main(int argc, char **argv)
 
 
 
+	if (argc >  1 && !std::strcmp(argv[1], "cgi"))
+	{
+		ft::cgi newcgi;
+	}
 	return (0);
 }

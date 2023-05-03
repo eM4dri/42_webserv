@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 17:15:53 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:09:25 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,13 @@ conf::~conf()
 	if (_conf.size())
 		_conf.clear();
 	if (servers.size())
+	{
+		for (std::vector<serverconf>::iterator it = servers.begin(); it != servers.end(); it++) {
+			if (it->locations.size())
+				it->locations.clear();
+		}
 		servers.clear();
+	}
 	// if (_valid_conf_keys.size())
 	// 	_valid_conf_keys.clear();
 	if (_accepted_methods.size())
