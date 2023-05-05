@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/04/25 15:57:28 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/05 20:43:50 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,13 +44,13 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					network/socket/BindSocket.hpp			\
 					network/socket/ListenSocket.hpp			\
 					network/socket/ConnectSocket.hpp		\
-					parsing/request_header_parsing.hpp		\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
 					responses/Filetypes.hpp					\
 					responses/responses.hpp					\
 					actuators/methods.hpp					\
+					requests/Request.hpp					\
 					general.hpp
 
 # Source and object files
@@ -71,6 +71,7 @@ SRC_FILES	= 	main.cpp								\
 				responses/Directories.cpp				\
 				actuators/get.cpp						\
 				to_string.cpp							\
+				requests/Request.cpp					\
 				utils.cpp
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)
