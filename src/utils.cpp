@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/03 19:39:31 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/04 16:23:05 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,4 +299,10 @@ std::string get_date()
 	retval.append(to_string(gmt_time->tm_sec));
 	retval.append(" GMT");
 	return (retval);
+}
+
+//! Debugging purposes, please delete before evaluating.
+void checkpoint(char *text)
+{
+	std::cout << text << std::endl;
 }

@@ -6,78 +6,63 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/03 20:24:42 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:23:32 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 
+
+Response::Response(): request(Request())
+{
+}
+
 Response::Response(const Request _request): request(_request)
 {
 	return_content();
-	std::cout << std::endl << "--------------" << std::endl << generate_response() << std::endl << "--------------" << std::endl;
+	std::cout << std::endl << generate_response() << std::endl;
 }
 
-std::string Response::reply()
+void Response::return_error_message(int error_code)
 {
-	if (request.get_method() == GET)
-	{
-		
-	}
-	return (""); // TODO
-}
-
-
-std::string return_error_message(int status_code)
-{
-	std::string		error_reason;
-	std::string		retvalue;
-	int				status;
-	std::string		body  = file_reader(ERROR_TEMPLATE, &status);
-
-	error_reason.append(to_string(status_code));
+	std::string retval;
+	std::string error_reason = to_string(error_code);
 	error_reason.append(" ");
-	error_reason.append(getMessageFromCode(status_code));
+	error_reason.append(getMessageFromCode(error_code));
 
-	if (body.size() > 2)
-	{
-		body.replace(body.find("{PAGE_TITLE}", 0), sizeof("{PAGE_TITLE}") - 1, error_reason);
-		body.replace(body.find("{H1_TITLE}", 0), sizeof("{H1_TITLE}") - 1, error_reason);
-	}
-
-	retvalue.append("HTTP/1.1 ");
-	retvalue.append(to_string(status_code));
-	retvalue.append(" ");
-	retvalue.append(getMessageFromCode(status_code));
-	retvalue.append("\nDate: ");
-	retvalue.append(get_date());
-	retvalue.append("\nServer: WTF IDK LOL");
-	retvalue.append("\nContent-Length: ");
-	retvalue.append(to_string(body.length()));
-	retvalue.append("\nContent-Type: ");
-	retvalue.append("text/html");
-
-	retvalue.append("\n\n");
-	retvalue.append(body);
-	return(retvalue);
+	status_code = error_code;
+	retval.append("<html>\n");
+	retval.append("\t<head><title>");
+	retval.append(error_reason);
+	retval.append("</title></head>\n");
+	retval.append("\t<body>\n");
+	retval.append("\t\t<h1><center>");
+	retval.append(error_reason);
+	retval.append("</center></h1>\n");
+	retval.append("\t\t<hr>\n");
+	retval.append("\t\t<p><center>Webserv</center></p>\n");
+	retval.append("\t</body>");
+	retval.append("</html>");
+	body = retval;
 }
 
-std::string Response::file_status_custom_error(int file_status)
+void Response::file_status_custom_error(int file_status)
 {
 	std::string retval;
 	if (file_status == ENOENT)			//?	File Not found
 		status_code = 404;
 	else if (file_status == EACCES)		//?	Permission denied
 		status_code = 500;
-	else if (file_status == EISDIR)		//?	Is a directory
+	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been chacked previously so there should be no errors from now on.
 	{
-		retval = create_directory_index(request.get_path_abs());
-		return (retval);
+		status_code = 200;
+		retval = create_directory_index();
+		body = retval;
+		return ;
 	}
 	else
-		status_code = 501;
-	retval = return_error_message(status_code);
-	return (retval);
+		status_code = 501;				//?	"Not implemented" error
+	return_error_message(status_code);
 }
 
 std::string get_file(std::string filename, std::string &mod_date, int *status)
@@ -115,20 +100,18 @@ void Response::return_content()
 
 	if (status)
 	{
-		body = file_status_custom_error(status);
+		/*body = */file_status_custom_error(status);
+		head_params["Content-Type"] = get_filetype.get("html");
 	}
 	else
 	{
 		status_code = 200;
 		body = get_body;
+		head_params["Content-Type"] = get_filetype.get_suffix(request.get_path_rel());
+		head_params["Last-Modified"] = mod_date;
 	}
-	head_params["Date"] = get_date();
 	head_params["Server"] = "IDK 4.2"; 		// TODO
 	head_params["Content-Length"] = to_string(body.length());
-	head_params["Content-Type"] = get_filetype.get_suffix(request.get_path_rel());
-	head_params["Last-Modified"] = mod_date;
-
-
 }
 
 std::string Response::generate_response()
@@ -141,6 +124,7 @@ std::string Response::generate_response()
 	retval.append(getMessageFromCode(status_code));
 	retval.append("\n");
 
+	head_params["Date"] = get_date();
 	for (std::map<std::string, std::string>::const_iterator it = head_params.begin(); it != head_params.end(); it++)
 	{
 		retval.append(it->first);

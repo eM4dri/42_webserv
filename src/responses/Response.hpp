@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/03 20:24:53 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:23:39 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,16 @@ class Response
 		int status_code;
 		std::map<std::string, std::string> head_params;
 		std::string body;
+		Response();
 
 	public:
 		Response(const Request _request);
-		std::string reply();
 		void return_content();
+		std::string reply();
 		std::string generate_response();
-		std::string file_status_custom_error(int file_status);
+		void file_status_custom_error(int file_status);
+		void return_error_message(int error_code);
+		std::string create_directory_index();
 };
 
 

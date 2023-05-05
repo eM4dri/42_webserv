@@ -6,11 +6,20 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/03 17:04:56 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/04 18:41:12 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
+
+Request::Request(): fullrequest("")
+{
+	method = 0;
+	path.absolute = "";
+	path.relative = "";
+	path.unparsed = "";
+	body = "";
+}
 
 Request::Request(const std::string input): fullrequest(input)
 {
