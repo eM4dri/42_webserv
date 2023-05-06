@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 17:21:44 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/28 19:30:07 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:49:01 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "../general.hpp"
 #include "Filetypes.hpp"
 
-#define ERROR_TEMPLATE "conf/error_template"
 
 
 std::string return_content(int status_code, std::string filename);

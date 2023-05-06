@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/01 17:50:13 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:45:58 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #define SERVER_ROOT "test_files"
+#define ERROR_TEMPLATE "conf/error_template"
 
 enum e_methods
 {
@@ -78,5 +79,8 @@ std::string to_string(int number);
 std::string bytes_metric_formatting(long size);
 std::string get_date(time_t in_time, bool is_gmt);
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
+std::string getMessageFromCode(int status_code);
+std::string get_date();
+void checkpoint(char *text); //! Debugging purposes, please delete before evaluating.
 
 #endif
