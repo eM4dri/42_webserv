@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/03 14:41:37 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/06 09:28:04 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 					actuators/methods.hpp					\
 					actuators/cgi.hpp						\
 					requests/Request.hpp					\
+					responses/Response.hpp					\
 					general.hpp
 
 # Source and object files
@@ -74,6 +75,7 @@ SRC_FILES	= 	main.cpp								\
 				actuators/cgi.cpp						\
 				to_string.cpp							\
 				requests/Request.cpp					\
+				responses/Response.cpp					\
 				utils.cpp
 
 OBJ_FILES	= $(SRC_FILES:.cpp=.o)

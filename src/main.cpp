@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 14:40:04 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/06 09:28:16 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 #include "responses/responses.hpp"
 #include "general.hpp"
 #include "actuators/methods.hpp"
-#include "requests/Request.hpp"
 #include "actuators/cgi.hpp"
+#include "requests/Request.hpp"
+#include "responses/Response.hpp"
 
 // void ft_leaks(void)
 // {
@@ -73,18 +74,6 @@ int main(int argc, char **argv)
 		std::cout << "fdf:  "<< filetypes.get("fdf") << std::endl;
 		std::cout << "gif:  "<< filetypes.get("gif") << std::endl;
 	}
-	if (argc >  1 && !std::strcmp(argv[1], "error"))
-	{
-		LOG(std::endl << " *\t Test return error message \t* ");
-		LOG(return_error_message(404));
-	}
-	if (argc >  1 && !std::strcmp(argv[1], "dirpage"))
-	{
-		std::string result;
-		std::cout << "Showing the content of the generated html file showing the index of a directory." << std::endl;
-		result = create_directory_index("src/");
-		std::cout << result << std::endl;
-	}
 	if (argc >  1 && !std::strcmp(argv[1], "headerparser"))
 	{
 		int read_status;
@@ -100,34 +89,21 @@ int main(int argc, char **argv)
 		std::cout << "------ BODY ------" << std::endl;
 		std::cout << newrequest.get_body() << std::endl << std::endl;
 	}
-	// if (argc >  1 && !std::strcmp(argv[1], "gettest"))
-	// {
-	// 	struct s_request_info header_struct;
-	// 	std::map<std::string, std::string> header_map;
-	// 	std::string body;
-	// 	int read_status;
-
-	// 	std::string file_read = file_reader("test_files/get_request", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
-	// 	if (read_status)
-	// 		std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
-	// 	header_parser(file_read, header_struct, header_map, body);
-
-	// 	method_get(header_struct);
-	// }
-	// if (argc >  1 && !std::strcmp(argv[1], "getdirtest"))
-	// {
-	// 	struct s_request_info header_struct;
-	// 	std::map<std::string, std::string> header_map;
-	// 	std::string body;
-	// 	int read_status;
-
-	// 	std::string file_read = file_reader("test_files/get_request_dir", &read_status); //! Please include the complete path of the file containing the GET request relative to the executable.
-	// 	if (read_status)
-	// 		std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
-	// 	header_parser(file_read, header_struct, header_map, body);
-
-	// 	method_get(header_struct);
-	// }
+//*		This will make a GET request. The full header must be stored in a file and it mocks a real
+//*		request. Add 'dir' to the parameters to try with a directory instead of a file.
+	if (argc >  1 && !std::strcmp(argv[1], "gettest"))
+	{
+		int read_status = 1;
+		std::string getfilename;
+		if (argc > 2 && !std::strcmp(argv[2], "dir"))
+			getfilename = "test_files/get_request_dir";
+		else
+			getfilename = "test_files/get_request";
+		Request request(file_reader(getfilename, &read_status));
+		if (read_status)
+			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
+		Response response(request);
+	}
 
 
 
