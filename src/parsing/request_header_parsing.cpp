@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/01 18:31:24 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:46:47 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static std::string correct_path(const std::string &orig_path)
 	std::vector<std::string>::iterator curr_route_aux = routes.end();
 	std::string retval;
 	int level = 0;
+	if (!routes.size())
+		return ("");
 	while (curr_route != routes.begin())
 	{
 		if (*curr_route == "~")
@@ -43,7 +45,12 @@ static std::string correct_path(const std::string &orig_path)
 			if (level - 1 < 0)
 				routes.erase(curr_route);
 			else
-				level--;
+			{
+				routes.erase(curr_route);
+				curr_route--;
+				routes.erase(curr_route);
+			}
+				
 		}
 		else if (*curr_route == ".")
 			routes.erase(curr_route);
@@ -197,6 +204,7 @@ void Request::header_parser()
 	size_t head_body_separation = fullrequest.find("\n\n");
 	if (!check_request_validity(fullrequest.substr(0, head_body_separation)))
 	{
+		//TODO COMPLAIN
 		return ;
 	}
 	if (head_body_separation != std::string::npos)

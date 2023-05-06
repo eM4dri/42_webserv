@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/23 17:25:03 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/05 20:22:44 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Filetypes::Filetypes()
 	file_instream.open(FILETYPES);
 	if (!file_instream.is_open())
 	{
-		//	COMPLAIN
+		//TODO	COMPLAIN
 	}
 	std::getline(file_instream, file_line);
 	while (std::getline(file_instream, file_line))
@@ -52,6 +52,8 @@ std::string Filetypes::get(const std::string &tosearch)
 
 std::string Filetypes::get_suffix(const std::string &tosearch)
 {
+	if (tosearch.size() < 1)
+		return(DEFAULT_VALUE);
 	unsigned int search_it = tosearch.size() - 1;
 	while (search_it > 0)
 	{

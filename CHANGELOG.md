@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-05 - Jorge
+### Reworked
+- Responses are now stored as an object and need to be built as a string with the function `std::string Response::generate_response()` to be returned.
+	- Some tests form the `main` turned obsolete, so a few of them were removed.
+	- The test `gettest` allows an additional `dir` parameter to test both files and directories.
+- Function `correct_path()` now returns a full path without `..` expressions.
+
+### Bug fixes
+- The index of files when requesting a directory now hides the `Parent directory` button when found in the root.
+
+## 2023-05-03 - Jorge
+- Responses are still being turned into objects. It mostly works except for the cases where a directory is requested instead of a file.
+
 ## 2023-05-01 - Jorge
 ### Reworked
 - Requests are now stored in an object.

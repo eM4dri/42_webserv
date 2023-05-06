@@ -7,3 +7,4 @@ gTest/build
 a.out
 obj/
 .DS_Store
+test_files/forbidden_file.txt
