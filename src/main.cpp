@@ -6,11 +6,11 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/06 09:28:16 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/06 09:57:15 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "network/fdlibc-network.hpp"
+// #include "network/fdlibc-network.hpp"
 #include <iostream>
 #include "utils/log.hpp"
 #include "network/server.hpp"
@@ -18,7 +18,6 @@
 #include "responses/Filetypes.hpp"
 #include "responses/responses.hpp"
 #include <cstring>
-#include "responses/responses.hpp"
 #include "general.hpp"
 #include "actuators/methods.hpp"
 #include "actuators/cgi.hpp"
@@ -33,23 +32,6 @@
 int main(int argc, char **argv)
 {
 	// atexit(ft_leaks);
-	if (argc > 1 && !std::strcmp(argv[1], "granular"))
-	{
-		ft::SelectServer T(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080, 5);
-		std::cout << "Starting..." << std::endl;
-		// std::cout << "Socket..." << std::endl;
-		// ft::ASocket as = ft::ASocket(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80);
-		std::cout << "Binding Socket..." << std::endl;
-		ft::BindSocket bd = ft::BindSocket(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8080);
-		std::cout << "Listening Socket..." << std::endl;
-		ft::ListenSocket ld = ft::ListenSocket(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 8081, 5);
-		//atexit(ft_leaks);
-		// BindSocket();
-		(void)bd;
-		(void)ld;
-
-		std::cout << "Success!" << std::endl;
-	}
 	if (argc > 1 && !std::strcmp(argv[1], "conf"))
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");

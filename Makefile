@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/06 09:28:04 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/06 09:58:18 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,19 +31,8 @@ VERSION = -std=c++98 -MMD
 NAMESPACE =
 
 # Header files
-INCLUDES_FILES =	network/fdlibc-network.hpp				\
-					utils/log.hpp							\
+INCLUDES_FILES =	utils/log.hpp							\
 					network/server.hpp						\
-					network/server/fdlibc-server.hpp		\
-					network/server/AServer.hpp				\
-					network/server/TestServer.hpp			\
-					network/server/SelectServer.hpp			\
-					network/server/PollServer.hpp			\
-					network/socket/fdlibc-socket.hpp		\
-					network/socket/ASocket.hpp				\
-					network/socket/BindSocket.hpp			\
-					network/socket/ListenSocket.hpp			\
-					network/socket/ConnectSocket.hpp		\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
@@ -58,14 +47,6 @@ INCLUDES_FILES =	network/fdlibc-network.hpp				\
 # Source and object files
 SRC_FILES	= 	main.cpp								\
 				network/server.cpp						\
-				network/server/AServer.cpp				\
-				network/server/TestServer.cpp			\
-				network/server/SelectServer.cpp			\
-				network/server/PollServer.cpp			\
-				network/socket/ASocket.cpp				\
-				network/socket/BindSocket.cpp			\
-				network/socket/ListenSocket.cpp			\
-				network/socket/ConnectSocket.cpp		\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
 				responses/responses.cpp					\
