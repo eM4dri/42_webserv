@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-06 - Edu
 ### Added
 - Class `cgi` to handle cgi programs, this version contains response of script `reply.py`, but request and header response is mocked
-- Added som sandbox examples to play with cgi
+- Added some sandbox examples to play with cgi
 
 ### Removed
 - Removed obsolete tests form the `main` and `Makefile`, moved mock early  servers versions to sandbox
