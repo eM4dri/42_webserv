@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:46:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 19:54:53 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,10 @@ static std::string correct_path(const std::string &orig_path)
 	*	Parameters == 3
 	*	Valid method ("GET", "POST" and "DELETE").
 	*	The verison is "HTTP1.1".
+
+!	UPDATE:	The formatting won't be transfered into the error page, so the formatting is 
+!			useless for now (except for debugging purposes). Most of it has been commented.
+!			If there's time, we can pass some explanation about the error to the returned page.
 */
 bool	Request::check_first_line_validity(std::string firstline)
 {
@@ -87,41 +91,41 @@ bool	Request::check_first_line_validity(std::string firstline)
 
 	if (params.size() < 3)
 	{
-		std::cerr << "Error: Too few arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
-		std::cerr << TXT_COLOR_GREEN;
-		for (unsigned long i = 0; i < params.size(); i++)
-		{
-			std::cerr << params[i] << " ";
-		}
-		std::cerr << TXT_COLOR_YELLOW << ">>>" << TXT_RESET << std::endl;
+		// std::cerr << "Error: Too few arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
+		// std::cerr << TXT_COLOR_GREEN;
+		// for (unsigned long i = 0; i < params.size(); i++)
+		// {													//? Uncomment if necessary for testing
+		// 	std::cerr << params[i] << " ";
+		// }
+		// std::cerr << TXT_COLOR_YELLOW << ">>>" << TXT_RESET << std::endl;
 		return (false);
 	}
 	else if (params.size() > 3)
 	{
-		std::cerr << "Error: Too many arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
-		for (unsigned long i = 0; i < params.size(); i++)
-		{
-			if (i == 3)
-				std::cerr << TXT_BOLD_RED;
-			else if (!i)
-				std::cerr << TXT_COLOR_GREEN;
-			std::cerr << params[i] << " ";
-		}
-		std::cerr << TXT_RESET << std::endl;
+		// std::cerr << "Error: Too many arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
+		// for (unsigned long i = 0; i < params.size(); i++)
+		// {													//? Uncomment if necessary for testing
+		// 	if (i == 3)
+		// 		std::cerr << TXT_BOLD_RED;
+		// 	else if (!i)
+		// 		std::cerr << TXT_COLOR_GREEN;
+		// 	std::cerr << params[i] << " ";
+		// }
+		// std::cerr << TXT_RESET << std::endl;
 		return (false);
 	}
 	if (params[0] != "GET" && params[0] != "POST" && params[0] != "DELETE")
 	{
-		std::cerr << "Error: Unrecognized method \"" << params[0] << "\"." << std::endl << std::endl;
-		for (unsigned long i = 0; i < params.size(); i++)
-		{
-			if (i == 0)
-				std::cerr << TXT_BOLD_RED;
-			else if (i)
-				std::cerr << TXT_RESET;
-			std::cerr << params[i] << " ";
-		}
-		std::cerr << std::endl;
+		// std::cerr << "Error: Unrecognized method \"" << params[0] << "\"." << std::endl << std::endl;
+		// for (unsigned long i = 0; i < params.size(); i++)
+		// {													//? Uncomment if necessary for testing
+		// 	if (i == 0)
+		// 		std::cerr << TXT_BOLD_RED;
+		// 	else if (i)
+		// 		std::cerr << TXT_RESET;
+		// 	std::cerr << params[i] << " ";
+		// }
+		// std::cerr << std::endl;
 		return (false);
 	}
 	else
@@ -135,16 +139,16 @@ bool	Request::check_first_line_validity(std::string firstline)
 	}
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
-		std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
-		for (unsigned long i = 0; i < params.size(); i++)
-		{
-			if (i == 2)
-				std::cerr << TXT_BOLD_RED;
-			else
-				std::cerr << TXT_RESET;
-			std::cerr << params[i] << " ";
-		}
-		std::cerr << TXT_RESET << std::endl;
+		// std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
+		// for (unsigned long i = 0; i < params.size(); i++)
+		// {													//? Uncomment if necessary for testing
+		// 	if (i == 2)
+		// 		std::cerr << TXT_BOLD_RED;
+		// 	else
+		// 		std::cerr << TXT_RESET;
+		// 	std::cerr << params[i] << " ";
+		// }
+		// std::cerr << TXT_RESET << std::endl;
 		return (false);
 	}
 	path.unparsed = params[1];
@@ -204,7 +208,7 @@ void Request::header_parser()
 	size_t head_body_separation = fullrequest.find("\n\n");
 	if (!check_request_validity(fullrequest.substr(0, head_body_separation)))
 	{
-		//TODO COMPLAIN
+		method = -1;
 		return ;
 	}
 	if (head_body_separation != std::string::npos)

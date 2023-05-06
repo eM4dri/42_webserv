@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/05 20:46:25 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 19:01:10 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	if (argc > 1 && !std::strcmp(argv[1], "mime"))
 	{
 		LOG(std::endl << " *\t Test Load mime.types \t* ");
-		Filetypes filetypes;
+		Filetypes filetypes(NULL);
 		std::cout << "html:  "<< filetypes.get("html") << std::endl;
 		std::cout << "png:  "<< filetypes.get("png") << std::endl;
 		std::cout << "mp3:  "<< filetypes.get("mp3") << std::endl;
@@ -107,7 +107,6 @@ int main(int argc, char **argv)
 			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
 		Response response(request);
 	}
-
 
 
 	return (0);

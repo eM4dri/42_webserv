@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:45:58 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:02:58 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #define SERVER_ROOT "test_files"
-#define ERROR_TEMPLATE "conf/error_template"
+//#define ERROR_TEMPLATE "conf/error_template"
+#define SERVER_NAME "IDK 4.2"
 
 enum e_methods
 {
