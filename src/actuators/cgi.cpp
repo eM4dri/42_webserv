@@ -6,14 +6,16 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 18:08:17 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/06 17:06:48 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgi.hpp"
+#include "utils/log.hpp"
 #include <unistd.h>	//	execve, fork, pipe
+#include <cstring>	//	menset, fork, pipe
+#include <sstream>	// std::stringstream
 
-# define SON 0
 enum e_pipe_fd
 {
 	READ_END,
@@ -37,83 +39,89 @@ cgi::~cgi() {
 
 void cgi::_populate_env(void)
 {
-	_add_env(std::string("AUTH_TYPE"));
-	_add_env(std::string("CONTENT_LENGTH"));
-	_add_env(std::string("CONTENT-TYPE"));
-	_add_env(std::string("GATEWAY_INTERFACE=CGI/1.1"));
-	_add_env(std::string("PATH_INFO"));
-	_add_env(std::string("PATH_TRANSLATED"));
-	_add_env(std::string("QUERY_STRING"));
-	_add_env(std::string("REMOTE_ADDR=127.0.0.1"));
-	_add_env(std::string("REMOTE_HOST"));
-	_add_env(std::string("REQUEST_METHOD=GET"));
-	_add_env(std::string("SCRIPT_NAME=./tests/www/localhost/reply.py"));
-	_add_env(std::string("SERVER_NAME=localhost"));
-	_add_env(std::string("SERVER_PORT=9000"));
-	_add_env(std::string("SERVER_PROTOCOL=HTTP/1.1"));
-	_add_env(std::string("SERVER_SOFTWARE=42WebServer/1.0"));
-	_add_env(std::string("HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"));
-	_add_env(std::string("HTTP_ACCEPT_ENCODING=gzip, deflate, br"));
-	_add_env(std::string("HTTP_ACCEPT_LANGUAGE=en_US,en;q=0.5"));
-	_add_env(std::string("HTTP_COOKIE=HIPPIE_COOKIE=42"));
-	_add_env(std::string("HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0) Gecko/20100101 Firefox/108.0"));
+	// _env.push_back(strdup());
+	_env.push_back(strdup("AUTH_TYPE"));
+	_env.push_back(strdup("CONTENT_LENGTH"));
+	_env.push_back(strdup("CONTENT-TYPE"));
+	_env.push_back(strdup("GATEWAY_INTERFACE=CGI/1.1"));
+	_env.push_back(strdup("PATH_INFO"));
+	_env.push_back(strdup("PATH_TRANSLATED"));
+	_env.push_back(strdup("QUERY_STRING"));
+	_env.push_back(strdup("REMOTE_ADDR=127.0.0.1"));
+	_env.push_back(strdup("REMOTE_HOST"));
+	_env.push_back(strdup("REQUEST_METHOD=GET"));
+	_env.push_back(strdup("SCRIPT_NAME=./tests/www/localhost/reply.py"));
+	_env.push_back(strdup("SERVER_NAME=localhost"));
+	_env.push_back(strdup("SERVER_PORT=9000"));
+	_env.push_back(strdup("SERVER_PROTOCOL=HTTP/1.1"));
+	_env.push_back(strdup("SERVER_SOFTWARE=42WebServer/1.0"));
+	_env.push_back(strdup("HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"));
+	_env.push_back(strdup("HTTP_ACCEPT_ENCODING=gzip, deflate, br"));
+	_env.push_back(strdup("HTTP_ACCEPT_LANGUAGE=en_US,en;q=0.5"));
+	_env.push_back(strdup("HTTP_COOKIE=HIPPIE_COOKIE=42"));
+	_env.push_back(strdup("HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0) Gecko/20100101 Firefox/108.0"));
 }
 
-void cgi::_add_env(const std::string & input)
-{
-	char *cstr = new char[input.length() + 1];
-	strcpy(cstr, input.c_str());
-	// do stuff
-	_env.push_back(cstr);
-	delete [] cstr;
+// void cgi::_add_env(const std::string & input)
+// {
+// 	char *cstr = new char[input.length() + 1];
+// 	strcpy(cstr, input.c_str());
+// 	_env.push_back(cstr);
+// }
 
+template <typename T>
+void _print_vector(std::vector<T> & vector)
+{
+	for (typename std::vector<T>::iterator it = vector.begin(); it != vector.end(); it++)
+		LOG(*it);
 }
 
-
-template<class InputIterator, class OutputIterator>
-  OutputIterator copy (InputIterator first, InputIterator last, OutputIterator result)
+template <typename T>
+void _print_array_null_ending(T **array)
 {
-  while (first!=last) {
-    *result = *first;
-    ++result; ++first;
-  }
-  return result;
+	if (*array != NULL)
+		while (*array != NULL)
+			LOG(*array++);
 }
 
 void cgi::_execute(void)
 {
-	char	**envp;
-	char	*argv[2];
-	pid_t	pid;
-	int		fd[2];
-	const std::string exe("/usr/local/bin/python3");
-	const std::string binary("tests_files/reply.py");
+	const char *argv[] = {"/usr/local/bin/python3", "test_files/reply.py", NULL};
+	int			status;
+	pid_t		pid;
+	int			fd[2];
 
-
-	argv[0] = const_cast<char *>(exe.c_str());
-	argv[1] = const_cast<char *>(binary.c_str());
+	pipe(fd);
 	pid = fork();
-	if (pid < 0)
-		;	// error
-	if (pid == SON)
+	if (!pid)	//	son
 	{
-		if (pipe(fd) < 0)
-			;	//	error
-		dup2(fd[READ_END], STDIN_FILENO);
-		dup2(fd[WRITE_END], STDOUT_FILENO);
-	}
-	close(fd[READ_END]);
-	close(fd[WRITE_END]);
-	if (pid == SON)
-	{
-		envp = new char *[_env.size()+1];
+		char **envp = new char *[_env.size() + 1];
 		std::copy(_env.begin(), _env.end(), envp);
-		execve(argv[0], argv, envp);
+		envp[_env.size()] = NULL;
+		// _print_array_null_ending(envp);
+		// _print_vector(_env);
+		close(fd[READ_END]);
+		dup2(fd[WRITE_END], STDOUT_FILENO);
+		close(fd[WRITE_END]);
+		execve(argv[0], const_cast<char **>(argv), envp);
+	}
+	else	//	father
+	{
+		close(fd[WRITE_END]);
+		char	buff[USHRT_MAX]={0};
+		std::memset(buff, 0, USHRT_MAX);
+		read(fd[READ_END], buff, USHRT_MAX);
+		close(fd[READ_END]);
+		waitpid(pid, &status, 0);
+		std::ostringstream ss;
+		ss << buff;
+		_response = ss.str();;
 	}
 }
 
-
-//Private
+std::string const & cgi::get_response() const
+{
+	return _response;
+}
 
 }	// Nammespace ft
-

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:10 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 18:07:10 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/05 17:12:53 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@
 namespace ft
 {
 
-class cgi{
+class server;
+
+class cgi {
 	public:
 	    //Constructor
 		cgi();
 
 	    //Destructor
 		~cgi();
+		std::string const & get_response() const;
 
 	private:
 		cgi( int var );
@@ -34,6 +37,8 @@ class cgi{
 		void _execute(void);
 		void _populate_env(void);
 		void _add_env(const std::string & input);
+		std::string _response;
+
 
 		std::vector<char *>	_env;
 

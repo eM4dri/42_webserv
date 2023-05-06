@@ -20,6 +20,7 @@
 #include "responses/responses.hpp"
 #include "general.hpp"
 #include "actuators/methods.hpp"
+#include "actuators/cgi.hpp"
 
 #define BUFFER_SIZE 1024
 #define BINDING_RETRYS 10
@@ -170,14 +171,29 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		buffer[nbytes] = '\0';
 		LOG2( CLIENT_SAYS(it->fd) << buffer );
 		_responder(it->fd);
-		_echo(it->fd, buffer, nbytes);
+		// _echo(it->fd, buffer, nbytes);
+		close(it->fd);
 	}
 }
 
 void server::_responder(int client_fd)
 {
-	const size_t len = std::strlen(WELCOME_MESSAGE);
-	send(client_fd, reinterpret_cast<const void *>(WELCOME_MESSAGE), len, 0);
+	cgi aux;
+	std::string response;
+	// std::string response = "HTTP/1.1 200 OK\
+	// 						CONTENT-TYPE: text/plain; charset=utf-8\
+	// 						Date: Sat, 06 May 2023 14:05:09 GMT\
+	// 						Server: HippieServer/1.1\
+	// 						Connection: keep-alive\
+	// 						Keep-Alive: timeout=5, max=100\
+	// 						TRANSFER-ENCODING: chunked\
+	// 						\
+	// 						";
+
+
+	response.append(aux.get_response());
+	// const size_t len = std::strlen(WELCOME_MESSAGE);
+	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
 	// struct s_request_info header_struct;
 	// std::map<std::string, std::string> header_map;
 	// std::string body;
@@ -186,7 +202,7 @@ void server::_responder(int client_fd)
 	// std::string file_read = file_reader("test_files/get_request", &read_status);
 	// if (read_status)
 	// 	std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
-	// header_parser(file_read, header_struct, header_map, body);
+	// header_parser(file_read, header_struct, header_ma=p, body);
 
 	// std::string content = return_content(200, header_struct.path);
 

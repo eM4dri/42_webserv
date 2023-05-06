@@ -5,7 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2023-05-05 - Edu
+## 2023-05-06 - Edu
+### Added
+- Class `cgi` to handle cgi programs, this version contains response of script `reply.py`, but request and header response is mocked
+- Added som sandbox examples to play with cgi
+
 ### Removed
 - Removed obsolete tests form the `main` and `Makefile`, moved mock early  servers versions to sandbox
 
