@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/07 09:49:10 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/07 10:41:39 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <climits>		//	USHRT_MAX
 #include <sys/types.h>	//	waitpid
 #include <sys/wait.h>	//	waitpid
+#include <cstdlib>		//	std::free
 
 enum e_pipe_fd
 {
@@ -37,7 +38,11 @@ cgi::cgi()
 //Destructor
 cgi::~cgi() {
 	if (_env.size())
+	{
+		for (std::vector<char *>::iterator it = _env.begin(); it != _env.end(); it++)
+			std::free(*it);
 		_env.clear();
+	}
 }
 
 void cgi::_populate_env(void)
@@ -89,7 +94,8 @@ void _print_array_null_ending(T **array)
 
 void cgi::_execute(void)
 {
-	const char *argv[] = {"/usr/local/bin/python3", "test_files/reply.py", NULL};
+	const char *argv[] = {"/bin/ls", "-la", NULL};	//	test pruposes
+	// const char *argv[] = {"/usr/local/bin/python3", "test_files/reply.py", NULL};
 	int			status;
 	pid_t		pid;
 	int			fd[2];
@@ -101,8 +107,8 @@ void cgi::_execute(void)
 		char **envp = new char *[_env.size() + 1];
 		std::copy(_env.begin(), _env.end(), envp);
 		envp[_env.size()] = NULL;
-		// _print_array_null_ending(envp);
 		// _print_vector(_env);
+		//_print_array_null_ending(envp);
 		close(fd[READ_END]);
 		dup2(fd[WRITE_END], STDOUT_FILENO);
 		close(fd[WRITE_END]);
@@ -120,6 +126,8 @@ void cgi::_execute(void)
 		ss << buff;
 		_response = ss.str();;
 	}
+	// if (envp != NULL)
+	// 	delete [](envp);
 }
 
 std::string const & cgi::get_response() const
