@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:50:38 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:08:35 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Response
 		std::string generate_response();
 		void file_status_custom_error(int file_status);
 		void return_error_message(int error_code);
+		void return_error_message(int error_code, std::string custom_reason);
 		std::string create_directory_index();
 };
 

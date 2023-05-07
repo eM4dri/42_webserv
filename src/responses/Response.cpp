@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:48:34 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:09:39 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ Response::Response(): request(Request())
 
 Response::Response(const Request _request): request(_request)
 {
-	return_content();
-	std::cout << std::endl << generate_response() << std::endl;
+	if (_request.get_method() == -1)
+	{
+		return_error_message(400);
+		head_params["Content-Type"] = "text/html";
+	}
+	else
+		return_content();
+	std::cout << std::endl << generate_response() << std::endl;	//! Delete when testing ends.
 }
 
 void Response::return_error_message(int error_code)
@@ -41,7 +47,33 @@ void Response::return_error_message(int error_code)
 	retval.append("</center></h1>\n");
 	retval.append("\t\t<hr>\n");
 	retval.append("\t\t<p><center>Webserv</center></p>\n");
-	retval.append("\t</body>");
+	retval.append("\t</body>\n");
+	retval.append("</html>");
+	body = retval;
+}
+
+void Response::return_error_message(int error_code, std::string custom_reason)
+{
+	std::string retval;
+	std::string error_reason = to_string(error_code);
+	error_reason.append(" ");
+	error_reason.append(getMessageFromCode(error_code));
+
+	status_code = error_code;
+	retval.append("<html>\n");
+	retval.append("\t<head><title>");
+	retval.append(error_reason);
+	retval.append("</title></head>\n");
+	retval.append("\t<body>\n");
+	retval.append("\t\t<h1><center>");
+	retval.append(error_reason);
+	retval.append("</center></h1>\n");
+	retval.append("\t\t<p><center><b>Custom reason:</b> ");
+	retval.append(custom_reason);
+	retval.append("</center></p>\n");
+	retval.append("\t\t<hr>\n");
+	retval.append("\t\t<p><center>Webserv</center></p>\n");
+	retval.append("\t</body>\n");
 	retval.append("</html>");
 	body = retval;
 }
@@ -96,11 +128,17 @@ void Response::return_content()
 	std::string mod_date;
 	int status = 0;
 	std::string get_body = get_file(request.get_path_abs(), mod_date, &status);
-	Filetypes get_filetype;
+	bool filetype_status;
+	Filetypes get_filetype(&filetype_status);
 
-	if (status)
+	if (!filetype_status)
 	{
-		/*body = */file_status_custom_error(status);
+		return_error_message(500, "The file containing the allowed file types can't be accessed.");
+		head_params["Content-Type"] = "text/html";
+	}
+	else if (status)
+	{
+		file_status_custom_error(status);
 		head_params["Content-Type"] = get_filetype.get("html");
 	}
 	else
@@ -110,20 +148,19 @@ void Response::return_content()
 		head_params["Content-Type"] = get_filetype.get_suffix(request.get_path_rel());
 		head_params["Last-Modified"] = mod_date;
 	}
-	head_params["Server"] = "IDK 4.2"; 		// TODO
-	head_params["Content-Length"] = to_string(body.length());
 }
 
 std::string Response::generate_response()
 {
 	std::string retval;
-
 	retval.append("HTTP/1.1 ");
 	retval.append(to_string(status_code));
 	retval.append(" ");
 	retval.append(getMessageFromCode(status_code));
 	retval.append("\n");
 
+	head_params["Server"] = SERVER_NAME;
+	head_params["Content-Length"] = to_string(body.length());
 	head_params["Date"] = get_date();
 	for (std::map<std::string, std::string>::const_iterator it = head_params.begin(); it != head_params.end(); it++)
 	{

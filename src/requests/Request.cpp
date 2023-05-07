@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:47:00 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:09:59 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 Request::Request(): fullrequest("")
 {
-	method = 0;
+	method = -2;
 	path.absolute = "";
 	path.relative = "";
 	path.unparsed = "";
