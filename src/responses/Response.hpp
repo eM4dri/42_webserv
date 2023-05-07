@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 09:33:25 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/07 10:04:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ class Response
 		std::string generate_response();
 		void file_status_custom_error(int file_status);
 		void return_error_message(int error_code);
+		void return_error_message(int error_code, std::string custom_reason);
 		std::string create_directory_index();
 };
+
+
 
 #endif
