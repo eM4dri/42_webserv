@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
-#include <iostream>			// std::cout, std::endl
-#include <fcntl.h>
-#include <stdlib.h>
-#include <cstring>			// std::memset
-#include <unistd.h>
+#include <fcntl.h>						//	fcntl
+#include <cstring>						//	std::memset
+#include <unistd.h>						//	close, sleep
+#include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
-#include "responses/responses.hpp"
-#include "general.hpp"
-#include "actuators/methods.hpp"
 #include "actuators/cgi.hpp"
+// #include <iostream>						//	std::cout, std::endl
+// #include "responses/responses.hpp"
+// #include "general.hpp"
+// #include "actuators/methods.hpp"
 
 #define BUFFER_SIZE 1024
 #define BINDING_RETRYS 10
@@ -31,6 +31,7 @@
 #define NEW_CONNECTION "webserver: new client connects on socket "
 #define CLIENT_HUNGUP "client hung up"
 #define CLIENT_SAYS(Client) "client " << Client << ": "
+#define SERVER_REPONSE "server response:"
 #define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << _server_fd << " is listening on " << address << ":" << port
 #define BACKLOG 256
 
@@ -101,7 +102,7 @@ void server::_start()
 		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) )
 		{
 			LOG_ERROR("poll");
-			exit(1);
+			std::exit(1);	//! I think we should not exit, just log some error
 		}
 		for(std::vector<struct pollfd>::iterator it = _poll_fds.begin(); it != _poll_fds.end(); it++)
 		{
@@ -141,7 +142,7 @@ void server::_accepter()
 	if (client_fd == -1)
 	{
 		LOG_ERROR("accept");
-		exit(1);
+		std::exit(1);	//! I think we should not exit, just log some error
 	}
 	struct pollfd client;
 	client.fd = client_fd;
@@ -157,19 +158,21 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 	if ( nbytes < 0 )   // got error
 	{
 		LOG_ERROR("recv");
-		exit(1);
+		std::exit(1);	//! I think we should not exit, just log some error
 	}
 	if ( nbytes == 0 )  // connection closed by client
 	{
 		LOG( CLIENT_SAYS(it->fd) << CLIENT_HUNGUP );
-		//TODO Should we not close conection inmediatly, after he closes?
+		// TODO Should we not close conection inmediatly, after he closes?
+		//?	I think we can close as soon as the response has properly ended following http
 		close(it->fd); // Bye!
 		_poll_fds.erase(it);
 	}
 	else	// message from client
 	{
 		buffer[nbytes] = '\0';
-		LOG2( CLIENT_SAYS(it->fd) << buffer );
+		LOG(CLIENT_SAYS(it->fd));
+		LOG_COLOR(RED, buffer );
 		_responder(it->fd);
 		// _echo(it->fd, buffer, nbytes);
 		close(it->fd);
@@ -180,19 +183,19 @@ void server::_responder(int client_fd)
 {
 	cgi aux;
 	std::string response;
-	// std::string response = "HTTP/1.1 200 OK\
-	// 						CONTENT-TYPE: text/plain; charset=utf-8\
-	// 						Date: Sat, 06 May 2023 14:05:09 GMT\
-	// 						Server: HippieServer/1.1\
-	// 						Connection: keep-alive\
-	// 						Keep-Alive: timeout=5, max=100\
-	// 						TRANSFER-ENCODING: chunked\
-	// 						\
-	// 						";
-
+	response =	"HTTP/1.1 200 OK\n"
+				"CONTENT-TYPE: text/plain; charset=utf-8\n"
+				"Date: Sat, 06 May 2023 14:05:09 GMT\n"
+				"Server: HippieServer/1.1\n"
+				"Connection: keep-alive\n"
+				"Keep-Alive: timeout=5, max=100\n"
+				"TRANSFER-ENCODING: chunked\n"
+				"\n";
 
 	response.append(aux.get_response());
 	// const size_t len = std::strlen(WELCOME_MESSAGE);
+	LOG(SERVER_REPONSE);
+	LOG_COLOR(GREEN, response);
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
 	// struct s_request_info header_struct;
 	// std::map<std::string, std::string> header_map;
