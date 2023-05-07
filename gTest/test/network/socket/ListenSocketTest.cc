@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../../src/network/socket/ListenSocket.hpp"
+#include "../../../../src/sandbox/socket/ListenSocket.hpp"
 #include <iostream>
 
 #define ANY_PROTOCOL 0

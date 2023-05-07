@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../../src/network/socket/BindSocket.hpp"
+#include "../../../../src/sandbox/socket/BindSocket.hpp"
 #include <iostream>
 
 #define ANY_PROTOCOL 0

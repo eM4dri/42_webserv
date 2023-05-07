@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-07 - Edu
+### Added
+- Class `cgi` to handle cgi programs, this version contains response of script `reply.py`, but request and header response is mocked
+- Added some sandbox examples to play with cgi
+
+### Removed
+- Removed obsolete tests form the `main` and `Makefile`, moved mock early  servers versions to sandbox
+
+### Fixed
+- Fixed unit test paths & added some missing includes on `cgi.cpp`
+
 ## 2023-05-06 - Jorge
 ### Added
 - More error cases are handled:
@@ -24,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-05-03 - Jorge
 - Responses are still being turned into objects. It mostly works except for the cases where a directory is requested instead of a file.
+
+## 2023-05-02 - Edu
+### Changed
+- Minor changes addded some betterComments class descriptions & mock accepted response every request on server.cpp
 
 ## 2023-05-01 - Jorge
 ### Reworked

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/21 23:28:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:24:57 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ namespace ft
 
 struct location;
 
+/**
+ * @param address	(std::string)
+ * @param port		(unsigned short)
+ * @param root		(std::string)
+ * @param locations	(std::map<std::string, location>)
+*/
 class serverconf{
 	public:
 		std::string							address;

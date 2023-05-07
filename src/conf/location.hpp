@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/21 23:25:47 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/02 16:54:21 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,18 @@ namespace ft
 enum e_accepted_methods
 { GET = 0x1, POST = 0x2, DELETE = 0x4 };
 
+
+/**
+ * @param methods	(unsigned short) usage (methods & GET/POST/DELETE)
+ * @param autoindex	(bool)
+ * @param path	(std::string)
+ * @param client_max_body_size	(size_t)
+ * @param index	(std::string)
+ * @param redirect	(std::string)
+*/
 struct location{
 	// public:
-	unsigned short	methods; //Accepted methods GET POST DELETE
+	unsigned short	methods;	// usage (methods & GET/POST/DELETE)
 	bool			autoindex;
 	std::string		path;
 	size_t			client_max_body_size;

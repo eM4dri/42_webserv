@@ -17,20 +17,20 @@ enable_testing()
 
 add_executable(
   runTest
-  ../src/network/socket/ASocket.hpp
-  ../src/network/socket/ASocket.cpp
-  ../src/network/socket/BindSocket.hpp
-  ../src/network/socket/BindSocket.cpp
-  ../src/network/socket/ListenSocket.hpp
-  ../src/network/socket/ListenSocket.cpp
-  ../src/network/server/AServer.hpp
-  ../src/network/server/AServer.cpp
+  ../src/sandbox/socket/ASocket.hpp
+  ../src/sandbox/socket/ASocket.cpp
+  ../src/sandbox/socket/BindSocket.hpp
+  ../src/sandbox/socket/BindSocket.cpp
+  ../src/sandbox/socket/ListenSocket.hpp
+  ../src/sandbox/socket/ListenSocket.cpp
+  ../src/sandbox/server/AServer.hpp
+  ../src/sandbox/server/AServer.cpp
 
   test/network/socket/ASocketTest.cc
   test/network/socket/BindSocketTest.cc
   test/network/socket/ListenSocketTest.cc
   test/network/server/AServerTest.cc
-  
+
 )
 target_link_libraries(
   runTest
