@@ -6,15 +6,18 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/06 17:06:48 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/07 09:49:10 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cgi.hpp"
 #include "utils/log.hpp"
-#include <unistd.h>	//	execve, fork, pipe
-#include <cstring>	//	menset, fork, pipe
-#include <sstream>	// std::stringstream
+#include <unistd.h>		//	execve, fork, pipe
+#include <cstring>		//	menset, fork, pipe
+#include <sstream>		//	std::stringstream
+#include <climits>		//	USHRT_MAX
+#include <sys/types.h>	//	waitpid
+#include <sys/wait.h>	//	waitpid
 
 enum e_pipe_fd
 {

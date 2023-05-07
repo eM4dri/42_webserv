@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../../src/network/server/AServer.hpp"
+#include "../../../../src/sandbox/server/AServer.hpp"
 
 #define ANY_PROTOCOL 0
 #define MOCK_PORT 8080
@@ -14,7 +14,7 @@ enum e_connect_status
 };
 
 
-class AServerForTest : public ft::AServer 
+class AServerForTest : public ft::AServer
 {
     private:
         void _accepter(){}

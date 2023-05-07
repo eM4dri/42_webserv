@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../../src/network/socket/ASocket.hpp"
+#include "../../../../src/sandbox/socket/ASocket.hpp"
 
 #define ANY_PROTOCOL 0
 #define MOCK_PORT 8080
@@ -7,7 +7,7 @@
 #define MOCK_HOST_ADDR "192.168.0.21"
 #define MIN_VALID_SOCKETFD 0
 
-class ASocketForTest : public ft::ASocket 
+class ASocketForTest : public ft::ASocket
 {
     public:
         ASocketForTest(int domain, int type, int protocol,  u_long interface, int port)
