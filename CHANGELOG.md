@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-05-07 - Edu
 ### Moved
-- Moved `Filetypes` into `serverconf`to be able too access it from server, relocate class into `conf` directory
+- Move `Filetypes` into `serverconf`to be able too access it from server, relocate class into `conf` directory
 ### Fixed
 - Included `<errno.h>` on `Response.cpp` and `utils.cpp`
 
