@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:46:39 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:19:27 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,13 @@ std::string bytes_metric_formatting(long size)
 
 }
 
+
+/**
+ * Formats the time_t struct passed and returns it as a string.
+ * @param in_time Struct with the requested time to be displayed.
+ * @param is_gmt Will append "GMT" at the end if true.
+ * @retval "WDay, MDay Month Year HH:MM:SS GMT"
+*/
 std::string get_date(time_t in_time, bool is_gmt)
 {
 	std::string	retval;
@@ -149,6 +156,47 @@ std::string get_date(time_t in_time, bool is_gmt)
 	return (retval);
 }
 
+/**
+ * Gets the current GMT date and returns it formatted in a string.
+ * @retval "WDay, MDay Month Year HH:MM:SS GMT"
+*/
+std::string get_date()
+{
+	std::string	retval;
+	std::string wdays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+	std::string ymonths[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+	time_t now = time(NULL);
+	tm *gmt_time = gmtime(&now);
+
+	retval.append(wdays[gmt_time->tm_wday]);
+	retval.append(", ");
+	retval.append(to_string(gmt_time->tm_mday));
+	retval.append(" ");
+	retval.append(ymonths[gmt_time->tm_mon]);
+	retval.append(" ");
+	retval.append(to_string(gmt_time->tm_year + 1900));
+	retval.append(" ");
+	if (gmt_time->tm_hour < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_hour));
+	retval.append(":");
+	if (gmt_time->tm_min < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_min));
+	retval.append(":");
+	if (gmt_time->tm_sec < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_sec));
+	retval.append(" GMT");
+	return (retval);
+}
+
+/**
+ * Recieves an int representing an error code and returns a string
+ * with the message associated to the error code.
+ * @param status_code Allowed ints: 100-101, 200-205, 300-303, 305-307, 400-406, 408-418, 421, 426, 428-429, 431, 451, 500-506, 510-511  |  Anything else returns "Error (x) not found".
+*/
 std::string getMessageFromCode(int status_code)
 {
 	//?	Informational responses
@@ -267,38 +315,6 @@ std::string getMessageFromCode(int status_code)
 		return (customerror);
 	}
 
-}
-
-std::string get_date()
-{
-	std::string	retval;
-	std::string wdays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-	std::string ymonths[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
-	time_t now = time(NULL);
-	tm *gmt_time = gmtime(&now);
-
-	retval.append(wdays[gmt_time->tm_wday]);
-	retval.append(", ");
-	retval.append(to_string(gmt_time->tm_mday));
-	retval.append(" ");
-	retval.append(ymonths[gmt_time->tm_mon]);
-	retval.append(" ");
-	retval.append(to_string(gmt_time->tm_year + 1900));
-	retval.append(" ");
-	if (gmt_time->tm_hour < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_hour));
-	retval.append(":");
-	if (gmt_time->tm_min < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_min));
-	retval.append(":");
-	if (gmt_time->tm_sec < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_sec));
-	retval.append(" GMT");
-	return (retval);
 }
 
 //! Debugging purposes, please delete before evaluating.
