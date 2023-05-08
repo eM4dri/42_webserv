@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/07 10:04:18 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:25:39 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "utils/log.hpp"
 #include "network/server.hpp"
 #include "conf/conf.hpp"
-#include "responses/Filetypes.hpp"
+#include "conf/Filetypes.hpp"
 #include "responses/responses.hpp"
 #include <cstring>
 #include "general.hpp"
@@ -35,19 +35,24 @@ int main(int argc, char **argv)
 	if (argc > 1 && !std::strcmp(argv[1], "conf"))
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
-		ft::conf newconf("conf/example.conf");
+		ft::conf newconf("conf/example.conf", NULL);
 		newconf.print_loaded_conf();
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "serverconf"))
 	{
-		ft::conf newconf("conf/example.conf");
+		ft::Filetypes aux(NULL);
+		ft::conf newconf("conf/example.conf", aux);
+		std::vector<ft::serverconf>::iterator it = newconf.servers.begin();
+
+		std::cout << "EDU\thtml:  "<< it->filetypes.get("html") << std::endl;
+
 		for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
 			ft::server server(*it);
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "mime"))
 	{
 		LOG(std::endl << " *\t Test Load mime.types \t* ");
-		Filetypes filetypes(NULL);
+		ft::Filetypes filetypes(NULL);
 		std::cout << "html:  "<< filetypes.get("html") << std::endl;
 		std::cout << "png:  "<< filetypes.get("png") << std::endl;
 		std::cout << "mp3:  "<< filetypes.get("mp3") << std::endl;

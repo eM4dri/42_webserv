@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 18:09:25 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:24:01 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace ft
 {
 
 //Constructor
-conf::conf( const char* filename )
+conf::conf( const char* filename, const Filetypes & types )
 {
 	std::ifstream ifs;
 	ifs.open (filename, std::ifstream::in);
@@ -55,7 +55,7 @@ conf::conf( const char* filename )
 	_process_conf_file(ifs);
 	// _print_processed_conf();
 	_validate_processed_conf();
-	_load_configuration();
+	_load_configuration(types);
 	// _print_loaded_conf();
 
 }
@@ -260,10 +260,10 @@ void conf::_set_location_defaults(location *location)
 	location->index = DEFAULT_INDEX;
 }
 
-void conf::_load_configuration()
+void conf::_load_configuration(const Filetypes & types)
 {
 	int	curly_braces_level = CLOSED;
-	serverconf server;
+	serverconf server(types);
 	location location;
 	_load_acepted_methods();
 	for (std::vector< std::pair<std::string,std::string> >::iterator it=_conf.begin(); it!=_conf.end(); ++it){

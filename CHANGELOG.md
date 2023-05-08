@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 2023-05-07 - Edu
+### Moved
+- Moved `Filetypes` into `serverconf`to be able too access it from server, relocate class into `conf` directory
+### Fixed
+- Included `<errno.h>` on `Response.cpp` and `utils.cpp`
+
+## 2023-05-07 - Edu
 ### Added
 - Class `cgi` to handle cgi programs, this version contains response of script `reply.py`, but request and header response is mocked
 - Added some sandbox examples to play with cgi

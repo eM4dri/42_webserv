@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/06 09:58:18 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/08 18:44:35 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ INCLUDES_FILES =	utils/log.hpp							\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
-					responses/Filetypes.hpp					\
+					conf/Filetypes.hpp						\
 					responses/responses.hpp					\
 					actuators/methods.hpp					\
 					actuators/cgi.hpp						\
@@ -49,8 +49,8 @@ SRC_FILES	= 	main.cpp								\
 				network/server.cpp						\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
+				conf/Filetypes.cpp						\
 				responses/responses.cpp					\
-				responses/Filetypes.cpp					\
 				responses/Directories.cpp				\
 				actuators/get.cpp						\
 				actuators/cgi.cpp						\
