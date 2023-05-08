@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 17:11:37 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:23:17 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ namespace ft
 // { "GET", "POST", "DELETE"};
 
 class serverconf;
+class Filetypes;
 
 /**
  * @param server	(std::vector<serverconf>)
@@ -33,7 +34,7 @@ class serverconf;
 class conf{
 	public:
 	    //Constructor
-		conf( const char *filename );
+		conf( const char *filename, const Filetypes & types );
 
 	    //Destructor
 		~conf();
@@ -51,7 +52,7 @@ class conf{
 		void _process_conf_line(std::string &line);
 		void _validate_processed_conf();
 		void _print_processed_conf();
-		void _load_configuration();
+		void _load_configuration( const Filetypes & types );
 
 		//	load parameters to validate conf file
 		void _load_acepted_methods();
