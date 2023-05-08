@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/01 12:44:20 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/03 18:09:25 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,15 @@ conf::~conf()
 	if (_conf.size())
 		_conf.clear();
 	if (servers.size())
+	{
+		for (std::vector<serverconf>::iterator it = servers.begin(); it != servers.end(); it++) {
+			if (it->locations.size())
+				it->locations.clear();
+		}
 		servers.clear();
-	if (_valid_conf_keys.size())
-		_valid_conf_keys.clear();
+	}
+	// if (_valid_conf_keys.size())
+	// 	_valid_conf_keys.clear();
 	if (_accepted_methods.size())
 		_accepted_methods.clear();
 }
@@ -236,7 +242,7 @@ void conf::_parse_server_directive(const std::pair<std::string,std::string> &dir
 		_parse_root(directive_val, server);
 }
 
-void _set_server_defaults(serverconf *server)
+void conf::_set_server_defaults(serverconf *server)
 {
 	server->address = DEFAULT_ADDRESS;
 	server->port = DEFAULT_PORT;
@@ -245,7 +251,7 @@ void _set_server_defaults(serverconf *server)
 		server->locations.clear();
 }
 
-void _set_location_defaults(location *location)
+void conf::_set_location_defaults(location *location)
 {
 	location->methods = GET;
 	location->autoindex = DEFAULT_AUTOINDEX;
@@ -316,18 +322,18 @@ void conf::_print_processed_conf()
 	}
 }
 
-void conf::_load_valid_conf_keys()
+void load_valid_conf_keys(std::set<std::string> & valid_conf_keys)
 {
-	_valid_conf_keys.insert("}");
-	_valid_conf_keys.insert("location");
-	_valid_conf_keys.insert("root");
-	_valid_conf_keys.insert("listen");
-	_valid_conf_keys.insert("methods");
-	_valid_conf_keys.insert("autoindex");
-	_valid_conf_keys.insert("server");
-	_valid_conf_keys.insert("return");
-	_valid_conf_keys.insert("server_name");
-	_valid_conf_keys.insert("client_max_body_size");
+	valid_conf_keys.insert("}");
+	valid_conf_keys.insert("location");
+	valid_conf_keys.insert("root");
+	valid_conf_keys.insert("listen");
+	valid_conf_keys.insert("methods");
+	valid_conf_keys.insert("autoindex");
+	valid_conf_keys.insert("server");
+	valid_conf_keys.insert("return");
+	valid_conf_keys.insert("server_name");
+	valid_conf_keys.insert("client_max_body_size");
 }
 
 void conf::_load_acepted_methods()
@@ -339,7 +345,8 @@ void conf::_load_acepted_methods()
 
 void conf::_validate_processed_conf()
 {
-	_load_valid_conf_keys();
+	std::set<std::string>	valid_conf_keys;
+	load_valid_conf_keys(valid_conf_keys);
 	int	curly_braces_count;
 	curly_braces_count = 0;
 	char second_back;
@@ -354,7 +361,7 @@ void conf::_validate_processed_conf()
 				curly_braces_count--;
 			else if (second_back == '{')
 				curly_braces_count++;
-			if( _valid_conf_keys.find(it->first) == _valid_conf_keys.end() )
+			if (valid_conf_keys.find(it->first) == valid_conf_keys.end() )
 				// Unkown key directive
 				ERROR_CONF(INVALID_UNKOWN_DIRECTIVE);
 		}

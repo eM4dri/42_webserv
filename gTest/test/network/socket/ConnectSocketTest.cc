@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../../../../src/network/socket/ConnectSocket.hpp"
+#include "../../../../src/sandbox/socket/ConnectSocket.hpp"
 #include <iostream>
 
 #define ANY_PROTOCOL 0

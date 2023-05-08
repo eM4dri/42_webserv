@@ -22,10 +22,17 @@ namespace ft
 
 class serverconf;
 
+/**
+ * @param _server_fd	(int)
+ * @param _address	(struct sockaddr_in)
+ * @param _address_len	(socklen_t)
+ * @param _poll_fds	(std::vector<struct pollfd>)
+ * @param _listening	(bool)
+ * @param _conf	(const serverconf &)
+*/
 class server{
 	public:
 		//Constructor
-		server(const char *address, int port, int backlog);
 		server(const serverconf &conf);
 		~server();
 
@@ -37,8 +44,9 @@ class server{
 		int								_server_fd;
 		struct sockaddr_in				_address;
 		socklen_t						_address_len;
-		std::vector<struct pollfd> 		_poll_fds;
+		std::vector<struct pollfd>		_poll_fds;
 		bool							_listening;
+		const serverconf				&_conf;
 
 		//Function to init server
 		bool _init_server(const char *address, int port, int backlog);

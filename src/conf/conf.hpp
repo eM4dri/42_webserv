@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/04/30 22:56:47 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/02 17:11:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@ namespace ft
 
 class serverconf;
 
+/**
+ * @param server	(std::vector<serverconf>)
+*/
 class conf{
 	public:
 	    //Constructor
@@ -51,8 +54,11 @@ class conf{
 		void _load_configuration();
 
 		//	load parameters to validate conf file
-		void _load_valid_conf_keys();
 		void _load_acepted_methods();
+
+		// set_default_values
+		void _set_server_defaults(serverconf *server);
+		void _set_location_defaults(location *location);
 
 		//	parse server directives
 		void _parse_server_directive(const std::pair <std::string,std::string> &directive, serverconf *server);
@@ -69,14 +75,8 @@ class conf{
 		void _parse_redirect(const std::string &redirect, location *location);
 
 	private:
-		// std::string											_address;
-		// unsigned short										_port;
-		// unsigned short										_methods;
-		// std::string											_root;
-		std::set<std::string>								_valid_conf_keys; // listen, root, methods...
-		std::vector<std::string>							_accepted_methods; // GET, POST, DELETE
-
-		std::vector<std::pair <std::string,std::string> >	_conf;
+		std::vector<std::string>							_accepted_methods;	// GET, POST, DELETE for validations
+		std::vector<std::pair <std::string,std::string> >	_conf;	// parsed conf for validations
 };
 
 }//Namespace ft

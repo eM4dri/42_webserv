@@ -6,23 +6,30 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:22:44 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/06 20:09:47 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Filetypes.hpp"
 #include "utils/log.hpp"
 
-Filetypes::Filetypes()
+/**
+ * @param filetypes_status (bool *)  |  Will return false if the file required for this function is unavailable. 
+*/
+Filetypes::Filetypes(bool *filetypes_status)
 {
 	std::ifstream	file_instream;
 	std::string		file_line;
 	std::vector<std::string>		line_couple;
 
 	file_instream.open(FILETYPES);
+	if (filetypes_status)
+		*filetypes_status = true;
 	if (!file_instream.is_open())
 	{
-		//TODO	COMPLAIN
+		if (filetypes_status)
+			*filetypes_status = false;
+		return ;
 	}
 	std::getline(file_instream, file_line);
 	while (std::getline(file_instream, file_line))

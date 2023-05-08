@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:50:38 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/07 10:04:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @param status_code (int)
  * @param head_params (std::map <std::string, std::string>)
  * @param body (std::String)
- * 
+ *
 */
 class Response
 {
@@ -39,6 +39,7 @@ class Response
 		std::string generate_response();
 		void file_status_custom_error(int file_status);
 		void return_error_message(int error_code);
+		void return_error_message(int error_code, std::string custom_reason);
 		std::string create_directory_index();
 };
 
