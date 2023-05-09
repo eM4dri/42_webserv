@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/08 19:09:55 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 18:53:31 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class serverconf{
 	public:
 		std::string							address;
 		unsigned short						port;
-		std::string							root;
+		std::string							default_root;
 		std::map<std::string, location>		locations;
 		const Filetypes &					filetypes;
 

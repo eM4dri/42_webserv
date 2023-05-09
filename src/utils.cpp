@@ -6,12 +6,12 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/08 19:36:41 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:41:40 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "general.hpp"
-#include <errno.h>
+#include <errno.h>	//	errno
 
 /*
 ?	Function will split an std::string into new strings contained in an
