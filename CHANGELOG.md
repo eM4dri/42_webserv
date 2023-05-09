@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added some color logs (background & foreground) to `log.hpp`
 
 ## 2023-05-07 - Edu
+### Moved
+- Move `Filetypes` into `serverconf`to be able too access it from server, relocate class into `conf` directory
+### Fixed
+- Included `<errno.h>` on `Response.cpp` and `utils.cpp`
+
+## 2023-05-07 - Edu
 ### Added
 - Class `cgi` to handle cgi programs, this version contains response of script `reply.py`, but request and header response is mocked
 - Added some sandbox examples to play with cgi
