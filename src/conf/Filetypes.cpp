@@ -3,18 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 20:09:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:20:48 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Filetypes.hpp"
 #include "utils/log.hpp"
 
+namespace ft
+{
+
 /**
- * @param filetypes_status (bool *)  |  Will return false if the file required for this function is unavailable. 
+ * @param filetypes_status (bool *)  |  Will return false if the file required for this function is unavailable.
 */
 Filetypes::Filetypes(bool *filetypes_status)
 {
@@ -42,19 +45,20 @@ Filetypes::Filetypes(bool *filetypes_status)
 			else
 				full_list[*idx] = line_couple[0];
 		}
-	}	
+	}
 }
-
 
 Filetypes::~Filetypes()
 {
+	if (full_list.size())
+		full_list.clear();
 }
 
-std::string Filetypes::get(const std::string &tosearch)
+std::string Filetypes::get(const std::string &tosearch) const
 {
-	if (full_list[tosearch] == "")
-		return(DEFAULT_VALUE);
-	return (full_list[tosearch]);
+	if (full_list.count(tosearch))
+		return (full_list.find(tosearch)->second);
+	return(DEFAULT_VALUE);
 }
 
 std::string Filetypes::get_suffix(const std::string &tosearch)
@@ -70,3 +74,5 @@ std::string Filetypes::get_suffix(const std::string &tosearch)
 	}
 	return(DEFAULT_VALUE);
 }
+
+}	// Nammespace ft

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 15:32:06 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:21:00 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #define FILETYPES "conf/mime.types"
 #define DEFAULT_VALUE ""
 
+namespace ft
+{
 /*
 ?		This class is used to retrieve the Content-Type of a file
 *		(check https://www.nginx.com/resources/wiki/start/topics/examples/full/#mime-types)
@@ -29,9 +31,12 @@ class Filetypes
 	public:
 		Filetypes(bool *filetypes_status);
 		~Filetypes();
-		std::string get(const std::string &tosearch);
+
+		std::string get(const std::string &tosearch) const;
 		std::string get_suffix(const std::string &tosearch);
 
 };
+
+}//Namespace ft
 
 #endif

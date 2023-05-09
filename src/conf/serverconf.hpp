@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 17:24:57 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/08 19:09:55 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <string>		// std::string
 # include <map>			// std::map
 # include "location.hpp"
+# include "Filetypes.hpp"
 # define DEFAULT_ADDRESS "localhost"
 # define DEFAULT_PORT 8080
 # define DEFAULT_ROOT "www"
@@ -23,6 +24,7 @@ namespace ft
 {
 
 struct location;
+class Filetypes;
 
 /**
  * @param address	(std::string)
@@ -36,9 +38,12 @@ class serverconf{
 		unsigned short						port;
 		std::string							root;
 		std::map<std::string, location>		locations;
+		const Filetypes &					filetypes;
 
 		//Constructor
-		// serverc();
+		serverconf(const Filetypes & types)
+			:	filetypes(types)
+		{};
 
 		//Destructor
 		~serverconf()
