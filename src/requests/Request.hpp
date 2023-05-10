@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:02:50 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:53:51 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Request
 			std::string unparsed;
 		};
 
-		Request(const ft::serverconf &_config);
+////		Request(const ft::serverconf &_config);
 		Request(const std::string &_input, const ft::serverconf &_config);
 		Request(Request &tocopy);
 		Request(const Request &tocopy);

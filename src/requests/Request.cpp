@@ -6,20 +6,20 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:02:56 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:47:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(const ft::serverconf &_config): fullrequest(""), config(_config)
+/*Request::Request(const ft::serverconf &_config): fullrequest(""), config(_config)
 {
 	method = -2;
 	path.absolute = "";
 	path.relative = "";
 	path.unparsed = "";
 	body = "";
-}
+}*/
 
 Request::Request(const std::string &_input, const ft::serverconf &_config): fullrequest(_input), config(_config)
 {

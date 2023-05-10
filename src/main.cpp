@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/08 19:25:39 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:28:53 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "network/server.hpp"
 #include "conf/conf.hpp"
 #include "conf/Filetypes.hpp"
-#include "responses/responses.hpp"
 #include <cstring>
 #include "general.hpp"
 #include "actuators/methods.hpp"
@@ -64,8 +63,11 @@ int main(int argc, char **argv)
 	if (argc >  1 && !std::strcmp(argv[1], "headerparser"))
 	{
 		int read_status;
-
-		Request newrequest(file_reader("test_files/get_request", &read_status));
+		ft::Filetypes aux(NULL);
+		ft::conf newconf("conf/example.conf", aux);
+		// std::vector<ft::serverconf>::iterator it = newconf.server;
+		
+		Request newrequest(file_reader("test_files/get_request", &read_status), newconf.servers[0]);
 
 		std::cout << "Abs path: " << newrequest.get_path_abs() << std::endl;
 		std::cout << "Rel path: " << newrequest.get_path_rel() << std::endl;
@@ -81,12 +83,15 @@ int main(int argc, char **argv)
 	if (argc >  1 && !std::strcmp(argv[1], "gettest"))
 	{
 		int read_status = 1;
+		ft::Filetypes aux(NULL);
+		ft::conf newconf("conf/example.conf", aux);
+
 		std::string getfilename;
 		if (argc > 2 && !std::strcmp(argv[2], "dir"))
 			getfilename = "test_files/get_request_dir";
 		else
 			getfilename = "test_files/get_request";
-		Request request(file_reader(getfilename, &read_status));
+		Request request(file_reader(getfilename, &read_status), newconf.servers[0]);
 		if (read_status)
 			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
 		Response response(request);
