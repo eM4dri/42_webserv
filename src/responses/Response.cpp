@@ -6,16 +6,16 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/09 11:50:27 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:09:07 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include <errno.h>	//	error codes
 
-Response::Response(): request(Request())
+/*Response::Response(): request(Request())
 {
-}
+}*/
 
 Response::Response(const Request _request): request(_request)
 {

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/09 11:41:40 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:08:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,13 @@ std::string bytes_metric_formatting(long size)
 
 }
 
+
+/**
+ * Formats the time_t struct passed and returns it as a string.
+ * @param in_time Struct with the requested time to be displayed.
+ * @param is_gmt Will append "GMT" at the end if true.
+ * @retval "WDay, MDay Month Year HH:MM:SS GMT"
+*/
 std::string get_date(time_t in_time, bool is_gmt)
 {
 	std::string	retval;
@@ -150,6 +157,47 @@ std::string get_date(time_t in_time, bool is_gmt)
 	return (retval);
 }
 
+/**
+ * Gets the current GMT date and returns it formatted in a string.
+ * @retval "WDay, MDay Month Year HH:MM:SS GMT"
+*/
+std::string get_date()
+{
+	std::string	retval;
+	std::string wdays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+	std::string ymonths[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+	time_t now = time(NULL);
+	tm *gmt_time = gmtime(&now);
+
+	retval.append(wdays[gmt_time->tm_wday]);
+	retval.append(", ");
+	retval.append(to_string(gmt_time->tm_mday));
+	retval.append(" ");
+	retval.append(ymonths[gmt_time->tm_mon]);
+	retval.append(" ");
+	retval.append(to_string(gmt_time->tm_year + 1900));
+	retval.append(" ");
+	if (gmt_time->tm_hour < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_hour));
+	retval.append(":");
+	if (gmt_time->tm_min < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_min));
+	retval.append(":");
+	if (gmt_time->tm_sec < 10)
+		retval.append("0");
+	retval.append(to_string(gmt_time->tm_sec));
+	retval.append(" GMT");
+	return (retval);
+}
+
+/**
+ * Recieves an int representing an error code and returns a string
+ * with the message associated to the error code.
+ * @param status_code Allowed ints: 100-101, 200-205, 300-303, 305-307, 400-406, 408-418, 421, 426, 428-429, 431, 451, 500-506, 510-511  |  Anything else returns "Error (x) not found".
+*/
 std::string getMessageFromCode(int status_code)
 {
 	//?	Informational responses
@@ -270,36 +318,65 @@ std::string getMessageFromCode(int status_code)
 
 }
 
-std::string get_date()
+/*
+?	This function takes a string that has a path starting from a root and
+?	checks whether there are attempts to access files over the root or not.
+?	If there are, it will delete those attempts remaining within the allowed
+?	boundaries and returning a string with a safe path.
+*/
+std::string correct_path(const std::string &orig_path)
 {
-	std::string	retval;
-	std::string wdays[7] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-	std::string ymonths[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+	std::vector <std::string> routes = cpp_split(orig_path, '/');
+	std::vector<std::string>::iterator curr_route = routes.end() - 1;
+	std::vector<std::string>::iterator curr_route_aux = routes.end();
+	std::string retval;
+	int level = 0;
+	if (!routes.size())
+		return ("");
+	while (curr_route != routes.begin())
+	{
+		if (*curr_route == "~")
+			break;
+		else
+			curr_route--;
+	}
+	if (*curr_route == "~")
+		curr_route++;
+	curr_route_aux = curr_route;
 
-	time_t now = time(NULL);
-	tm *gmt_time = gmtime(&now);
+	while (curr_route != routes.end())
+	{
+		if (*curr_route == "..")
+		{
+			if (level - 1 < 0)
+				routes.erase(curr_route);
+			else
+			{
+				routes.erase(curr_route);
+				curr_route--;
+				routes.erase(curr_route);
+			}
 
-	retval.append(wdays[gmt_time->tm_wday]);
-	retval.append(", ");
-	retval.append(to_string(gmt_time->tm_mday));
-	retval.append(" ");
-	retval.append(ymonths[gmt_time->tm_mon]);
-	retval.append(" ");
-	retval.append(to_string(gmt_time->tm_year + 1900));
-	retval.append(" ");
-	if (gmt_time->tm_hour < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_hour));
-	retval.append(":");
-	if (gmt_time->tm_min < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_min));
-	retval.append(":");
-	if (gmt_time->tm_sec < 10)
-		retval.append("0");
-	retval.append(to_string(gmt_time->tm_sec));
-	retval.append(" GMT");
+		}
+		else if (*curr_route == ".")
+			routes.erase(curr_route);
+		else
+		{
+			level++;
+			curr_route++;
+		}
+
+	}
+	while (curr_route_aux != routes.end())
+	{
+		retval.append("/");
+		retval.append(*curr_route_aux);
+		curr_route_aux++;
+	}
+	if (retval[0] == '/')
+		retval = retval.substr(1, retval.size() - 1);
 	return (retval);
+
 }
 
 //! Debugging purposes, please delete before evaluating.
