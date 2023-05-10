@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/03 18:09:25 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 21:03:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace ft
 {
 
 //Constructor
-conf::conf( const char* filename )
+conf::conf( const char* filename, const Filetypes & types )
 {
 	std::ifstream ifs;
 	ifs.open (filename, std::ifstream::in);
@@ -55,8 +55,8 @@ conf::conf( const char* filename )
 	_process_conf_file(ifs);
 	// _print_processed_conf();
 	_validate_processed_conf();
-	_load_configuration();
-	// _print_loaded_conf();
+	_load_configuration(types);
+	// print_loaded_conf();
 
 }
 
@@ -79,10 +79,36 @@ conf::~conf()
 		_accepted_methods.clear();
 }
 
-void conf::_parse_path(const std::string &root, location *location)
+
+void conf::_parse_file_root(const std::string &file_root, location *location)
 {
 	//TODO validate format
-	location->path = root.substr(0, root.find_first_of(ISSPACE_CHARACTERS));
+	location->file_root = file_root;
+}
+
+void conf::_parse_request_path(const std::string &request_path, location *location)
+{
+	//TODO validate format
+	location->request_path = request_path.substr(0, request_path.find_first_of(ISSPACE_CHARACTERS));
+}
+
+void conf::_parse_cgi(const std::string &cgi, location *location)
+{
+	//TODO validate format
+	std::stringstream ss(cgi);
+
+	std::string key;
+	const size_t  key_end = cgi.find_first_of(ISSPACE_CHARACTERS, 0);
+	if (key_end == std::string::npos)
+		location->cgi_execs.insert(std::make_pair(cgi, "\0"));
+	else
+	{
+		std::getline(ss, key, cgi[key_end]);
+		std::string value;
+		std::getline(ss, value, '\0');
+		value.erase(0, value.find_first_not_of(ISSPACE_CHARACTERS,0)); //ltrim isspace
+		location->cgi_execs.insert(std::make_pair(key, value));
+	}
 }
 
 void conf::_parse_methods(const std::string &methods, location *location)
@@ -133,7 +159,7 @@ void conf::_parse_location_directive(const std::pair <std::string,std::string> &
 	std::string directive_val;
 	std::getline(ss, directive_val, ';');
 	if (directive.first == "location")
-		_parse_path(directive_val, location);
+		_parse_request_path(directive_val, location);
 	else if (directive.first == "index")
 		_parse_index(directive_val, location);
 	else if (directive.first == "client_max_body_size")
@@ -144,6 +170,10 @@ void conf::_parse_location_directive(const std::pair <std::string,std::string> &
 		_parse_redirect(directive_val, location);
 	else if (directive.first == "methods")
 		_parse_methods(directive_val, location);
+	else if (directive.first == "root")
+		_parse_file_root(directive_val, location);
+	else if (directive.first == "cgi")
+		_parse_cgi(directive_val, location);
 }
 
 
@@ -225,10 +255,10 @@ void conf::_parse_listen(const std::string &listen, serverconf *server)
 	}
 }
 
-void conf::_parse_root(const std::string &root, serverconf *server)
+void conf::_parse_default_root(const std::string &default_root, serverconf *server)
 {
 	//TODO validate format
-	server->root = root;
+	server->default_root = default_root;
 }
 
 void conf::_parse_server_directive(const std::pair<std::string,std::string> &directive, serverconf *server)
@@ -239,31 +269,42 @@ void conf::_parse_server_directive(const std::pair<std::string,std::string> &dir
 	if (directive.first == "listen")
 		_parse_listen(directive_val, server);
 	if (directive.first == "root")
-		_parse_root(directive_val, server);
+		_parse_default_root(directive_val, server);
 }
 
 void conf::_set_server_defaults(serverconf *server)
 {
 	server->address = DEFAULT_ADDRESS;
 	server->port = DEFAULT_PORT;
-	server->root = DEFAULT_ROOT;
+	server->default_root = DEFAULT_ROOT;
 	if (server->locations.size())
 		server->locations.clear();
+
 }
 
 void conf::_set_location_defaults(location *location)
 {
 	location->methods = GET;
 	location->autoindex = DEFAULT_AUTOINDEX;
-	location->path = DEFAULT_PATH;
+	location->request_path = DEFAULT_PATH;
 	location->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 	location->index = DEFAULT_INDEX;
+	location->file_root = "";
 }
 
-void conf::_load_configuration()
+void conf::push_back_server(serverconf &server)
+{
+	for (std::map<std::string, location>::iterator it = server.locations.begin(); it != server.locations.end(); it++ ){
+		if (it->second.file_root == "")
+			it->second.file_root = server.default_root + it->first;
+	}
+	this->servers.push_back(server);
+}
+
+void conf::_load_configuration(const Filetypes & types)
 {
 	int	curly_braces_level = CLOSED;
-	serverconf server;
+	serverconf server(types);
 	location location;
 	_load_acepted_methods();
 	for (std::vector< std::pair<std::string,std::string> >::iterator it=_conf.begin(); it!=_conf.end(); ++it){
@@ -271,15 +312,19 @@ void conf::_load_configuration()
 		{
 			curly_braces_level--;
 			if (curly_braces_level == CLOSED)
-				this->servers.push_back(server);
+				push_back_server(server);
 			else if (curly_braces_level == OPEN_SERVER)
-				server.locations.insert(std::make_pair(location.path, location));
+				server.locations.insert(std::make_pair(location.request_path, location));
 		}
 		else if (it->second[it->second.length() - 1] == '{')
 		{
 			curly_braces_level++;
 			if (curly_braces_level == OPEN_SERVER)
+			{
 				_set_server_defaults(&server);
+				_set_location_defaults(&location);
+				server.locations.insert(std::make_pair(location.request_path, location));
+			}
 			else if (curly_braces_level == OPEN_LOCATION)
 				_set_location_defaults(&location);
 		}
@@ -295,14 +340,19 @@ void conf::print_loaded_conf()
 	LOG(this->servers.size() << " server configurations loaded");
 	for (std::vector<serverconf>::iterator it= this->servers.begin(); it!= this->servers.end(); ++it){
 		LOG("Listen\t"<<it->address <<":"<< it->port );
+		LOG("Default_Root\t"<<it->default_root);
+
 		for (std::map<std::string, location>::iterator it2=it->locations.begin(); it2!=it->locations.end(); ++it2){
 			LOG("\tLocation " << it2->first);
-			LOG("\t\tpath\t " << it2->second.path);
+			LOG("\t\tpath\t " << it2->second.request_path);
 			LOG("\t\tautoindex\t " << it2->second.autoindex);
 			LOG("\t\tclient_max_body_size\t " << it2->second.client_max_body_size);
 			LOG("\t\tindex\t " << it2->second.index);
 			LOG("\t\tmethods\t " << it2->second.methods);
 			LOG("\t\tredirect\t " << it2->second.redirect);
+			LOG("\t\tfile_root\t " << it2->second.file_root);
+			for (std::map<std::string, std::string>::iterator it3 = it2->second.cgi_execs.begin(); it3!=it2->second.cgi_execs.end(); ++it3)
+				LOG("\t\tcgi\t " << it3->first << "\t"<< it3->second);
 		}
 	}
 }
@@ -334,6 +384,7 @@ void load_valid_conf_keys(std::set<std::string> & valid_conf_keys)
 	valid_conf_keys.insert("return");
 	valid_conf_keys.insert("server_name");
 	valid_conf_keys.insert("client_max_body_size");
+	valid_conf_keys.insert("cgi");
 }
 
 void conf::_load_acepted_methods()

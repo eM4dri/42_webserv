@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/05 20:47:18 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:02:50 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 # define REQUEST_HPP
 
 #include "../general.hpp"
+#include "../conf/serverconf.hpp"
 
 /**
  * @param fullrequest (const string)
+ * @param config (const ft::config)
  * @param method (int)
  * @param path (s_path)
  * @param header_map (map <string,string>)
@@ -32,8 +34,8 @@ class Request
 			std::string unparsed;
 		};
 
-		Request();
-		Request(const std::string input);
+		Request(const ft::serverconf &_config);
+		Request(const std::string &_input, const ft::serverconf &_config);
 		Request(Request &tocopy);
 		Request(const Request &tocopy);
 
@@ -53,6 +55,7 @@ class Request
 		const std::string &get_body() const;
 	private:
 		const std::string fullrequest;
+		const ft::serverconf config;
 		int method;
 		s_path path;
 		std::map <std::string, std::string> header_map;

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 20:09:39 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/09 11:50:27 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
-
+#include <errno.h>	//	error codes
 
 Response::Response(): request(Request())
 {
@@ -129,7 +129,7 @@ void Response::return_content()
 	int status = 0;
 	std::string get_body = get_file(request.get_path_abs(), mod_date, &status);
 	bool filetype_status;
-	Filetypes get_filetype(&filetype_status);
+	ft::Filetypes get_filetype(&filetype_status);
 
 	if (!filetype_status)
 	{

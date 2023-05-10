@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 15:32:06 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:41:49 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@
 #define FILETYPES "conf/mime.types"
 #define DEFAULT_VALUE ""
 
+namespace ft
+{
 /*
 ?		This class is used to retrieve the Content-Type of a file
 *		(check https://www.nginx.com/resources/wiki/start/topics/examples/full/#mime-types)
 ?		by introducing the suffix of a file or the full name of a file.
+?		Declare an object with ft::serverconf.
 */
 class Filetypes
 {
@@ -29,9 +32,12 @@ class Filetypes
 	public:
 		Filetypes(bool *filetypes_status);
 		~Filetypes();
-		std::string get(const std::string &tosearch);
+
+		std::string get(const std::string &tosearch) const;
 		std::string get_suffix(const std::string &tosearch);
 
 };
+
+}//Namespace ft
 
 #endif
