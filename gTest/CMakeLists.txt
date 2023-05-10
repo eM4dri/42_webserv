@@ -17,19 +17,26 @@ enable_testing()
 
 add_executable(
   runTest
-  ../src/sandbox/socket/ASocket.hpp
-  ../src/sandbox/socket/ASocket.cpp
-  ../src/sandbox/socket/BindSocket.hpp
-  ../src/sandbox/socket/BindSocket.cpp
-  ../src/sandbox/socket/ListenSocket.hpp
-  ../src/sandbox/socket/ListenSocket.cpp
-  ../src/sandbox/server/AServer.hpp
-  ../src/sandbox/server/AServer.cpp
+#  ../src/sandbox/socket/ASocket.hpp
+#  ../src/sandbox/socket/ASocket.cpp
+#  ../src/sandbox/socket/BindSocket.hpp
+#  ../src/sandbox/socket/BindSocket.cpp
+#  ../src/sandbox/socket/ListenSocket.hpp
+#  ../src/sandbox/socket/ListenSocket.cpp
+#  ../src/sandbox/server/AServer.hpp
+#  ../src/sandbox/server/AServer.cpp
+  ../src/utils/log.hpp
+  ../src/general.hpp
+  ../src/utils.cpp
+  ../src/to_string.cpp
+  ../src/conf/Filetypes.hpp
+  ../src/conf/Filetypes.cpp
 
-  test/network/socket/ASocketTest.cc
-  test/network/socket/BindSocketTest.cc
-  test/network/socket/ListenSocketTest.cc
-  test/network/server/AServerTest.cc
+#  test/network/socket/ASocketTest.cc
+#  test/network/socket/BindSocketTest.cc
+#  test/network/socket/ListenSocketTest.cc
+#  test/network/server/AServerTest.cc
+  test/conf/Filetypes.cc
 
 )
 target_link_libraries(
