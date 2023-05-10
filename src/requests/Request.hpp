@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:53:51 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:46:52 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 /**
  * @param fullrequest (const string)
- * @param config (const ft::config)
+ * @param config (const ft::serverconf)
  * @param method (int)
  * @param path (s_path)
  * @param header_map (map <string,string>)
@@ -32,6 +32,7 @@ class Request
 			std::string absolute;
 			std::string relative;
 			std::string unparsed;
+			std::vector<std::string> vec_relative;
 		};
 
 ////		Request(const ft::serverconf &_config);
@@ -53,6 +54,8 @@ class Request
 		const std::string &get_path_abs() const;
 		const std::map<std::string, std::string> get_headermap() const;
 		const std::string &get_body() const;
+
+		void set_redirect_path();
 	private:
 		const std::string fullrequest;
 		const ft::serverconf config;

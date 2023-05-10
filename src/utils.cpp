@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:45:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:42:58 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,60 @@ std::string getMessageFromCode(int status_code)
 std::string correct_path(const std::string &orig_path)
 {
 	std::vector <std::string> routes = cpp_split(orig_path, '/');
+	std::vector<std::string>::iterator curr_route = routes.end() - 1;
+	std::vector<std::string>::iterator curr_route_aux = routes.end();
+	std::string retval;
+	int level = 0;
+	if (!routes.size())
+		return ("");
+	while (curr_route != routes.begin())
+	{
+		if (*curr_route == "~")
+			break;
+		else
+			curr_route--;
+	}
+	if (*curr_route == "~")
+		curr_route++;
+	curr_route_aux = curr_route;
+
+	while (curr_route != routes.end())
+	{
+		if (*curr_route == "..")
+		{
+			if (level - 1 < 0)
+				routes.erase(curr_route);
+			else
+			{
+				routes.erase(curr_route);
+				curr_route--;
+				routes.erase(curr_route);
+			}
+				
+		}
+		else if (*curr_route == ".")
+			routes.erase(curr_route);
+		else
+		{
+			level++;
+			curr_route++;
+		}
+
+	}
+	while (curr_route_aux != routes.end())
+	{
+		retval.append("/");
+		retval.append(*curr_route_aux);
+		curr_route_aux++;
+	}
+	if (retval[0] == '/')
+		retval = retval.substr(1, retval.size() - 1);
+	return (retval);
+	
+}
+
+std::string correct_path(const std::string &orig_path, std::vector <std::string> routes)
+{
 	std::vector<std::string>::iterator curr_route = routes.end() - 1;
 	std::vector<std::string>::iterator curr_route_aux = routes.end();
 	std::string retval;

@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:47:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 20:39:15 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,40 @@ method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(to
 Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
 {
+}
+
+/*
+TODO		Hasn't been tested yet. 
+*/
+void Request::set_redirect_path()
+{
+	std::string try_path;
+	std::vector<std::string>::iterator ending = path.vec_relative.end();
+	
+	
+	while (true)
+	{
+		try_path = "";
+		for (std::vector<std::string>::iterator it = path.vec_relative.begin(); it != ending; it++)
+		{
+			if (it != path.vec_relative.begin())
+				try_path.append("/");
+			try_path.append(*it);
+		}
+		if (config.locations.find(try_path) != config.locations.end())
+		{
+			break ;
+		}
+		else
+		{
+			if (ending == path.vec_relative.begin())
+				return ;
+			else
+				ending--;
+		}
+	}
+	path.absolute = path.absolute.replace(path.absolute.find(try_path), try_path.length(), config.locations.find(try_path)->second.file_root);
+	path.relative = path.absolute;
 }
 
 const std::string &Request::get_fullrequest() const

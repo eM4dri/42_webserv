@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:45:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 19:45:49 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ bool	Request::check_first_line_validity(std::string firstline)
 	}
 	path.unparsed = params[1];
 	path.relative = correct_path(params[1]);
+	path.vec_relative = cpp_split(path.relative, '/');
 	path.absolute = SERVER_ROOT;
 	path.absolute.append("/");
 	path.absolute.append(path.relative);
