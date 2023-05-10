@@ -6,13 +6,13 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 20:09:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:02:56 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(): fullrequest("")
+Request::Request(const ft::serverconf &_config): fullrequest(""), config(_config)
 {
 	method = -2;
 	path.absolute = "";
@@ -21,17 +21,17 @@ Request::Request(): fullrequest("")
 	body = "";
 }
 
-Request::Request(const std::string input): fullrequest(input)
+Request::Request(const std::string &_input, const ft::serverconf &_config): fullrequest(_input), config(_config)
 {
 	header_parser();
 }
 
-Request::Request(Request &tocopy): fullrequest(tocopy.fullrequest), \
+Request::Request(Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
 {
 }
 
-Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), \
+Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
 {
 }

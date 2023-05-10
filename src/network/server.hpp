@@ -29,6 +29,7 @@ class serverconf;
  * @param _poll_fds	(std::vector<struct pollfd>)
  * @param _listening	(bool)
  * @param _conf	(const serverconf &)
+ * @warning Declare this class with ft::server
 */
 class server{
 	public:

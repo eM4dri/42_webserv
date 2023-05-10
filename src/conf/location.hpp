@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/02 16:54:21 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:41:30 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ enum e_accepted_methods
 
 /**
  * @param methods	(unsigned short) usage (methods & GET/POST/DELETE)
- * @param autoindex	(bool)
+ * @param autoindex	(bool) autoindex allowed (list of files in a dir)
  * @param path	(std::string)
  * @param client_max_body_size	(size_t)
- * @param index	(std::string)
+ * @param index	(std::string) default file if the requested resource is a dir and autoindex is false. //! Check '..'
  * @param redirect	(std::string)
+ * @warning Declare a struct with ft::location.
 */
 struct location{
 	// public:
@@ -42,6 +43,7 @@ struct location{
 	size_t			client_max_body_size;
 	std::string		index;
 	std::string		redirect;
+	std::map<std::string, std::string>		cgi_interprters;
 
 };
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   responses.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 17:21:44 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/08 18:52:07 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:27:50 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define RESPONSES_HPP
 
 #include "../general.hpp"
-#include "conf/Filetypes.hpp"
+//#include "conf/Filetypes.hpp"
 
 
 

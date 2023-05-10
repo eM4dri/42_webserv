@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/08 19:21:00 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/09 19:41:49 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ namespace ft
 ?		This class is used to retrieve the Content-Type of a file
 *		(check https://www.nginx.com/resources/wiki/start/topics/examples/full/#mime-types)
 ?		by introducing the suffix of a file or the full name of a file.
+?		Declare an object with ft::serverconf.
 */
 class Filetypes
 {
