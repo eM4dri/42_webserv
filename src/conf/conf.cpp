@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/09 21:03:35 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:44:24 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 #define INVALID_FILE_BRACES "curly braces not closed"
 #define INVALID_UNKOWN_DIRECTIVE "unknown key directive"
 #define INVALID_LISTEN "only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT)"
+#define WRONG_LOCATION "wrong location\t"
+#define WRONG_METHOD "wrong method\t"
 
 enum e_curly_braces_level{
 	CLOSED,
@@ -73,10 +75,6 @@ conf::~conf()
 		}
 		servers.clear();
 	}
-	// if (_valid_conf_keys.size())
-	// 	_valid_conf_keys.clear();
-	if (_accepted_methods.size())
-		_accepted_methods.clear();
 }
 
 
@@ -88,8 +86,12 @@ void conf::_parse_file_root(const std::string &file_root, location *location)
 
 void conf::_parse_request_path(const std::string &request_path, location *location)
 {
-	//TODO validate format
-	location->request_path = request_path.substr(0, request_path.find_first_of(ISSPACE_CHARACTERS));
+	if (request_path[0] != '/')
+		ERROR_CONF(WRONG_LOCATION << COLOR(RED,request_path));
+	size_t end_request_path = request_path.find_first_of(ISSPACE_CHARACTERS);
+	if (end_request_path == std::string::npos )
+		end_request_path = request_path.length() - 1;
+	location->request_path = request_path.substr(0, end_request_path);
 }
 
 void conf::_parse_cgi(const std::string &cgi, location *location)
@@ -113,23 +115,17 @@ void conf::_parse_cgi(const std::string &cgi, location *location)
 
 void conf::_parse_methods(const std::string &methods, location *location)
 {
-	//TODO validate format
-	location->methods = 0;
-	short	bit;
-	bit = 0;
 	std::stringstream ss(methods);
 	std::string method;
 	while (std::getline(ss, method, ' ')){
-		bit = 0;
-		for (std::vector<std::string>::const_iterator it = _accepted_methods.begin(); it!=_accepted_methods.end(); it++ )
-		{
-			if ( method == *it )
-			{
-				location->methods |= (1<<bit);
-				break;
-			}
-			bit++;
-		}
+		if (method == "GET")
+			location->methods |= GET;
+		else if (method == "POST")
+			location->methods |= POST;
+		else if (method == "DELETE")
+			location->methods |= DELETE;
+		else
+			ERROR_CONF(WRONG_METHOD << COLOR(RED,method));//!Error or Warning
 	}
 }
 void conf::_parse_autoindex(const std::string &autoindex, location *location)
@@ -272,16 +268,6 @@ void conf::_parse_server_directive(const std::pair<std::string,std::string> &dir
 		_parse_default_root(directive_val, server);
 }
 
-void conf::_set_server_defaults(serverconf *server)
-{
-	server->address = DEFAULT_ADDRESS;
-	server->port = DEFAULT_PORT;
-	server->default_root = DEFAULT_ROOT;
-	if (server->locations.size())
-		server->locations.clear();
-
-}
-
 void conf::_set_location_defaults(location *location)
 {
 	location->methods = GET;
@@ -289,13 +275,26 @@ void conf::_set_location_defaults(location *location)
 	location->request_path = DEFAULT_PATH;
 	location->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 	location->index = DEFAULT_INDEX;
-	location->file_root = "";
+}
+
+void conf::_set_server_defaults(serverconf *server, location *location)
+{
+	server->address = DEFAULT_ADDRESS;
+	server->port = DEFAULT_PORT;
+	server->default_root = DEFAULT_ROOT;
+	if (server->locations.size())
+		server->locations.clear();
+
+	// Insert '/' default location, this location would be overwritten if is later defined
+	_set_location_defaults(location);
+	server->locations.insert(std::make_pair(location->request_path, *location));
 }
 
 void conf::push_back_server(serverconf &server)
 {
+	// Iterate thorugh locations to set file_root not setted previously
 	for (std::map<std::string, location>::iterator it = server.locations.begin(); it != server.locations.end(); it++ ){
-		if (it->second.file_root == "")
+		if (it->second.file_root.empty())
 			it->second.file_root = server.default_root + it->first;
 	}
 	this->servers.push_back(server);
@@ -306,7 +305,7 @@ void conf::_load_configuration(const Filetypes & types)
 	int	curly_braces_level = CLOSED;
 	serverconf server(types);
 	location location;
-	_load_acepted_methods();
+	// _load_acepted_methods();
 	for (std::vector< std::pair<std::string,std::string> >::iterator it=_conf.begin(); it!=_conf.end(); ++it){
 		if (it->first == "}")
 		{
@@ -314,17 +313,13 @@ void conf::_load_configuration(const Filetypes & types)
 			if (curly_braces_level == CLOSED)
 				push_back_server(server);
 			else if (curly_braces_level == OPEN_SERVER)
-				server.locations.insert(std::make_pair(location.request_path, location));
+				server.locations[location.request_path] = location; // Using access instead of insert because I need to overwritte
 		}
 		else if (it->second[it->second.length() - 1] == '{')
 		{
 			curly_braces_level++;
 			if (curly_braces_level == OPEN_SERVER)
-			{
-				_set_server_defaults(&server);
-				_set_location_defaults(&location);
-				server.locations.insert(std::make_pair(location.request_path, location));
-			}
+				_set_server_defaults(&server, &location);
 			else if (curly_braces_level == OPEN_LOCATION)
 				_set_location_defaults(&location);
 		}
@@ -385,13 +380,6 @@ void load_valid_conf_keys(std::set<std::string> & valid_conf_keys)
 	valid_conf_keys.insert("server_name");
 	valid_conf_keys.insert("client_max_body_size");
 	valid_conf_keys.insert("cgi");
-}
-
-void conf::_load_acepted_methods()
-{
-	_accepted_methods.push_back("GET");
-	_accepted_methods.push_back("DELETE");
-	_accepted_methods.push_back("POST");
 }
 
 void conf::_validate_processed_conf()

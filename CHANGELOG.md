@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `github-actions` rule to check make all compiles
 - Added `Filetypes` unit test
 
+### Changed
+- Added `conf` validations for locations 6 methods, refactorize some code
+- Added some color alias on `log`
+
 ## 2023-05-09 - Edu
 ### Added
 - Added some color logs (background & foreground) to `log.hpp`

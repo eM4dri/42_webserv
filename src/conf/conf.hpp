@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/09 20:36:58 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:04:04 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@
 
 namespace ft
 {
-
-// enum accepted_methods
-// 	{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
-// static const char *logLevel[] =
-// { "GET", "POST", "DELETE"};
-
 class serverconf;
 class Filetypes;
 
@@ -54,11 +48,9 @@ class conf{
 		void _print_processed_conf();
 		void _load_configuration( const Filetypes & types );
 
-		//	load parameters to validate conf file
-		void _load_acepted_methods();
 
 		// set_default_values
-		void _set_server_defaults(serverconf *server);
+		void _set_server_defaults(serverconf *server,location *location);
 		void _set_location_defaults(location *location);
 
 		//	parse server directives
@@ -79,7 +71,6 @@ class conf{
 
 		void push_back_server(serverconf &server);
 	private:
-		std::vector<std::string>							_accepted_methods;	// GET, POST, DELETE for validations
 		std::vector<std::pair <std::string,std::string> >	_conf;	// parsed conf for validations
 };
 
