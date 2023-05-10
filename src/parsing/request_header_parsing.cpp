@@ -6,72 +6,12 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 20:10:09 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:45:47 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../requests/Request.hpp"
 
-/*
-?	This function takes a string that has a path starting from a root and 
-?	checks whether there are attempts to access files over the root or not.
-?	If there are, it will delete those attempts remaining within the allowed
-?	boundaries and returning a string with a safe path.
-*/
-static std::string correct_path(const std::string &orig_path)
-{
-	std::vector <std::string> routes = cpp_split(orig_path, '/');
-	std::vector<std::string>::iterator curr_route = routes.end() - 1;
-	std::vector<std::string>::iterator curr_route_aux = routes.end();
-	std::string retval;
-	int level = 0;
-	if (!routes.size())
-		return ("");
-	while (curr_route != routes.begin())
-	{
-		if (*curr_route == "~")
-			break;
-		else
-			curr_route--;
-	}
-	if (*curr_route == "~")
-		curr_route++;
-	curr_route_aux = curr_route;
-
-	while (curr_route != routes.end())
-	{
-		if (*curr_route == "..")
-		{
-			if (level - 1 < 0)
-				routes.erase(curr_route);
-			else
-			{
-				routes.erase(curr_route);
-				curr_route--;
-				routes.erase(curr_route);
-			}
-				
-		}
-		else if (*curr_route == ".")
-			routes.erase(curr_route);
-		else
-		{
-			level++;
-			curr_route++;
-		}
-
-	}
-	while (curr_route_aux != routes.end())
-	{
-		retval.append("/");
-		retval.append(*curr_route_aux);
-		curr_route_aux++;
-	}
-	if (retval[0] == '/')
-		retval = retval.substr(1, retval.size() - 1);
-	return (retval);
-	
-}
 
 /*
 ?	Returns false if there's an error in the first line of a request and prints a

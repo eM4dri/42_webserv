@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/06 20:10:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:45:12 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ std::string get_date(time_t in_time, bool is_gmt);
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
 std::string getMessageFromCode(int status_code);
 std::string get_date();
+std::string correct_path(const std::string &orig_path);
 void checkpoint(char *text); //! Debugging purposes, please delete before evaluating.
 
 #endif

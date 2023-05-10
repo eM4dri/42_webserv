@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/09 18:53:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:07:59 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Filetypes;
  * @param port		(unsigned short)
  * @param root		(std::string)
  * @param locations	(std::map<std::string, location>)
+ * @warning Declare an object with ft::serverconf.
 */
 class serverconf{
 	public:
