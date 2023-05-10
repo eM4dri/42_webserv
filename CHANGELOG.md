@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2023-05-07 - Edu
+## 2023-05-09 - Edu
+### Added
+- Added some color logs (background & foreground) to `log.hpp`
+- File `TODO.md` added to keep tracking everything we acknowledge as TODO
+- File `NOTES.md` added to add general notes that doesn't fit in a README.md
+- `conf` added default `\` location for every new server, regardless if it's an actual directive.
+
+### Changed
+- Some new `conf` entities such as cgi, file_root, and some rename (default_root & request_path)
+
+## 2023-05-08 - Edu
 ### Moved
 - Move `Filetypes` into `serverconf`to be able too access it from server, relocate class into `conf` directory
 ### Fixed

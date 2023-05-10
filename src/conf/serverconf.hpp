@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/09 19:41:02 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:07:59 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class serverconf{
 	public:
 		std::string							address;
 		unsigned short						port;
-		std::string							root;
+		std::string							default_root;
 		std::map<std::string, location>		locations;
 		const Filetypes &					filetypes;
 
