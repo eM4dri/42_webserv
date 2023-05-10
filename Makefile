@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
+#    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/08 18:44:35 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/10 15:29:37 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,6 @@ INCLUDES_FILES =	utils/log.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
 					conf/Filetypes.hpp						\
-					responses/responses.hpp					\
 					actuators/methods.hpp					\
 					actuators/cgi.hpp						\
 					requests/Request.hpp					\
@@ -50,9 +49,7 @@ SRC_FILES	= 	main.cpp								\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
 				conf/Filetypes.cpp						\
-				responses/responses.cpp					\
 				responses/Directories.cpp				\
-				actuators/get.cpp						\
 				actuators/cgi.cpp						\
 				to_string.cpp							\
 				requests/Request.cpp					\

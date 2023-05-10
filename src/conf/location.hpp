@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/09 19:35:49 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:07:48 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ enum e_accepted_methods
  * @param client_max_body_size	(size_t)
  * @param index	(std::string) default file if the requested resource is a dir and autoindex is false. //! Check '..'
  * @param redirect	(std::string)
+ * @warning Declare a struct with ft::location.
 */
 struct location{
 	// public:
