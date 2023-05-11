@@ -37,6 +37,7 @@ add_executable(
 #  test/network/socket/ListenSocketTest.cc
 #  test/network/server/AServerTest.cc
   test/conf/Filetypes.cc
+  test/utils.cc
 
 )
 target_link_libraries(
