@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly
 - Function to print vector and ending null array on `log`
+- New folder `cgi` to store executables & scripts
 ### Changed
 - Added `cgi_script` to cgi constructor to load the script to exec
 
@@ -22,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `Filetypes` unit test
 
 ### Changed
-- Added `conf` validations for locations 6 methods, refactorize some code
+- Added `conf` validations for locations methods, refactorize some code
 - Added some color alias on `log`
 
 ## 2023-05-09 - Edu
@@ -31,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File `TODO.md` added to keep tracking everything we acknowledge as TODO
 - File `NOTES.md` added to add general notes that doesn't fit in a README.md
 - `conf` added default `\` location for every new server, regardless if it's an actual directive.
-- New folder `cgi` to store executables & scripts
 
 ### Changed
 - Some new `conf` entities such as cgi, file_root, and some rename (default_root & request_path)
