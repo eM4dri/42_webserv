@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-12 - Edu
 ### Added
 - Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly
+- Function to print vector and ending null array on `log`
+### Changed
+- Added `cgi_script` to cgi constructor to load the script to exec
 
 ## 2023-05-11 - Edu
 ### Added

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 15:28:53 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/12 17:01:58 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,6 @@ int main(int argc, char **argv)
 	{
 		ft::Filetypes aux(NULL);
 		ft::conf newconf("conf/example.conf", aux);
-		std::vector<ft::serverconf>::iterator it = newconf.servers.begin();
-
-		std::cout << "EDU\thtml:  "<< it->filetypes.get("html") << std::endl;
-
 		for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
 			ft::server server(*it);
 	}
@@ -66,7 +62,7 @@ int main(int argc, char **argv)
 		ft::Filetypes aux(NULL);
 		ft::conf newconf("conf/example.conf", aux);
 		// std::vector<ft::serverconf>::iterator it = newconf.server;
-		
+
 		Request newrequest(file_reader("test_files/get_request", &read_status), newconf.servers[0]);
 
 		std::cout << "Abs path: " << newrequest.get_path_abs() << std::endl;
@@ -96,12 +92,16 @@ int main(int argc, char **argv)
 			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
 		Response response(request);
 	}
-
-
-
 	if (argc >  1 && !std::strcmp(argv[1], "cgi"))
 	{
-		ft::cgi newcgi;
+		ft::conf newconf("conf/example.conf", ft::Filetypes(NULL));
+		const ft::serverconf &serveconf = newconf.servers[0];
+		std::string getfilename("test_files/get_request");
+		Request request(file_reader(getfilename, NULL), serveconf);
+		// ft::cgi newcgi("/usr/local/bin/python3", "test_files/reply.py", request, serveconf);
+		// ft::cgi newcgi("/bin/ls", "-la", request, serveconf);
+		ft::cgi newcgi("", "test_files/cpp_env.cgi", request, serveconf);
+		LOG(newcgi.get_cgi_response());
 	}
 	return (0);
 }

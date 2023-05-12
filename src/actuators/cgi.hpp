@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:10 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/05 17:12:53 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:45:27 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,35 @@
 # define CGI_HPP
 # include <string>	//	std::string
 # include <vector>	//	std::vector
-
+#include "requests/Request.hpp"
+# include "conf/conf.hpp"
 
 namespace ft
 {
 
-class server;
-
 class cgi {
 	public:
 	    //Constructor
-		cgi();
+		cgi( const std::string & cgi_exec, const std::string & _cgi_script, const Request & request , const serverconf & conf );
 
 	    //Destructor
 		~cgi();
-		std::string const & get_response() const;
+		std::string const & get_cgi_response() const;
 
 	private:
-		cgi( int var );
-		cgi( const cgi& copy );
-		cgi & operator=( const cgi& assign ); // Assignement Operator
+		cgi(); // not necesary
+		cgi( const cgi& copy ); // not necesary
+		cgi & operator=( const cgi& assign ); // not necesary
+
 		void _execute(void);
-		void _populate_env(void);
-		void _add_env(const std::string & input);
-		std::string _response;
+		void _populate_env();
 
-
-		std::vector<char *>	_env;
+		std::vector<std::string>	_env;
+		const std::string &			_cgi_exec;
+		const std::string &			_cgi_script;
+		const Request &				_request;
+		const serverconf &			_conf;
+		std::string					_cgi_response;
 
 };
 
