@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `cgi_script` to cgi constructor to load the script to exec
 ### Fixed
 - Comment set but not used variable `is_dir` on `Response.cpp`
+- Comment `Filetypes` unit test on `CMakeList.txt` as pipeline can't open files
 
 ## 2023-05-11 - Edu
 ### Added
