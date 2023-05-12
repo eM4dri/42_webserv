@@ -102,10 +102,10 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
-	int			is_dir;
+	//int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	is_dir = stat(filename.c_str(), &file_info);
+	//is_dir = stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;

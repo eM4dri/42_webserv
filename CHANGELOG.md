@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New folder `cgi` to store executables & scripts
 ### Changed
 - Added `cgi_script` to cgi constructor to load the script to exec
+### Fixed
+- Comment set but not used variable `is_dir` on `Response.cpp`
 
 ## 2023-05-11 - Edu
 ### Added
