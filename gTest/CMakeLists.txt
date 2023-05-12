@@ -31,12 +31,15 @@ add_executable(
   ../src/to_string.cpp
   ../src/conf/Filetypes.hpp
   ../src/conf/Filetypes.cpp
+  ../src/conf/conf.hpp
+  ../src/conf/conf.cpp
 
 #  test/network/socket/ASocketTest.cc
 #  test/network/socket/BindSocketTest.cc
 #  test/network/socket/ListenSocketTest.cc
 #  test/network/server/AServerTest.cc
   test/conf/Filetypes.cc
+  test/conf/conf.cc
   test/utils.cc
 
 )

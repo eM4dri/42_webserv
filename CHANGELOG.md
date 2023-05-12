@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-12 - Edu
+### Added
+- Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly
+
 ## 2023-05-11 - Edu
 ### Added
 - Added `utils` unit test, to test `correct_path`, include examples with paremeterized test

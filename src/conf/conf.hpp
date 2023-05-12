@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 16:04:04 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/12 12:56:07 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Filetypes;
 class conf{
 	public:
 	    //Constructor
+		conf() {};  // Should be private or better desgin patern
 		conf( const char *filename, const Filetypes & types );
 
 	    //Destructor
@@ -38,16 +39,15 @@ class conf{
 		void print_loaded_conf();
 
 	private:
-		conf();
+		// conf();  // Should be private or better desgin patern
 		conf( const conf& copy );
-		conf & operator=( const conf& assign ); // Assignement Operator
+		conf & operator=( const conf& assign );
 
 		void _process_conf_file(std::ifstream &ifs);
 		void _process_conf_line(std::string &line);
 		void _validate_processed_conf();
 		void _print_processed_conf();
 		void _load_configuration( const Filetypes & types );
-
 
 		// set_default_values
 		void _set_server_defaults(serverconf *server,location *location);
@@ -70,8 +70,11 @@ class conf{
 		void _parse_cgi(const std::string &cgi, location *location);
 
 		void push_back_server(serverconf &server);
+		// bool valid_path(const std::string &path);  // Should be private or better desgin patern
 	private:
 		std::vector<std::pair <std::string,std::string> >	_conf;	// parsed conf for validations
+	public:
+		bool valid_path(const std::string &path); // Should be private or better desgin patern
 };
 
 }//Namespace ft

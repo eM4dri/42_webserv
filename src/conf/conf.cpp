@@ -6,14 +6,14 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 16:44:24 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/12 13:03:21 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "conf.hpp"
-#include "utils/log.hpp"
-# include <string>		// std::string, std::getline
-# include <vector>		// std::vector
+#include "../utils/log.hpp"
+#include <string>		// std::string, std::getline
+#include <vector>		// std::vector
 #include <fstream>		// std::ifstream
 #include <sstream>		// std::stringstream
 #include <iostream>		// std::out, std::endl
@@ -30,8 +30,9 @@
 #define INVALID_FILE_BRACES "curly braces not closed"
 #define INVALID_UNKOWN_DIRECTIVE "unknown key directive"
 #define INVALID_LISTEN "only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT)"
-#define WRONG_LOCATION "wrong location\t"
-#define WRONG_METHOD "wrong method\t"
+#define WRONG_LOCATION "wrong location "
+#define WRONG_METHOD "wrong method "
+#define WRONG_PATH "wrong path "
 
 enum e_curly_braces_level{
 	CLOSED,
@@ -41,7 +42,6 @@ enum e_curly_braces_level{
 
 namespace ft
 {
-
 //Constructor
 conf::conf( const char* filename, const Filetypes & types )
 {
@@ -75,23 +75,54 @@ conf::~conf()
 		}
 		servers.clear();
 	}
+	// delete pimpl_;
 }
 
+bool valid_path_end(const std::string &path)
+{
+	const char *invalid_end[] = {"/", "{", "/.", "/..", "/~", NULL};
+	const int len[] = {1, 1, 2, 3, 2};
+	u_short		i = 0;
+
+	while (invalid_end[i] != NULL)
+	{
+		if (path.rfind(*invalid_end[i]) == path.length() - len[i])
+			return false;
+		i++;
+	}
+	return true;
+}
+
+bool conf::valid_path(const std::string &path)
+{
+	const char	*invalid[] = {"//", "/./", "/../", "/~/", NULL};
+	u_short		i = 0;
+
+	if (path[0] != '/')	// Only starting char allowed for any conf path
+		return false;
+	else if (path == "/") // '/' is defualt valid path
+		return true;
+	while (invalid[i] != NULL)
+	{
+		if (path.find(invalid[i]) != std::string::npos)
+			return false;
+		i++;
+	}
+	return valid_path_end(path);
+}
 
 void conf::_parse_file_root(const std::string &file_root, location *location)
 {
-	//TODO validate format
-	location->file_root = file_root;
+	if (!valid_path(file_root))
+		ERROR_CONF(WRONG_PATH << COLOR(RED, file_root));
+	location->file_root = std::string(&file_root[1]); // ltrim(str,'/')
 }
 
 void conf::_parse_request_path(const std::string &request_path, location *location)
 {
-	if (request_path[0] != '/')
-		ERROR_CONF(WRONG_LOCATION << COLOR(RED,request_path));
-	size_t end_request_path = request_path.find_first_of(ISSPACE_CHARACTERS);
-	if (end_request_path == std::string::npos )
-		end_request_path = request_path.length() - 1;
-	location->request_path = request_path.substr(0, end_request_path);
+	if (!valid_path(request_path))
+		ERROR_CONF(WRONG_LOCATION << COLOR(RED, request_path));
+	location->request_path = std::string(&request_path[1]); // ltrim(str,'/')
 }
 
 void conf::_parse_cgi(const std::string &cgi, location *location)
@@ -151,12 +182,15 @@ void conf::_parse_redirect(const std::string &redirect, location *location)
 
 void conf::_parse_location_directive(const std::pair <std::string,std::string> &directive, location *location)
 {
+	if (directive.first == "location")
+	{
+		std::string directive_val(directive.second, 0, directive.second.find_first_of(ISSPACE_CHARACTERS));
+		_parse_request_path(directive_val, location);
+	}
 	std::stringstream ss(directive.second);
 	std::string directive_val;
 	std::getline(ss, directive_val, ';');
-	if (directive.first == "location")
-		_parse_request_path(directive_val, location);
-	else if (directive.first == "index")
+	if (directive.first == "index")
 		_parse_index(directive_val, location);
 	else if (directive.first == "client_max_body_size")
 		_parse_client_max_body_size(directive_val, location);
@@ -253,7 +287,8 @@ void conf::_parse_listen(const std::string &listen, serverconf *server)
 
 void conf::_parse_default_root(const std::string &default_root, serverconf *server)
 {
-	//TODO validate format
+	if (!valid_path(default_root))
+		ERROR_CONF(WRONG_PATH << COLOR(RED, default_root));
 	server->default_root = default_root;
 }
 
