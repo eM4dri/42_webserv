@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 17:01:58 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/12 18:04:50 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,11 @@ int main(int argc, char **argv)
 		const ft::serverconf &serveconf = newconf.servers[0];
 		std::string getfilename("test_files/get_request");
 		Request request(file_reader(getfilename, NULL), serveconf);
-		// ft::cgi newcgi("/usr/local/bin/python3", "test_files/reply.py", request, serveconf);
+		// ft::cgi newcgi("/usr/local/bin/python3", "cgi/script/reply.py", request, serveconf);
+		ft::cgi newcgi("/usr/bin/perl", "cgi/script/query.pl", request, serveconf);
 		// ft::cgi newcgi("/bin/ls", "-la", request, serveconf);
-		ft::cgi newcgi("", "test_files/cpp_env.cgi", request, serveconf);
+		// ft::cgi newcgi("", "cgi/bin/cpp_env.wexec", request, serveconf);
+		// ft::cgi newcgi("", "cgi/bin/show_env.sh", request, serveconf);
 		LOG(newcgi.get_cgi_response());
 	}
 	return (0);

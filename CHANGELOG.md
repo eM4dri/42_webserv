@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - File `TODO.md` added to keep tracking everything we acknowledge as TODO
 - File `NOTES.md` added to add general notes that doesn't fit in a README.md
 - `conf` added default `\` location for every new server, regardless if it's an actual directive.
+- New folder `cgi` to store executables & scripts
 
 ### Changed
 - Some new `conf` entities such as cgi, file_root, and some rename (default_root & request_path)
