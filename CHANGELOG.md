@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added workaround to allow use unit test on private methods making public at compiling gTest, bases on this scripts `pre/post_gTest.sh`, example on `conf.hpp`,  usage copy `// public:	//	gTest public` before the private methods to test
 
+### Changed
+- Log error on `cgi` errors
+
 ## 2023-05-12 - Edu
 ### Added
 - Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly

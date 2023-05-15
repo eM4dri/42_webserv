@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 17:02:10 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:50:48 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void cgi::_execute(void)
 			execve(argv[1], const_cast<char **>(&argv[1]), envp);
 		else
 			execve(argv[0], const_cast<char **>(argv), envp);
+		LOG_ERROR("execve() returns only on error");	//	execve() returns only on error // exec not available or not enough access on Asscess Control List
+		exit(EXIT_FAILURE);
 	}
 	else	//	father
 	{
@@ -103,6 +105,9 @@ void cgi::_execute(void)
 		read(fd[READ_END], buff, USHRT_MAX);
 		close(fd[READ_END]);
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			if (WEXITSTATUS(status))
+				LOG_ERROR("CGI exits with status " << status);
 		std::ostringstream ss;
 		ss << buff;
 		_cgi_response = ss.str();
