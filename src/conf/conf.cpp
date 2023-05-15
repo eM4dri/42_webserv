@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/15 20:47:58 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/15 20:52:09 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,9 @@ conf::~conf()
 
 bool valid_path_end(const std::string &path)
 {
-	if (path.back() == '/' || path.back() == '{' )
-		return false;
 	u_short		i = 0;
-	const char *invalid_end[] = { "/.", "/..", "/~", NULL};
-	const size_t len[] = {2, 3, 2};
+	const char *invalid_end[] = { "/", "{", "/.", "/..", "/~", NULL};
+	const size_t len[] = {1, 1, 2, 3, 2};
 	while (invalid_end[i] != NULL)
 	{
 		size_t pos = path.size() - len[i];
