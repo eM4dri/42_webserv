@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 13:03:21 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/15 20:47:58 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 #define WRONG_LOCATION "wrong location "
 #define WRONG_METHOD "wrong method "
 #define WRONG_PATH "wrong path "
+#define WRONG_REDIRECTION "wrong redirection "
 
 enum e_curly_braces_level{
 	CLOSED,
@@ -80,13 +81,15 @@ conf::~conf()
 
 bool valid_path_end(const std::string &path)
 {
-	const char *invalid_end[] = {"/", "{", "/.", "/..", "/~", NULL};
-	const int len[] = {1, 1, 2, 3, 2};
+	if (path.back() == '/' || path.back() == '{' )
+		return false;
 	u_short		i = 0;
-
+	const char *invalid_end[] = { "/.", "/..", "/~", NULL};
+	const size_t len[] = {2, 3, 2};
 	while (invalid_end[i] != NULL)
 	{
-		if (path.rfind(*invalid_end[i]) == path.length() - len[i])
+		size_t pos = path.size() - len[i];
+		if (path.compare(pos, len[i], invalid_end[i]) == 0)
 			return false;
 		i++;
 	}
@@ -109,6 +112,22 @@ bool conf::valid_path(const std::string &path)
 		i++;
 	}
 	return valid_path_end(path);
+}
+
+bool conf::valid_redirect(const std::string &redirect)
+{
+	const char	*valid[] = {"http://", "https://", NULL};
+	u_short		i = 0;
+	size_t		http_index;
+
+	while (valid[i] != NULL)
+	{
+		http_index = redirect.find(valid[i]);
+		if (http_index == 0)
+			return true;
+		i++;
+	}
+	return valid_path(redirect);
 }
 
 void conf::_parse_file_root(const std::string &file_root, location *location)
@@ -174,13 +193,23 @@ void conf::_parse_index(const std::string &index, location *location)
 	//TODO validate format
 	location->index = index;
 }
-void conf::_parse_redirect(const std::string &redirect, location *location)
+void conf::_parse_redirect(const std::string &redirect, location *location_, const serverconf &server)
 {
-	//TODO validate format
-	location->redirect = redirect;
+	if (!valid_redirect(redirect))
+		ERROR_CONF(WRONG_REDIRECTION << COLOR(RED, redirect));
+	std::string copy(&redirect[1]);	//	parsing without 1st '/'
+	std::map<std::string, location>::const_iterator it = server.locations.find(copy);
+	while (1)	//	Avoding circular references a > b, b > c & c > a -> c > ''
+	{
+		if (it == server.locations.end() || it->second.redirect == "")
+			break;
+		copy = it->second.redirect;
+		it = server.locations.find(copy);
+	}
+	location_->redirect = (location_->request_path == copy)	?	""	:	copy;
 }
 
-void conf::_parse_location_directive(const std::pair <std::string,std::string> &directive, location *location)
+void conf::_parse_location_directive(const std::pair <std::string,std::string> &directive, location *location, const serverconf &server)
 {
 	if (directive.first == "location")
 	{
@@ -196,8 +225,8 @@ void conf::_parse_location_directive(const std::pair <std::string,std::string> &
 		_parse_client_max_body_size(directive_val, location);
 	else if (directive.first == "autoindex")
 		_parse_autoindex(directive_val, location);
-	else if (directive.first == "redirect")
-		_parse_redirect(directive_val, location);
+	else if (directive.first == "return")
+		_parse_redirect(directive_val, location, server);
 	else if (directive.first == "methods")
 		_parse_methods(directive_val, location);
 	else if (directive.first == "root")
@@ -361,7 +390,7 @@ void conf::_load_configuration(const Filetypes & types)
 		if (curly_braces_level == OPEN_SERVER)
 			_parse_server_directive(*it, &server);
 		else if (curly_braces_level == OPEN_LOCATION)
-			_parse_location_directive(*it, &location);
+			_parse_location_directive(*it, &location, server);
 	}
 }
 

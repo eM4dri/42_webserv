@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-15 - Edu
 ### Added
 - Added workaround to allow use unit test on private methods making public at compiling gTest, bases on this scripts `pre/post_gTest.sh`, example on `conf.hpp`,  usage copy `// public:	//	gTest public` before the private methods to test
+- Added `valid_redirect` on `conf` to allow every path as `valid_path` and `http/https`, unit test included, also handled circular redirections missing unit test
 
 ### Changed
 - Log error on `cgi` errors

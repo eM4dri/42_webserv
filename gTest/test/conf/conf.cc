@@ -67,3 +67,53 @@ INSTANTIATE_TEST_SUITE_P(
 	)
 );
 
+struct sample_redirect
+{
+	std::string redirect;
+	bool expected;
+};
+
+struct ValidRedirectMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_redirect> {
+	protected:
+	const bool	is_valid = conf->valid_redirect( GetParam().redirect );
+
+	ValidRedirectMultipleParametersTests() {}
+	~ValidRedirectMultipleParametersTests() {}
+};
+
+TEST_P(ValidRedirectMultipleParametersTests, ChecksIfRedirectIsCorrected) {
+	EXPECT_EQ(is_valid, GetParam().expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+	ValidRedirectTests,
+	ValidRedirectMultipleParametersTests,
+	::testing::Values(
+
+		sample_redirect{"http://",true},
+		sample_redirect{"https://",true},
+		sample_redirect{"ahttp://",false},
+		sample_redirect{"ahttps://",false},
+		sample_redirect{"",false},
+		sample_redirect{"/",true},
+		sample_redirect{"/tmp",true},
+		sample_redirect{"/tmp/www",true},
+		sample_redirect{"tmp/www",false},
+
+		// invaid charset
+		sample_redirect{"/tmp//www",false},
+		sample_redirect{"/tmp/./www",false},
+		sample_redirect{"/tmp/~/www",false},
+		sample_redirect{"/tmp/../www",false},
+
+		// invalid ending
+		sample_redirect{"/tmp/www/",false},
+		sample_redirect{"/tmp/www/.",false},
+		sample_redirect{"/tmp/www/~",false},
+		sample_redirect{"/tmp/www/..",false},
+		sample_redirect{"/tmp/www/..",false},
+		sample_redirect{"/tmp/www{",false},
+		sample_redirect{"/tmp/www {",false}
+	)
+);
+
