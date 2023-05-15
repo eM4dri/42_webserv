@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 12:56:07 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:26:15 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ class conf{
 		void _parse_cgi(const std::string &cgi, location *location);
 
 		void push_back_server(serverconf &server);
-		// bool valid_path(const std::string &path);  // Should be private or better desgin patern
+
+	// public:	//	gTest public
+		bool valid_path(const std::string &path);  // Should be private or better desgin patern
 	private:
 		std::vector<std::pair <std::string,std::string> >	_conf;	// parsed conf for validations
-	public:
-		bool valid_path(const std::string &path); // Should be private or better desgin patern
 };
 
 }//Namespace ft
