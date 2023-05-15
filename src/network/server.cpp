@@ -17,6 +17,7 @@
 #include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
 #include "actuators/cgi.hpp"
+
 // #include <iostream>						//	std::cout, std::endl
 // #include "responses/responses.hpp"
 // #include "general.hpp"
@@ -173,26 +174,31 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		buffer[nbytes] = '\0';
 		LOG(CLIENT_SAYS(it->fd));
 		LOG_COLOR(RED, buffer );
-		_responder(it->fd);
+		// Request(buffer);
+		Request request(buffer, _conf);
+		LOG_COLOR(YELLOW, "HOLA");
+		_responder(it->fd, request);
 		// _echo(it->fd, buffer, nbytes);
 		close(it->fd);
 	}
 }
 
-void server::_responder(int client_fd)
+void server::_responder(int client_fd, const Request & request)
 {
-	cgi aux;
+	// LOG_COLOR(YELLOW, "ADIOS");
+	cgi aux("", "",request, _conf);
+	LOG_COLOR(YELLOW, "AMIGO");
 	std::string response;
-	response =	"HTTP/1.1 200 OK\n"
-				"CONTENT-TYPE: text/plain; charset=utf-8\n"
-				"Date: Sat, 06 May 2023 14:05:09 GMT\n"
-				"Server: HippieServer/1.1\n"
-				"Connection: keep-alive\n"
-				"Keep-Alive: timeout=5, max=100\n"
-				"TRANSFER-ENCODING: chunked\n"
-				"\n";
+	// response =	"HTTP/1.1 200 OK\n"
+	// 			"CONTENT-TYPE: text/plain; charset=utf-8\n"
+	// 			"Date: Sat, 06 May 2023 14:05:09 GMT\n"
+	// 			"Server: HippieServer/1.1\n"
+	// 			"Connection: keep-alive\n"
+	// 			"Keep-Alive: timeout=5, max=100\n"
+	// 			"TRANSFER-ENCODING: chunked\n"
+	// 			"\n";
 
-	response.append(aux.get_response());
+	response.append(aux.get_cgi_response());
 	// const size_t len = std::strlen(WELCOME_MESSAGE);
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);

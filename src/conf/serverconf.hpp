@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 15:07:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:45:36 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@
 
 namespace ft
 {
-
-struct location;
-class Filetypes;
 
 /**
  * @param address	(std::string)
