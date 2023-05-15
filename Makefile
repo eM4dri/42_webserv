@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
+#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/10 15:29:37 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/12 13:01:29 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,8 +99,12 @@ re:			fclean all
 
 # gTest rule
 gTest:
-			cmake -S ./gTest -B $(BUILD_DIR)
-			cmake --build $(BUILD_DIR)
+		cmake $(MACHINE) -S ./gTest -B $(BUILD_DIR) # devs
+		cmake --build $(BUILD_DIR)
+
+MACHINE= -Wno-dev
+# MACHINE=
+
 
 # phony
 .PHONY:		all clean fclean re gTest

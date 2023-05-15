@@ -15,6 +15,8 @@ jobs:
     - name: Install gtest manually
       run: sudo apt-get -y install clang && sudo apt-get -y install cmake
     - uses: actions/checkout@v3
+    - name: test make all compiles
+      run:  make all
     - name: Build gTest
       run:  make gTest
     - name: Run Test

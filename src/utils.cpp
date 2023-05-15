@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:45:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/10 16:08:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,7 +319,7 @@ std::string getMessageFromCode(int status_code)
 }
 
 /*
-?	This function takes a string that has a path starting from a root and 
+?	This function takes a string that has a path starting from a root and
 ?	checks whether there are attempts to access files over the root or not.
 ?	If there are, it will delete those attempts remaining within the allowed
 ?	boundaries and returning a string with a safe path.
@@ -356,7 +356,7 @@ std::string correct_path(const std::string &orig_path)
 				curr_route--;
 				routes.erase(curr_route);
 			}
-				
+
 		}
 		else if (*curr_route == ".")
 			routes.erase(curr_route);
@@ -376,7 +376,7 @@ std::string correct_path(const std::string &orig_path)
 	if (retval[0] == '/')
 		retval = retval.substr(1, retval.size() - 1);
 	return (retval);
-	
+
 }
 
 //! Debugging purposes, please delete before evaluating.
