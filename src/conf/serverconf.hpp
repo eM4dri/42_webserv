@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 15:07:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:30:39 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@
 
 namespace ft
 {
-
-struct location;
-class Filetypes;
 
 /**
  * @param address	(std::string)

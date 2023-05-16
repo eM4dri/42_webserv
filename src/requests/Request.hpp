@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 19:46:52 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:31:01 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 /**
  * @param fullrequest (const string)
- * @param config (const ft::serverconf)
+ * @param config (const ft::config)
  * @param method (int)
  * @param path (s_path)
  * @param header_map (map <string,string>)

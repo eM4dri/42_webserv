@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:17:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:31:09 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,10 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
-	int			is_dir;
+	//int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	is_dir = stat(filename.c_str(), &file_info);
+	//is_dir = stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;

@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-15 - Edu
+### Added
+- Added workaround to allow use unit test on private methods making public at compiling gTest, bases on this scripts `pre/post_gTest.sh`, example on `conf.hpp`,  usage copy `// public:	//	gTest public` before the private methods to test
+- Added `valid_redirect` on `conf` to allow every path as `valid_path` and `http/https`, unit test included, also handled circular redirections missing unit test
+
+### Changed
+- Log error on `cgi` errors
+
+### Fixed
+- Fix `sed` command discrepancies bewteen mac and GNU [Link](https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory)
+
+## 2023-05-12 - Edu
+### Added
+- Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly
+- Function to print vector and ending null array on `log`
+- New folder `cgi` to store executables & scripts
+### Changed
+- Added `cgi_script` to cgi constructor to load the script to exec
+### Fixed
+- Comment set but not used variable `is_dir` on `Response.cpp`
+- Comment `Filetypes` unit test on `CMakeList.txt` as pipeline can't open files
+
+## 2023-05-11 - Edu
+### Added
+- Added `utils` unit test, to test `correct_path`, include examples with paremeterized test
+
+## 2023-05-10 - Edu
+### Added
+- Added `github-actions` rule to check make all compiles
+- Added `Filetypes` unit test
+
+### Changed
+- Added `conf` validations for locations methods, refactorize some code
+- Added some color alias on `log`
+
 ## 2023-05-09 - Edu
 ### Added
 - Added some color logs (background & foreground) to `log.hpp`

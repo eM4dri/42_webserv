@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/10 15:29:37 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/16 17:29:18 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,8 +99,14 @@ re:			fclean all
 
 # gTest rule
 gTest:
-			cmake -S ./gTest -B $(BUILD_DIR)
-			cmake --build $(BUILD_DIR)
+		@./gTest/pre_gTest.sh
+		cmake $(MACHINE) -S ./gTest -B $(BUILD_DIR) # devs
+		cmake --build $(BUILD_DIR)
+		@./gTest/post_gTest.sh
+
+MACHINE= -Wno-dev
+# MACHINE=
+
 
 # phony
 .PHONY:		all clean fclean re gTest

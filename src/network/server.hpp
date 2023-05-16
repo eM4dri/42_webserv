@@ -16,11 +16,12 @@
 # include <poll.h>			// pollfd
 # include <vector>			// std::vector
 # include "conf/conf.hpp"
-
+# include "requests/Request.hpp"
 namespace ft
 {
 
-class serverconf;
+// class serverconf;
+// class Request;
 
 /**
  * @param _server_fd	(int)
@@ -61,7 +62,7 @@ class server{
 		//Functions to handle connections
 		void _accepter();
 		void _handler(std::vector<struct pollfd>::iterator it);
-		void _responder(int client_fd);
+		void _responder(int client_fd, const Request & request);
 		void _echo(int fd, char const *str, size_t nbytes);
 };
 
