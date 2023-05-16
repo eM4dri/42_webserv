@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/16 17:31:01 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:36:36 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ class Request
 		Request(const Request &tocopy);
 
 	//*	Parsing
-		void header_parser();
-		bool check_request_validity(std::string fullheader);
-		bool check_first_line_validity(std::string firstline);
+		void header_parser(const ft::serverconf &_config);
+		bool check_request_validity(std::string fullheader, const ft::serverconf &_config);
+		bool check_first_line_validity(std::string firstline, const ft::serverconf &_config);
 
 	//*	Getters
 		const std::string &get_fullrequest() const;
@@ -63,6 +63,7 @@ class Request
 		s_path path;
 		std::map <std::string, std::string> header_map;
 		std::string body;
+		ft::location location;
 		
 
 

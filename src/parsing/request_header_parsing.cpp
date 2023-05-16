@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/16 17:30:47 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:41:32 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 !			useless for now (except for debugging purposes). Most of it has been commented.
 !			If there's time, we can pass some explanation about the error to the returned page.
 */
-bool	Request::check_first_line_validity(std::string firstline)
+bool	Request::check_first_line_validity(std::string firstline, const ft::serverconf &_config)
 {
 	std::vector <std::string> params = cpp_split(firstline, ' ');
 
@@ -92,11 +92,41 @@ bool	Request::check_first_line_validity(std::string firstline)
 		return (false);
 	}
 	path.unparsed = params[1];
-	path.relative = correct_path(params[1]);
+	
+	
+	std::string path_iter;
+	path_iter = correct_path(params[1]);
+	std::vector<std::string> split_path = cpp_split(path_iter, '/');
+	unsigned int level = split_path.size();
+	std::map<std::string, ft::location>::const_iterator match = _config.locations.begin();
+	while (path_iter.size() > 0)
+	{
+		match = _config.locations.find(path_iter);
+		if (match == config.locations.end())
+		{
+			size_t last_slash = path_iter.find_last_of('/');
+			if (last_slash == std::string::npos)
+				path_iter = "";
+			else
+				path_iter = path_iter.substr(0, last_slash); //* Add a -1 after last_slash if is appends a '/'.
+			level--;
+		}
+		location = match->second;
+		break;
+	}
+		
+	path.relative = correct_path(location.file_root);
+	while (level < split_path.size())
+	{
+		path.relative.append("/");
+		path.relative.append(split_path[level++]);
+	}
 	path.vec_relative = cpp_split(path.relative, '/');
 	path.absolute = SERVER_ROOT;
 	path.absolute.append("/");
 	path.absolute.append(path.relative);
+
+
 	return (true);
 }
 
@@ -128,10 +158,10 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 /*
 ?	Checks if all fo the testing worked out well.
 */
-bool	Request::check_request_validity(std::string fullheader)
+bool	Request::check_request_validity(std::string fullheader, const ft::serverconf &_config)
 {
 	std::vector <std::string> line_vector = cpp_split(fullheader, '\n');
-	if (!check_first_line_validity(line_vector[0]))
+	if (!check_first_line_validity(line_vector[0], _config))
 		return (false);
 	if (!check_header_validity(line_vector, header_map))
 		return (false);
@@ -144,10 +174,10 @@ bool	Request::check_request_validity(std::string fullheader)
 ?	the header and the body into a string.
 !	If there's no body, it will be left as an empty string ("").
 */
-void Request::header_parser()
+void Request::header_parser(const ft::serverconf &_config)
 {
 	size_t head_body_separation = fullrequest.find("\n\n");
-	if (!check_request_validity(fullrequest.substr(0, head_body_separation)))
+	if (!check_request_validity(fullrequest.substr(0, head_body_separation), _config))
 	{
 		method = -1;
 		return ;
