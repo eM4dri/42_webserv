@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Log error on `cgi` errors
 
+### Fixed
+- Fix `sed` command discrepancies bewteen mac and GNU [Link](https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory)
+
 ## 2023-05-12 - Edu
 ### Added
 - Added `conf` unit test, to test `valid_path`, include examples with paremeterized test, currently failed at testing private function properly
