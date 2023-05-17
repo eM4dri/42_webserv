@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/16 20:41:32 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/17 19:33:24 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,24 +98,24 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 	path_iter = correct_path(params[1]);
 	std::vector<std::string> split_path = cpp_split(path_iter, '/');
 	unsigned int level = split_path.size();
-	std::map<std::string, ft::location>::const_iterator match = _config.locations.begin();
 	while (path_iter.size() > 0)
 	{
-		match = _config.locations.find(path_iter);
-		if (match == config.locations.end())
+		it_location = _config.locations.find(path_iter);
+		if (it_location == _config.locations.end())
 		{
 			size_t last_slash = path_iter.find_last_of('/');
 			if (last_slash == std::string::npos)
 				path_iter = "";
 			else
-				path_iter = path_iter.substr(0, last_slash); //* Add a -1 after last_slash if is appends a '/'.
+				path_iter = path_iter.substr(0, last_slash); //! Add a -1 after last_slash if is appends a '/'.
 			level--;
 		}
-		location = match->second;
-		break;
+		else
+			break;	
 	}
-		
-	path.relative = correct_path(location.file_root);
+	
+	path.relative = correct_path(it_location->second.file_root);
+
 	while (level < split_path.size())
 	{
 		path.relative.append("/");
