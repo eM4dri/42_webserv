@@ -25,8 +25,8 @@ add_executable(
 #  ../src/sandbox/socket/ListenSocket.cpp
 #  ../src/sandbox/server/AServer.hpp
 #  ../src/sandbox/server/AServer.cpp
-#  ../src/conf/Filetypes.hpp
-#  ../src/conf/Filetypes.cpp
+  ../src/conf/Filetypes.hpp
+  ../src/conf/Filetypes.cpp
   ../src/utils/log.hpp
   ../src/general.hpp
   ../src/utils.cpp
