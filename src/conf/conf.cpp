@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/15 20:52:09 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:35:17 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void conf::_parse_cgi(const std::string &cgi, location *location)
 
 void conf::_parse_methods(const std::string &methods, location *location)
 {
+	location->methods &= 0; // to address default initialization of locations's methods
 	std::stringstream ss(methods);
 	std::string method;
 	while (std::getline(ss, method, ' ')){
@@ -195,7 +196,7 @@ void conf::_parse_redirect(const std::string &redirect, location *location_, con
 {
 	if (!valid_redirect(redirect))
 		ERROR_CONF(WRONG_REDIRECTION << COLOR(RED, redirect));
-	std::string copy(&redirect[1]);	//	parsing without 1st '/'
+	std::string copy(&redirect[1]); // ltrim(str,'/')
 	std::map<std::string, location>::const_iterator it = server.locations.find(copy);
 	while (1)	//	Avoding circular references a > b, b > c & c > a -> c > ''
 	{

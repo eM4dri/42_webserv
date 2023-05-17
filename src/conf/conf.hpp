@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/15 19:27:13 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:02:33 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ class conf{
 
 		// set_default_values
 		void _set_server_defaults(serverconf *server,location *location);
-		void _set_location_defaults(location *location);
 
 		//	parse server directives
 		void _parse_server_directive(const std::pair <std::string,std::string> &directive, serverconf *server);
@@ -61,11 +60,9 @@ class conf{
 		//	parse location directives
 		void _parse_location_directive(const std::pair <std::string,std::string> &directive, location *location, const serverconf &server);
 		void _parse_request_path(const std::string &path, location *location);
-		void _parse_methods(const std::string &methods, location *location);
 		void _parse_autoindex(const std::string &autoindex, location *location);
 		void _parse_client_max_body_size(const std::string &client_max_body_size, location *location);
 		void _parse_index(const std::string &index, location *location);
-		void _parse_redirect(const std::string &redirect, location *location, const serverconf &server);
 		void _parse_file_root(const std::string &file_root, location *location);
 		void _parse_cgi(const std::string &cgi, location *location);
 
@@ -74,6 +71,9 @@ class conf{
 	// public:	//	gTest public
 		bool valid_path(const std::string &path);
 		bool valid_redirect(const std::string &redirect);
+		void _parse_redirect(const std::string &redirect, location *location, const serverconf &server);
+		void _parse_methods(const std::string &methods, location *location);
+		void _set_location_defaults(location *location);
 	private:
 		std::vector<std::pair <std::string,std::string> >	_conf;	// parsed conf for validations
 };

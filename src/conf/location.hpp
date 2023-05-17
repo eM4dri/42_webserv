@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/10 16:08:43 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/17 18:34:40 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define LOCATION_HPP
 # include <string>		// std::string
 # include <map>			// std::map
-# define DEFAULT_PATH "/"
+# define DEFAULT_PATH ""
 # define DEFAULT_INDEX "index.html"
 # define DEFAULT_CLIENT_MAX_BODY_SIZE 1024
 # define DEFAULT_AUTOINDEX false
