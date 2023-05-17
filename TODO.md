@@ -9,7 +9,10 @@
 - [ ] Parse index on `conf` default page
 - [X] Parse `conf` configure root in every location, apeeding server root
 - [X] Create default `/` location
-- [ ] Cgi
-- [ ] Apply `correct_path()` on `conf` default_root, file_root & request_path.
+- [X] Cgi
+- [F] Apply `correct_path()` on `conf` default_root, file_root & request_path.
+> Return KO if not complains `valid_path` on conf files (starts with `/`, not end with `/`, `.`,`{`, `~`, not allowed `//`,`/./``/../``/~/`)
 - [X] Fix errors `example.conf` look for kapouet
 - [X] Handle error with throws `conf`
+- [ ] Agreed Cgi comunications between Request or responses
+- [ ] Unit test parsed redirect to test circular references, using mock methods for valid redirect
