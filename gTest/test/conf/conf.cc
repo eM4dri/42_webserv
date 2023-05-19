@@ -117,3 +117,127 @@ INSTANTIATE_TEST_SUITE_P(
 	)
 );
 
+struct ParseRedirectFixtureTests: testing::Test {
+protected:
+	ft::conf	*conf;
+	ft::serverconf	*serverconf;
+    ft::location	*location;
+	ParseRedirectFixtureTests()
+	{
+		conf = new ft::conf();
+		serverconf = new ft::serverconf(NULL);
+		location = new ft::location();
+		location->request_path = "pathA";
+		conf->_parse_redirect("/pathB", location, *serverconf);
+		serverconf->locations.insert(std::make_pair(location->request_path, *location));
+		location->request_path = "pathB";
+		conf->_parse_redirect("/pathC", location, *serverconf);
+		serverconf->locations.insert(std::make_pair(location->request_path, *location));
+		location->request_path = "pathC";
+		conf->_parse_redirect("/pathA", location, *serverconf);
+		serverconf->locations.insert(std::make_pair(location->request_path, *location));
+	}
+	~ParseRedirectFixtureTests()
+	{
+		delete location;
+		if (serverconf->locations.size())
+			serverconf->locations.clear();
+		delete serverconf;
+		delete conf;
+	}
+
+};
+
+TEST_F(ParseRedirectFixtureTests, CheckIfRedirectCantLoop) {
+    EXPECT_EQ(serverconf->locations["pathA"].redirect, "pathB" );
+    EXPECT_EQ(serverconf->locations["pathB"].redirect, "pathC" );
+    EXPECT_NE(serverconf->locations["pathC"].redirect, "pathA" );
+    EXPECT_EQ(serverconf->locations["pathC"].redirect, "" );
+}
+
+struct sample_methods
+{
+	std::string methods;
+	int 		expected;
+};
+
+enum e_accepted_mock_methods
+{  MOCK_GET = 0x1, MOCK_POST = 0x2, MOCK_DELETE = 0x4 };
+
+
+struct ParseMethodsHasPermissionMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_methods> {
+	protected:
+	ft::location *some_location;
+	// const bool	is_valid = conf->valid_path( GetParam().path );
+
+	ParseMethodsHasPermissionMultipleParametersTests(){
+		some_location = new ft::location();
+		conf->_set_location_defaults(some_location);
+		// conf->_set_location_defaults(some_location);
+		conf->_parse_methods( GetParam().methods, some_location );
+	}
+	~ParseMethodsHasPermissionMultipleParametersTests() {
+		delete some_location;
+	}
+};
+
+TEST_P(ParseMethodsHasPermissionMultipleParametersTests, CheckHasPermisions) {
+	EXPECT_EQ(some_location->methods & GetParam().expected, GetParam().expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(
+	ParseMethodsTests,
+	ParseMethodsHasPermissionMultipleParametersTests,
+	::testing::Values(
+		sample_methods{"GET", MOCK_GET},
+		sample_methods{"POST", MOCK_POST},
+		sample_methods{"DELETE", MOCK_DELETE},
+		sample_methods{"GET POST", MOCK_GET},
+		sample_methods{"GET POST", MOCK_POST},
+		sample_methods{"DELETE GET", MOCK_DELETE},
+		sample_methods{"DELETE GET", MOCK_GET},
+		sample_methods{"DELETE POST GET", MOCK_DELETE},
+		sample_methods{"DELETE POST GET", MOCK_POST},
+		sample_methods{"DELETE POST GET", MOCK_GET},
+		sample_methods{"DELETE POST GET HOLA", MOCK_DELETE},
+		sample_methods{"DELETE POST GET HOLA", MOCK_POST},
+		sample_methods{"DELETE POST GET HOLA", MOCK_GET}
+	)
+);
+
+struct ParseMethodsHasNotPermissionMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_methods> {
+	protected:
+	ft::location *some_location;
+	// const bool	is_valid = conf->valid_path( GetParam().path );
+
+	ParseMethodsHasNotPermissionMultipleParametersTests(){
+		some_location = new ft::location();
+		conf->_set_location_defaults(some_location);
+		// conf->_set_location_defaults(some_location);
+		conf->_parse_methods( GetParam().methods, some_location );
+	}
+	~ParseMethodsHasNotPermissionMultipleParametersTests() {
+		delete some_location;
+	}
+};
+
+
+TEST_P(ParseMethodsHasNotPermissionMultipleParametersTests, CheckHasNotPermisions) {
+	EXPECT_NE(some_location->methods & GetParam().expected, GetParam().expected);
+}
+INSTANTIATE_TEST_SUITE_P(
+	ParseMethodsTests,
+	ParseMethodsHasNotPermissionMultipleParametersTests,
+	::testing::Values(
+		sample_methods{"", MOCK_GET},
+		sample_methods{"", MOCK_POST},
+		sample_methods{"", MOCK_DELETE},
+		sample_methods{"GET", MOCK_POST},
+		sample_methods{"POST", MOCK_DELETE},
+		sample_methods{"DELETE", MOCK_GET},
+
+		sample_methods{"GET POST", MOCK_DELETE},
+		sample_methods{"DELETE GET", MOCK_POST},
+		sample_methods{"POST DELETE", MOCK_GET}
+	)
+);
