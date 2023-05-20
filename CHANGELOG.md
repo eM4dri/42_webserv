@@ -6,7 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 2023-05-20 - Edu
+### Added
+- Added `exceptions` at loading `conf`, added scripts to enable/disable this exceptions on /src/conf
+
 ### Changed
+- Changed `location.redirect` to a std::pair<int,std::string> where `first` is returning code & `second` is location to return
 - Make const `Filetypes` get_suffix & improve performance not realloc with substring
 
 ## 2023-05-17 - Edu

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/17 18:34:40 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/19 17:43:58 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ struct location{
 	size_t									client_max_body_size;
 	std::string								index;
 	std::string								file_root;
-	std::string								redirect;
+	std::pair<unsigned short,std::string>	redirect;
 	std::map<std::string, std::string>		cgi_execs;
 
 };
