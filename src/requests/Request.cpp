@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/18 18:39:51 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:46:51 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ Request::Request(const std::string &_input, const ft::serverconf &_config): full
 }
 
 Request::Request(Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
+method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
 {
 }
 
 Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body)
+method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
 {
 }
 

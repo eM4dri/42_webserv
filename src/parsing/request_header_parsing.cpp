@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/18 20:26:01 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:50:16 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 	path_iter = correct_path(params[1]);
 	std::vector<std::string> split_path = cpp_split(path_iter, '/');
 	unsigned int level = split_path.size();
-	while (path_iter.size() > 0)
+	while (path_iter.size() >= 0)	//!		Might enter an infinite loop. Check it out later.
 	{
 		it_location = _config.locations.find(path_iter);
 		if (it_location == _config.locations.end())
@@ -114,7 +114,7 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 		else
 			break;	
 	}
-	
+
 	path.relative = correct_path(it_location->second.file_root);
 
 	while (level < split_path.size())

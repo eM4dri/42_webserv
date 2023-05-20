@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/20 17:29:08 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/20 20:30:45 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRC_FILES	= 	main.cpp								\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
 				conf/Filetypes.cpp						\
+				conf/serverconf.cpp						\
 				responses/Directories.cpp				\
 				actuators/cgi.cpp						\
 				to_string.cpp							\

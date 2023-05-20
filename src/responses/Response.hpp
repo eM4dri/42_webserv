@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:19:19 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:25:45 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Response
 		Response();
 
 	public:
-		Response(const Request _request);
+		Response(const Request &_request);
 		void return_content();
 		std::string reply();
 		std::string generate_response();

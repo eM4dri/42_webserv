@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/20 17:28:20 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 20:48:00 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 {
 }*/
 
-Response::Response(const Request _request): request(_request)
+Response::Response(const Request &_request): request(_request)
 {
 	if (_request.get_method() < 0)
 	{
@@ -27,12 +27,15 @@ Response::Response(const Request _request): request(_request)
 			return_error_message(505);
 		head_params["Content-Type"] = "text/html";
 	}
-	else if (request.get_dir_params()->second.redirect.size() > 0)
+	else if (request.get_dir_params()->second.redirect.first != 0)
 	{
-		
+		return_error_message(request.get_dir_params()->second.redirect.first);
+		head_params["Location"] = request.get_dir_params()->second.redirect.second;
 	}
 	else
+	{
 		return_content();
+	}
 	std::cout << std::endl << generate_response() << std::endl;	//! Delete when testing ends.
 }
 
@@ -122,7 +125,6 @@ void Response::file_status_custom_error(int file_status)
 		status_code = 500;
 	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been checked previously so there should be no errors from now on.
 	{
-		std::cout << ":DDDDDDD";
 		if (request.get_dir_params()->second.autoindex)
 		{
 			status_code = 200;
