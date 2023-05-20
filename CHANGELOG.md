@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-20 - Edu
+### Changed
+- Make const `Filetypes` get_suffix & improve performance not realloc with substring
+
 ## 2023-05-17 - Edu
 ### Fixed
 - Fixed  `gTest` pre/ post scripts to be able to work on MAC/LINUX systems
