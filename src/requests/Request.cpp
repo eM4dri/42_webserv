@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/16 19:40:29 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/18 18:39:51 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,10 @@ const std::map<std::string, std::string> Request::get_headermap() const
 const std::string &Request::get_body() const
 {
 	return(body);
+}
+
+const std::map<std::string, ft::location>::const_iterator &Request::get_dir_params() const
+{
+	return (it_location);
 }
 

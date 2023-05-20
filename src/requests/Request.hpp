@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/17 19:34:31 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/18 19:51:28 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class Request
 		const std::string &get_path_abs() const;
 		const std::map<std::string, std::string> get_headermap() const;
 		const std::string &get_body() const;
+		const std::map<std::string, ft::location>::const_iterator &get_dir_params() const;
 
 		void set_redirect_path();
 	private:

@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/16 17:31:09 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:28:20 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,17 @@
 
 Response::Response(const Request _request): request(_request)
 {
-	if (_request.get_method() == -1)
+	if (_request.get_method() < 0)
 	{
-		return_error_message(400);
+		if (_request.get_method() == -1)
+			return_error_message(400);
+		else if (_request.get_method() == -2)
+			return_error_message(505);
 		head_params["Content-Type"] = "text/html";
+	}
+	else if (request.get_dir_params()->second.redirect.size() > 0)
+	{
+		
 	}
 	else
 		return_content();
@@ -78,25 +85,6 @@ void Response::return_error_message(int error_code, std::string custom_reason)
 	body = retval;
 }
 
-void Response::file_status_custom_error(int file_status)
-{
-	std::string retval;
-	if (file_status == ENOENT)			//?	File Not found
-		status_code = 404;
-	else if (file_status == EACCES)		//?	Permission denied
-		status_code = 500;
-	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been chacked previously so there should be no errors from now on.
-	{
-		status_code = 200;
-		retval = create_directory_index();
-		body = retval;
-		return ;
-	}
-	else
-		status_code = 501;				//?	"Not implemented" error
-	return_error_message(status_code);
-}
-
 std::string get_file(std::string filename, std::string &mod_date, int *status)
 {
 	std::string		file_content;
@@ -123,6 +111,51 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 }
 
 
+void Response::file_status_custom_error(int file_status)
+{
+	std::string retval;
+	std::string mod_date;
+	int			file_read_status;
+	if (file_status == ENOENT)			//?	File Not found
+		status_code = 404;
+	else if (file_status == EACCES)		//?	Permission denied
+		status_code = 500;
+	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been checked previously so there should be no errors from now on.
+	{
+		std::cout << ":DDDDDDD";
+		if (request.get_dir_params()->second.autoindex)
+		{
+			status_code = 200;
+			retval = create_directory_index();
+			body = retval;
+			return ;
+		}
+		else if (!request.get_dir_params()->second.index.empty())
+		{
+			std::string file_to_get = request.get_path_abs();
+			file_to_get.append(request.get_dir_params()->second.index);
+			get_file(request.get_dir_params()->second.index, mod_date, &file_read_status);
+			if (file_read_status == ENOENT)								//?	File Not found
+				status_code = 404;
+			else if (file_status == EACCES || file_status == EISDIR)	//?	Permission denied or is a directory
+				status_code = 500;
+			else
+				status_code = 501;
+		}
+		else
+		{
+			status_code = 501;
+		}
+		
+
+
+	}
+	else
+		status_code = 501;				//?	"Not implemented" error
+	return_error_message(status_code);
+}
+
+
 void Response::return_content()
 {
 	std::string mod_date;
@@ -134,6 +167,7 @@ void Response::return_content()
 	if (!filetype_status)
 	{
 		return_error_message(500, "The file containing the allowed file types can't be accessed.");
+		status_code = 500;
 		head_params["Content-Type"] = "text/html";
 	}
 	else if (status)

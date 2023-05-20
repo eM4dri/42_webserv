@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/17 19:33:24 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/18 20:26:01 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 		// 	std::cerr << params[i] << " ";
 		// }
 		// std::cerr << TXT_RESET << std::endl;
+		method = -2;
 		return (false);
 	}
 	path.unparsed = params[1];
@@ -179,7 +180,8 @@ void Request::header_parser(const ft::serverconf &_config)
 	size_t head_body_separation = fullrequest.find("\n\n");
 	if (!check_request_validity(fullrequest.substr(0, head_body_separation), _config))
 	{
-		method = -1;
+		if (method != -2)
+			method = -1;
 		return ;
 	}
 	if (head_body_separation != std::string::npos)
