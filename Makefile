@@ -6,7 +6,7 @@
 #    By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/16 17:29:18 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/05/20 17:29:08 by jvacaris         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,6 +100,7 @@ re:			fclean all
 # gTest rule
 gTest:
 		@./gTest/pre_gTest.sh
+		@./src/conf/enableExceptions.sh
 		cmake $(MACHINE) -S ./gTest -B $(BUILD_DIR) # devs
 		cmake --build $(BUILD_DIR)
 		@./gTest/post_gTest.sh

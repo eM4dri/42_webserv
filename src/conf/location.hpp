@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/18 15:35:12 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:29:46 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ struct location{
 	size_t									client_max_body_size;
 	std::string								index;
 	std::string								file_root;
-	std::string								redirect;
+	std::pair<unsigned short,std::string>	redirect;
 	std::map<std::string, std::string>		cgi_execs;
 
 };

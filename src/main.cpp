@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/16 17:30:00 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:29:36 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,33 @@ int main(int argc, char **argv)
 	if (argc > 1 && !std::strcmp(argv[1], "conf"))
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
-		ft::conf newconf("conf/example.conf", NULL);
+		ft::Filetypes filetypes(NULL);
+		ft::conf newconf("conf/example.conf", filetypes);
 		newconf.print_loaded_conf();
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "serverconf"))
 	{
-		ft::Filetypes aux(NULL);
-		ft::conf newconf("conf/example.conf", aux);
-		for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
-			ft::server server(*it);
+		try
+		{
+			ft::Filetypes aux(NULL);
+			ft::conf newconf("conf/example.conf", aux);
+			for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
+				ft::server server(*it);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "mime"))
 	{
 		LOG(std::endl << " *\t Test Load mime.types \t* ");
 		ft::Filetypes filetypes(NULL);
+
+		// html htm shtml;
+		std::cout << "index.html:  "<< filetypes.get_suffix("index.html") << std::endl;
+		std::cout << "index.htm:  "<< filetypes.get_suffix("index.htm") << std::endl;
+		std::cout << "index.shtml:  "<< filetypes.get_suffix("index.shtml") << std::endl;
 		std::cout << "html:  "<< filetypes.get("html") << std::endl;
 		std::cout << "png:  "<< filetypes.get("png") << std::endl;
 		std::cout << "mp3:  "<< filetypes.get("mp3") << std::endl;
