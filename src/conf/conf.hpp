@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/17 20:45:43 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/20 14:17:56 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,17 @@ class conf{
 		void _parse_request_path(const std::string &path, location *location);
 		void _parse_autoindex(const std::string &autoindex, location *location);
 		void _parse_client_max_body_size(const std::string &client_max_body_size, location *location);
-		void _parse_index(const std::string &index, location *location);
+		bool _valid_index(const std::string &index, const Filetypes &filetypes);
+		void _parse_index(const std::string &index, location *location, const Filetypes &filetypes);
 		void _parse_file_root(const std::string &file_root, location *location);
 		void _parse_cgi(const std::string &cgi, location *location);
 
 		void push_back_server(serverconf &server);
 
 	// public:	//	gTest public
-		bool valid_path(const std::string &path);
-		bool valid_redirect(const std::string &redirect);
+		bool _valid_path(const std::string &path);
+		bool _valid_redirect_url(const std::string &url);
+		bool _valid_redirect(const std::string &redirect);
 		void _parse_redirect(const std::string &redirect, location *location, const serverconf &server);
 		void _parse_methods(const std::string &methods, location *location);
 		void _set_location_defaults(location *location);

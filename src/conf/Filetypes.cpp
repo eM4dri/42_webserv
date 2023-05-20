@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 14:24:17 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:29:52 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,14 @@ std::string Filetypes::get(const std::string &tosearch) const
 	return(DEFAULT_VALUE);
 }
 
-std::string Filetypes::get_suffix(const std::string &tosearch)
+std::string Filetypes::get_suffix(const std::string &tosearch) const
 {
 	if (tosearch.size() < 1)
 		return(DEFAULT_VALUE);
-	unsigned int search_it = tosearch.size() - 1;
-	while (search_it > 0)
-	{
-		if (tosearch[search_it] == '.')
-			return(full_list[tosearch.substr(search_it + 1, tosearch.size() - 1)]);
-		search_it--;
-	}
-	return(DEFAULT_VALUE);
+	size_t search_it = tosearch.find_last_of('.');
+	if (search_it == std::string::npos)
+		return(DEFAULT_VALUE);
+	return (get(&tosearch[search_it + 1]));
 }
 
 }	// Nammespace ft

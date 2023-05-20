@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/15 13:30:00 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/20 16:22:31 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,6 +100,7 @@ re:			fclean all
 # gTest rule
 gTest:
 		@./gTest/pre_gTest.sh
+		@./src/conf/enableExceptions.sh
 		cmake $(MACHINE) -S ./gTest -B $(BUILD_DIR) # devs
 		cmake --build $(BUILD_DIR)
 		@./gTest/post_gTest.sh
