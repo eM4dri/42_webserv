@@ -119,7 +119,7 @@ INSTANTIATE_TEST_SUITE_P(
 
 struct ParseRedirectFixtureTests: testing::Test {
 protected:
-	ft::conf	*conf;
+	ft::conf		*conf;
 	ft::serverconf	*serverconf;
     ft::location	*location;
 	ParseRedirectFixtureTests()
