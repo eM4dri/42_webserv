@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/20 16:16:09 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:33:34 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,14 @@ void conf::_parse_file_root(const std::string &file_root, location *location)
 		// throw std::invalid_argument(THROW_WRONG_PATH + file_root);
 		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, file_root));
 	location->file_root = std::string(&file_root[1]); // ltrim(str,'/')
+}
+
+void conf::_parse_upload_store(const std::string &upload_store, location *location)
+{
+	if (!_valid_path(upload_store))
+		// throw std::invalid_argument(THROW_WRONG_PATH + file_root);
+		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, upload_store));
+	location->upload_store = std::string(&upload_store[1]); // ltrim(str,'/')
 }
 
 void conf::_parse_request_path(const std::string &request_path, location *location)
@@ -303,6 +311,8 @@ void conf::_parse_location_directive(const std::pair <std::string,std::string> &
 		_parse_methods(directive_val, location);
 	else if (directive.first == "root")
 		_parse_file_root(directive_val, location);
+	else if (directive.first == "upload_store")
+		_parse_upload_store(directive_val, location);
 	else if (directive.first == "cgi")
 		_parse_cgi(directive_val, location);
 }
@@ -415,6 +425,7 @@ void conf::_set_location_defaults(location *location)
 	location->index = DEFAULT_INDEX;
 	location->redirect.first = 0;
 	location->redirect.second = "";
+	location->upload_store = "";
 }
 
 void conf::_set_server_defaults(serverconf *server, location *location)
@@ -486,6 +497,7 @@ void conf::print_loaded_conf()
 			LOG("\t\tmethods\t " << it2->second.methods);
 			LOG("\t\tredirect\t " << it2->second.redirect.first <<  ", " << it2->second.redirect.second);
 			LOG("\t\tfile_root\t " << it2->second.file_root);
+			LOG("\t\tupload_store\t " << it2->second.upload_store);
 			for (std::map<std::string, std::string>::iterator it3 = it2->second.cgi_execs.begin(); it3!=it2->second.cgi_execs.end(); ++it3)
 				LOG("\t\tcgi\t " << it3->first << "\t"<< it3->second);
 		}
@@ -521,6 +533,7 @@ void load_valid_conf_keys(std::set<std::string> & valid_conf_keys)
 	valid_conf_keys.insert("server_name");
 	valid_conf_keys.insert("client_max_body_size");
 	valid_conf_keys.insert("cgi");
+	valid_conf_keys.insert("upload_store");
 }
 
 void conf::_validate_processed_conf()

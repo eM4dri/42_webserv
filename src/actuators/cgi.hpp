@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:10 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 15:45:27 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:18:52 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft
 class cgi {
 	public:
 	    //Constructor
-		cgi( const std::string & cgi_exec, const std::string & _cgi_script, const Request & request , const serverconf & conf );
+		cgi( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf );
 
 	    //Destructor
 		~cgi();
