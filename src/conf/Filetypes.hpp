@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/09 19:41:49 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/19 15:14:45 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Filetypes
 		~Filetypes();
 
 		std::string get(const std::string &tosearch) const;
-		std::string get_suffix(const std::string &tosearch);
+		std::string get_suffix(const std::string &tosearch) const;
 
 };
 

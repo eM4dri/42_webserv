@@ -30,7 +30,7 @@ struct sample_path
 
 struct ValidPathMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_path> {
 	protected:
-	const bool	is_valid = conf->valid_path( GetParam().path );
+	const bool	is_valid = conf->_valid_path( GetParam().path );
 
 	ValidPathMultipleParametersTests() {}
 	~ValidPathMultipleParametersTests() {}
@@ -75,7 +75,7 @@ struct sample_redirect
 
 struct ValidRedirectMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_redirect> {
 	protected:
-	const bool	is_valid = conf->valid_redirect( GetParam().redirect );
+	const bool	is_valid = conf->_valid_redirect_url( GetParam().redirect );
 
 	ValidRedirectMultipleParametersTests() {}
 	~ValidRedirectMultipleParametersTests() {}
@@ -127,14 +127,17 @@ protected:
 		conf = new ft::conf();
 		serverconf = new ft::serverconf(NULL);
 		location = new ft::location();
+		conf->_set_location_defaults(location);
 		location->request_path = "pathA";
-		conf->_parse_redirect("/pathB", location, *serverconf);
+		conf->_parse_redirect("301 /pathB", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
+		conf->_set_location_defaults(location);
 		location->request_path = "pathB";
-		conf->_parse_redirect("/pathC", location, *serverconf);
+		conf->_parse_redirect("301 /pathC", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
+		conf->_set_location_defaults(location);
 		location->request_path = "pathC";
-		conf->_parse_redirect("/pathA", location, *serverconf);
+		conf->_parse_redirect("301 /pathA", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
 	}
 	~ParseRedirectFixtureTests()
@@ -149,10 +152,10 @@ protected:
 };
 
 TEST_F(ParseRedirectFixtureTests, CheckIfRedirectCantLoop) {
-    EXPECT_EQ(serverconf->locations["pathA"].redirect, "pathB" );
-    EXPECT_EQ(serverconf->locations["pathB"].redirect, "pathC" );
-    EXPECT_NE(serverconf->locations["pathC"].redirect, "pathA" );
-    EXPECT_EQ(serverconf->locations["pathC"].redirect, "" );
+    EXPECT_EQ(serverconf->locations["pathA"].redirect.second, "pathB" );
+    EXPECT_EQ(serverconf->locations["pathB"].redirect.second, "pathC" );
+    EXPECT_NE(serverconf->locations["pathC"].redirect.second, "pathA" );
+    EXPECT_EQ(serverconf->locations["pathC"].redirect.second, "" );
 }
 
 struct sample_methods
@@ -168,12 +171,10 @@ enum e_accepted_mock_methods
 struct ParseMethodsHasPermissionMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_methods> {
 	protected:
 	ft::location *some_location;
-	// const bool	is_valid = conf->valid_path( GetParam().path );
 
 	ParseMethodsHasPermissionMultipleParametersTests(){
 		some_location = new ft::location();
 		conf->_set_location_defaults(some_location);
-		// conf->_set_location_defaults(some_location);
 		conf->_parse_methods( GetParam().methods, some_location );
 	}
 	~ParseMethodsHasPermissionMultipleParametersTests() {
@@ -198,22 +199,17 @@ INSTANTIATE_TEST_SUITE_P(
 		sample_methods{"DELETE GET", MOCK_GET},
 		sample_methods{"DELETE POST GET", MOCK_DELETE},
 		sample_methods{"DELETE POST GET", MOCK_POST},
-		sample_methods{"DELETE POST GET", MOCK_GET},
-		sample_methods{"DELETE POST GET HOLA", MOCK_DELETE},
-		sample_methods{"DELETE POST GET HOLA", MOCK_POST},
-		sample_methods{"DELETE POST GET HOLA", MOCK_GET}
+		sample_methods{"DELETE POST GET", MOCK_GET}
 	)
 );
 
 struct ParseMethodsHasNotPermissionMultipleParametersTests :ConfTest, testing::WithParamInterface<sample_methods> {
 	protected:
 	ft::location *some_location;
-	// const bool	is_valid = conf->valid_path( GetParam().path );
 
 	ParseMethodsHasNotPermissionMultipleParametersTests(){
 		some_location = new ft::location();
 		conf->_set_location_defaults(some_location);
-		// conf->_set_location_defaults(some_location);
 		conf->_parse_methods( GetParam().methods, some_location );
 	}
 	~ParseMethodsHasNotPermissionMultipleParametersTests() {
@@ -239,5 +235,34 @@ INSTANTIATE_TEST_SUITE_P(
 		sample_methods{"GET POST", MOCK_DELETE},
 		sample_methods{"DELETE GET", MOCK_POST},
 		sample_methods{"POST DELETE", MOCK_GET}
+	)
+);
+
+
+struct ParseMethodsThrowUnknownMultipleParametersTests :ConfTest, testing::WithParamInterface<std::string> {
+	protected:
+	ft::location *some_location;
+
+	ParseMethodsThrowUnknownMultipleParametersTests(){
+		some_location = new ft::location();
+		conf->_set_location_defaults(some_location);
+	}
+	~ParseMethodsThrowUnknownMultipleParametersTests() {
+		delete some_location;
+	}
+};
+
+
+TEST_P(ParseMethodsThrowUnknownMultipleParametersTests, CheckHasNotPermisions) {
+	EXPECT_THROW(conf->_parse_methods( GetParam(), some_location ), std::invalid_argument);
+}
+INSTANTIATE_TEST_SUITE_P(
+	ParseMethodsTests,
+	ParseMethodsThrowUnknownMultipleParametersTests,
+	::testing::Values(
+		std::string("HOLA"),
+		std::string("GET HOLA"),
+		std::string("HOLA POST"),
+		std::string("POST DELETE HOLA")
 	)
 );
