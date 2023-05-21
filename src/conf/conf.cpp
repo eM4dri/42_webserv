@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 18:33:34 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/21 18:53:41 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void conf::_parse_file_root(const std::string &file_root, location *location)
 void conf::_parse_upload_store(const std::string &upload_store, location *location)
 {
 	if (!_valid_path(upload_store))
-		// throw std::invalid_argument(THROW_WRONG_PATH + file_root);
+		// throw std::invalid_argument(THROW_WRONG_PATH + upload_store);
 		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, upload_store));
 	location->upload_store = std::string(&upload_store[1]); // ltrim(str,'/')
 }
