@@ -194,15 +194,20 @@ const std::string mock_html_response(const std::string &filename,  const Request
 				Connection: keep-alive\n\
 				ETag: W/\"6450fcaf-264\"\n\
 				Content-Encoding: gzip\n";
-	std::ifstream in(filename, std::ios::in | std::ios::binary);
-	if (!in)
-		throw(errno);
+	std::ifstream ifs;
+	ifs.open (filename, std::ifstream::in);
+
+	if (ifs.is_open() == false)
+	{
+		LOG_ERROR("ERROR_OPENING_FILE");
+		std::exit(1);
+	}
 	std::string contents;
-	in.seekg(0, std::ios::end);
-	contents.resize(in.tellg());
-	in.seekg(0, std::ios::beg);
-	in.read(&contents[0], contents.size());
-	in.close();
+	ifs.seekg(0, std::ios::end);
+	contents.resize(ifs.tellg());
+	ifs.seekg(0, std::ios::beg);
+	ifs.read(&contents[0], contents.size());
+	ifs.close();
 	response.append(contents);
 	return response;
 }
