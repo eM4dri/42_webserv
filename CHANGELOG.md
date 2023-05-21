@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-05-20 - Jorge
 ### Added
+- Controlled the case where a directory is requested and an index is found.
+
+## 2023-05-20 - Jorge
+### Added
 - Redirection support (needs testing).
 - `ft::serverconf` copy constructor.
 

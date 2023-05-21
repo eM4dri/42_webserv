@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/20 20:48:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:14:43 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 	{
 		int read_status = 1;
 		ft::Filetypes aux(NULL);
-		ft::conf newconf("conf/example.conf", aux);
+		ft::conf newconf("conf/jvacaris.conf", aux);
 
 		std::string getfilename;
 		if (argc > 2 && !std::strcmp(argv[2], "dir"))
