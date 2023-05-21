@@ -181,7 +181,7 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 	}
 }
 
-const std::string mock_html_response(const std::string &filename,  const Request & request)
+const std::string mock_html_response(const char *filename,  const Request & request)
 {
 	(void)request;
 	std::string response;
