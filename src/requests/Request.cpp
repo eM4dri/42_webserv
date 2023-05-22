@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/21 21:24:34 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:42:50 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 	body = "";
 }*/
 
-Request::Request(const std::string &_input, const ft::serverconf &_config): fullrequest(_input), config(_config)
+Request::Request(const std::string &_input, const ft::serverconf &_config): config(_config), fullrequest(_input)
 {
 	header_parser(_config);
 }
 
-Request::Request(Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
+Request::Request(Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
 {
 }
 
-Request::Request(const Request &tocopy): fullrequest(tocopy.fullrequest), config(tocopy.config), \
+Request::Request(const Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
 method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
 {
 }

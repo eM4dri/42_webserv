@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2023-05-20 - Jorge
+## 2023-05-22 - Jorge
 ### Added
-- Controlled the case where a directory is requested and an index is found.
+- In case a directory is requested and autoindex is disabled, a given index is used.
 
 ## 2023-05-20 - Jorge
 ### Added

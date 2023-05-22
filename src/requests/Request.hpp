@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/21 19:09:21 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:39:48 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ class Request
 		const std::map<std::string, ft::location>::const_iterator &get_dir_params() const;
 
 		void set_redirect_path();
+		const ft::serverconf config;
 	private:
 		const std::string fullrequest;
-		const ft::serverconf config;
 		int method;
 		s_path path;
 		std::map <std::string, std::string> header_map;

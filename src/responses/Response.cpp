@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/21 21:25:14 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/22 20:56:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void Response::file_status_custom_error(int file_status)
 			
 			file_to_get.append("/");
 			file_to_get.append(request.get_dir_params()->second.index);
-			get_file(file_to_get, mod_date, &file_read_status);
+			std::string get_body = get_file(file_to_get, mod_date, &file_read_status);
 			if (file_read_status == ENOENT)								//?	File Not found
 				status_code = 404;
 			else if (file_read_status == EACCES || file_read_status == EISDIR)	//?	Permission denied or is a directory
@@ -148,7 +148,9 @@ void Response::file_status_custom_error(int file_status)
 			else if (!file_read_status)
 			{
 				status_code = 200;
-				
+				head_params["Last-Modified"] = mod_date;
+				head_params["Content-Type"] = request.config.filetypes.get_suffix(request.get_dir_params()->second.index);
+				body = get_body;
 			}
 			else
 				status_code = 501;
@@ -174,7 +176,7 @@ void Response::return_content()
 	int status = 0;
 	std::string get_body = get_file(request.get_path_abs(), mod_date, &status);
 	bool filetype_status;
-	ft::Filetypes get_filetype(&filetype_status);
+	ft::Filetypes get_filetype(&filetype_status);	//TODO	To be removed
 
 	if (!filetype_status)
 	{
@@ -187,8 +189,7 @@ void Response::return_content()
 		file_status_custom_error(status);
 		if (status_code == 200)
 		{
-			// ! Return the file type and mod date of the file inside the directory.
-			body = get_body;
+			std::cout << TXT_COLOR_RED << body << TXT_RESET;
 		}
 		else
 			head_params["Content-Type"] = get_filetype.get("html");
