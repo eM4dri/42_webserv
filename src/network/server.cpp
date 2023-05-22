@@ -174,48 +174,71 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		buffer[nbytes] = '\0';
 		LOG(CLIENT_SAYS(it->fd));
 		LOG_COLOR(RED, buffer );
-		// Request(buffer);
 		Request request(buffer, _conf);
-		LOG_COLOR(YELLOW, "HOLA");
 		_responder(it->fd, request);
 		// _echo(it->fd, buffer, nbytes);
 		close(it->fd);
 	}
 }
 
+const std::string mock_html_response(const char *filename,  const Request & request)
+{
+	(void)request;
+	std::string response;
+	response = "HTTP/1.1 200 OK\n\
+				Server: nginx/1.18.0\n\
+				Date: Sun, 21 May 2023 08:10:24 GMT\n\
+				Content-Type: text/html\n\
+				Last-Modified: Tue, 02 May 2023 12:06:07 GMT\n\
+				Transfer-Encoding: chunked\n\
+				Connection: keep-alive\n\
+				ETag: W/\"6450fcaf-264\"\n\
+				Content-Encoding: gzip\n";
+	std::ifstream ifs;
+	ifs.open (filename, std::ifstream::in);
+
+	if (ifs.is_open() == false)
+	{
+		LOG_ERROR("ERROR_OPENING_FILE");
+		std::exit(1);
+	}
+	std::string contents;
+	ifs.seekg(0, std::ios::end);
+	contents.resize(ifs.tellg());
+	ifs.seekg(0, std::ios::beg);
+	ifs.read(&contents[0], contents.size());
+	ifs.close();
+	response.append(contents);
+	return response;
+}
+
+const std::string mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf )
+{
+	std::string response;
+	response = "HTTP/1.1 200 OK\n\
+				Server: nginx/1.18.0\n\
+				Date: Sun, 21 May 2023 08:10:24 GMT\n\
+				Content-Type: text/html\n\
+				Last-Modified: Tue, 02 May 2023 12:06:07 GMT\n\
+				Transfer-Encoding: chunked\n\
+				Connection: keep-alive\n\
+				ETag: W/\"6450fcaf-264\"";
+	cgi aux(cgi_exec, cgi_script,request, conf);
+	response.append(aux.get_cgi_response());
+	return response;
+}
+
 void server::_responder(int client_fd, const Request & request)
 {
-	// LOG_COLOR(YELLOW, "ADIOS");
-	cgi aux("", "",request, _conf);
-	LOG_COLOR(YELLOW, "AMIGO");
-	std::string response;
-	// response =	"HTTP/1.1 200 OK\n"
-	// 			"CONTENT-TYPE: text/plain; charset=utf-8\n"
-	// 			"Date: Sat, 06 May 2023 14:05:09 GMT\n"
-	// 			"Server: HippieServer/1.1\n"
-	// 			"Connection: keep-alive\n"
-	// 			"Keep-Alive: timeout=5, max=100\n"
-	// 			"TRANSFER-ENCODING: chunked\n"
-	// 			"\n";
-
-	response.append(aux.get_cgi_response());
-	// const size_t len = std::strlen(WELCOME_MESSAGE);
+	std::string response = mock_html_response("test_files/post/newmessage.html", request);
+	// std::string response = mock_cgi_response("show_env.wexec", "",request, _conf);
+	// std::string response = mock_cgi_response("cpp_env.wexec", "",request, _conf);
+	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/reply.py",request, _conf);
+	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/guestbook.py",request, _conf);
+	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf);
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
-	// struct s_request_info header_struct;
-	// std::map<std::string, std::string> header_map;
-	// std::string body;
-	// int read_status;
-
-	// std::string file_read = file_reader("test_files/get_request", &read_status);
-	// if (read_status)
-	// 	std::cout << "SOMETHING WENT WRONG IN THE MAIN!" << std::endl << "Error code: " << read_status << std::endl;
-	// header_parser(file_read, header_struct, header_ma=p, body);
-
-	// std::string content = return_content(200, header_struct.path);
-
-	// send(client_fd, content.c_str(), content.length(), 0);
 }
 
 void server::_echo(int fd, char const *str, size_t nbytes)

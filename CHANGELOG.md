@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - In case a directory is requested and autoindex is disabled, a given index is used.
 
+## 2023-05-21 - Edu
+### Added
+- Added some files (`newmessage.html`, `guestbook.py`, `mewcomment.py`) for post methods inspired by [link](https://developer.mozilla.org/en-US/docs/Learn/Forms/Sending_and_retrieving_form_data)
+- Added `location.upload_store` wich specifies a directory to which output files will be saved to, inspired on nginx [link](https://www.nginx.com/resources/wiki/modules/upload/)
+### Changed
+- Include some mockups responses for cgi or html files
+
 ## 2023-05-20 - Jorge
 ### Added
 - Redirection support (needs testing).
