@@ -16,3 +16,4 @@
 - [X] Handle error with throws `conf`
 - [ ] Agreed Cgi comunications between Request or responses
 - [ ] Unit test parsed redirect to test circular references, using mock methods for valid redirect
+- [ ] use `curl` verbose to review  HTTP header response  curl -v localhost:8080
