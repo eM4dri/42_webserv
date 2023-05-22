@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/15 15:50:48 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:52:49 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void cgi::_populate_env(  )
 	_env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	_env.push_back("PATH_INFO");
 	_env.push_back("PATH_TRANSLATED");
-	_env.push_back("QUERY_STRING");
+	// _env.push_back("QUERY_STRING");
+	_env.push_back("QUERY_STRING=user_login=cmarcu&user_message=Hola+mundo+CRUEL%21");
 	_env.push_back("REMOTE_ADDR=" + _conf.address);
 	_env.push_back("REMOTE_HOST");
 	_env.push_back("REQUEST_METHOD=" + _request.get_method_txt());
