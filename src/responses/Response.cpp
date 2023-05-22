@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/22 20:56:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:01:29 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,11 +187,7 @@ void Response::return_content()
 	else if (status)
 	{
 		file_status_custom_error(status);
-		if (status_code == 200)
-		{
-			std::cout << TXT_COLOR_RED << body << TXT_RESET;
-		}
-		else
+		if (status_code != 200)
 			head_params["Content-Type"] = get_filetype.get("html");
 	}
 	else
