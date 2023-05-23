@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/22 20:42:50 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:47:01 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,32 @@ Request::Request(const std::string &_input, const ft::serverconf &_config): conf
 }
 
 Request::Request(Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
+method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), location(tocopy.location)
 {
 }
 
 Request::Request(const Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), it_location(tocopy.it_location)
+method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), location(tocopy.location)
 {
 }
 
 Request::~Request()
 {
-	
+	if (header_map.size())
+		header_map.clear();
+	if (path.vec_relative.size())
+		path.vec_relative.clear();
 }
 
 /*
-TODO		Hasn't been tested yet. 
+TODO		Hasn't been tested yet.
 */
 void Request::set_redirect_path()
 {
 	std::string try_path;
 	std::vector<std::string>::iterator ending = path.vec_relative.end();
-	
-	
+
+
 	while (true)
 	{
 		try_path = "";
@@ -123,8 +126,8 @@ const std::string &Request::get_body() const
 	return(body);
 }
 
-const std::map<std::string, ft::location>::const_iterator &Request::get_dir_params() const
+const ft::location *Request::get_location() const
 {
-	return (it_location);
+	return (location);
 }
 

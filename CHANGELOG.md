@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added newParam for main `serverconf` test to hardcode port, to avoid so long waits between rebindings example of use `./webserv serveconf 8081`
 - Setted 42 madrid termination mail (@student.42madrid.com) properly on *.cpp, *.hpp & Makfile
 - Use references on `Response` & `Request` to avoid unnecessary copies, remove unnecesary copy constructor for serverconf since it musn't be update onec created
+- On `Request`use ft::location ft::location instead of const std::map<std::string, ft::location>::const_iterator to keep a copy of the location demanded in request
 
 ## 2023-05-22 - Edu
 ### Changed
