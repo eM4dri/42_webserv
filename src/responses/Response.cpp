@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 11:51:44 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:21:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,9 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
-	// int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	// is_dir = stat(filename.c_str(), &file_info);
+	stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;
