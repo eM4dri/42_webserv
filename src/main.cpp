@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/20 11:26:01 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:14:43 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int main(int argc, char **argv)
 		ft::Filetypes aux(NULL);
 		ft::conf newconf("conf/example.conf", aux);
 		// std::vector<ft::serverconf>::iterator it = newconf.server;
+		
 
 		Request newrequest(file_reader("test_files/get_request", &read_status), newconf.servers[0]);
 
@@ -93,14 +94,14 @@ int main(int argc, char **argv)
 	{
 		int read_status = 1;
 		ft::Filetypes aux(NULL);
-		ft::conf newconf("conf/example.conf", aux);
+		ft::conf newconf("conf/jvacaris.conf", aux);
 
 		std::string getfilename;
 		if (argc > 2 && !std::strcmp(argv[2], "dir"))
 			getfilename = "test_files/get_request_dir";
 		else
 			getfilename = "test_files/get_request";
-		Request request(file_reader(getfilename, &read_status), newconf.servers[0]);
+		const Request request(file_reader(getfilename, &read_status), newconf.servers[0]);
 		if (read_status)
 			std::cout << TXT_COLOR_RED << "SOMETHING WENT WRONG IN THE MAIN!" << TXT_RESET << std::endl << "Error code: " << read_status << std::endl;
 		Response response(request);

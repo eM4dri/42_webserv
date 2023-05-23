@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   log.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 17:24:29 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/12 15:41:51 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:43:53 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <vector>	//	std::vector
+#include <map>	//	std::map
 #ifndef LOG_HPP
 # define LOG_HPP
 
@@ -42,6 +43,14 @@ void print_vector(std::vector<T> & vector)
 {
 	for (typename std::vector<T>::iterator it = vector.begin(); it != vector.end(); it++)
 		LOG(*it);
+}
+
+
+template <typename T1, typename T2>
+void print_map(std::map<T1,T2> & map)
+{
+	for (typename std::map<T1, T2>::const_iterator it = map.begin(); it != map.end(); it++)
+		LOG(it->first << "\t" << it->second);
 }
 
 template <typename T>

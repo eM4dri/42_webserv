@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 16:08:37 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:30:29 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,6 @@ std::string correct_path(const std::string &orig_path)
 				curr_route--;
 				routes.erase(curr_route);
 			}
-
 		}
 		else if (*curr_route == ".")
 			routes.erase(curr_route);
@@ -376,7 +375,6 @@ std::string correct_path(const std::string &orig_path)
 	if (retval[0] == '/')
 		retval = retval.substr(1, retval.size() - 1);
 	return (retval);
-
 }
 
 //! Debugging purposes, please delete before evaluating.
