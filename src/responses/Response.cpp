@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 16:09:07 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:21:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,25 @@
 {
 }*/
 
-Response::Response(const Request _request): request(_request)
+Response::Response(const Request &_request): request(_request)
 {
-	if (_request.get_method() == -1)
+	if (_request.get_method() < 0)
 	{
-		return_error_message(400);
+		if (_request.get_method() == -1)
+			return_error_message(400);
+		else if (_request.get_method() == -2)
+			return_error_message(505);
 		head_params["Content-Type"] = "text/html";
 	}
+	else if (request.get_dir_params()->second.redirect.first != 0)
+	{
+		return_error_message(request.get_dir_params()->second.redirect.first);
+		head_params["Location"] = request.get_dir_params()->second.redirect.second;
+	}
 	else
+	{
 		return_content();
+	}
 	std::cout << std::endl << generate_response() << std::endl;	//! Delete when testing ends.
 }
 
@@ -78,34 +88,14 @@ void Response::return_error_message(int error_code, std::string custom_reason)
 	body = retval;
 }
 
-void Response::file_status_custom_error(int file_status)
-{
-	std::string retval;
-	if (file_status == ENOENT)			//?	File Not found
-		status_code = 404;
-	else if (file_status == EACCES)		//?	Permission denied
-		status_code = 500;
-	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been chacked previously so there should be no errors from now on.
-	{
-		status_code = 200;
-		retval = create_directory_index();
-		body = retval;
-		return ;
-	}
-	else
-		status_code = 501;				//?	"Not implemented" error
-	return_error_message(status_code);
-}
-
 std::string get_file(std::string filename, std::string &mod_date, int *status)
 {
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
-	//int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	//is_dir = stat(filename.c_str(), &file_info);
+	stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;
@@ -117,29 +107,87 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 		return("");
 	}
 	else
+	{
 		mod_date = get_date(file_info.st_mtime, true);
+	}
 	*status = 0;
 	return(file_content);
 }
 
 
+void Response::file_status_custom_error(int file_status)
+{
+	std::string retval;
+	std::string mod_date;
+	int			file_read_status;
+	if (file_status == ENOENT)			//?	File Not found
+		status_code = 404;
+	else if (file_status == EACCES)		//?	Permission denied
+		status_code = 500;
+	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been checked previously so there should be no errors from now on.
+	{
+		if (request.get_dir_params()->second.autoindex)
+		{
+			status_code = 200;
+			retval = create_directory_index();
+			body = retval;
+			return ;
+		}
+		else if (!request.get_dir_params()->second.index.empty())
+		{
+			std::string file_to_get = request.get_path_abs();
+
+			file_to_get.append("/");
+			file_to_get.append(request.get_dir_params()->second.index);
+			std::string get_body = get_file(file_to_get, mod_date, &file_read_status);
+			if (file_read_status == ENOENT)								//?	File Not found
+				status_code = 404;
+			else if (file_read_status == EACCES || file_read_status == EISDIR)	//?	Permission denied or is a directory
+				status_code = 500;
+			else if (!file_read_status)
+			{
+				status_code = 200;
+				head_params["Last-Modified"] = mod_date;
+				head_params["Content-Type"] = request.config.filetypes.get_suffix(request.get_dir_params()->second.index);
+				body = get_body;
+			}
+			else
+				status_code = 501;
+		}
+		else
+		{
+			status_code = 501;
+		}
+
+
+
+	}
+	else
+		status_code = 501;				//?	"Not implemented" error
+	return_error_message(status_code);
+}
+
+
 void Response::return_content()
 {
+	std::cout << "";					//?	Fixes a Sanitizer error somehow.
 	std::string mod_date;
 	int status = 0;
 	std::string get_body = get_file(request.get_path_abs(), mod_date, &status);
 	bool filetype_status;
-	ft::Filetypes get_filetype(&filetype_status);
+	ft::Filetypes get_filetype(&filetype_status);	//TODO	To be removed
 
 	if (!filetype_status)
 	{
 		return_error_message(500, "The file containing the allowed file types can't be accessed.");
+		status_code = 500;
 		head_params["Content-Type"] = "text/html";
 	}
 	else if (status)
 	{
 		file_status_custom_error(status);
-		head_params["Content-Type"] = get_filetype.get("html");
+		if (status_code != 200)
+			head_params["Content-Type"] = get_filetype.get("html");
 	}
 	else
 	{

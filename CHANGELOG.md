@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-22 - Edu
 ### Changed
 - Simplifying `server` response mockups
+## 2023-05-22 - Jorge
+### Added
+- In case a directory is requested and autoindex is disabled, a given index is used.
 
 ## 2023-05-21 - Edu
 ### Added
@@ -23,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `location.upload_store` wich specifies a directory to which output files will be saved to, inspired on nginx [link](https://www.nginx.com/resources/wiki/modules/upload/)
 ### Changed
 - Include some mockups responses for cgi or html files
+
+## 2023-05-20 - Jorge
+### Added
+- Redirection support (needs testing).
+- `ft::serverconf` copy constructor.
 
 ## 2023-05-20 - Edu
 ### Added
@@ -36,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed  `gTest` pre/ post scripts to be able to work on MAC/LINUX systems
 - Fixed some `conf` parsing errors on methods & default_path without initial `/`, added some unit test for this methods
+
+## 2023-05-16/17 - Jorge
+### Added
+- **16** The path used to retrieve files is now the one found in locations.
+- **17** Same as yesterday but now it works.
 
 ## 2023-05-15 - Edu
 ### Added

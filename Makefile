@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/23 14:10:09 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/23 15:31:15 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRC_FILES	= 	main.cpp								\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
 				conf/Filetypes.cpp						\
+				conf/serverconf.cpp						\
 				responses/Directories.cpp				\
 				actuators/cgi.cpp						\
 				to_string.cpp							\

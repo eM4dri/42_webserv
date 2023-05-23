@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/10 15:45:12 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:29:50 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ std::vector <std::string> cpp_split(std::string full_line, char splitter);
 std::string getMessageFromCode(int status_code);
 std::string get_date();
 std::string correct_path(const std::string &orig_path);
+std::string correct_path(const std::string &orig_path, std::vector <std::string> routes);
 void checkpoint(char *text); //! Debugging purposes, please delete before evaluating.
 
 #endif

@@ -27,6 +27,9 @@ add_executable(
 #  ../src/sandbox/server/AServer.cpp
   ../src/conf/Filetypes.hpp
   ../src/conf/Filetypes.cpp
+  ../src/conf/serverconf.hpp
+  ../src/conf/serverconf.cpp
+  ../src/conf/location.hpp
   ../src/utils/log.hpp
   ../src/general.hpp
   ../src/utils.cpp
