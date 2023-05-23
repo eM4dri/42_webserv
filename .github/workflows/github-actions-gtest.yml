@@ -12,8 +12,8 @@ jobs:
   Perform-Unit-Test:
     runs-on: ubuntu-latest
     steps:
-    - name: Install gtest manually
-      run: sudo apt-get -y install sed && sudo apt-get -y install clang && sudo apt-get -y install cmake
+    - name: Install packages
+      run: sudo apt-get -y install clang && sudo apt-get -y install cmake
     - uses: actions/checkout@v3
     - name: test make all compiles
       run:  make all

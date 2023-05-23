@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 12:14:34 by emadriga          #+#    #+#             */
 /*   Updated: 2023/04/11 19:57:32 by emadriga         ###   ########.fr       */
@@ -181,19 +181,12 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 	}
 }
 
-const std::string mock_html_response(const char *filename,  const Request & request)
+const std::string mock_html_response(const char *filename,  const Request & request, const std::string &content_type)
 {
 	(void)request;
-	std::string response;
-	response = "HTTP/1.1 200 OK\n\
-				Server: nginx/1.18.0\n\
-				Date: Sun, 21 May 2023 08:10:24 GMT\n\
-				Content-Type: text/html\n\
-				Last-Modified: Tue, 02 May 2023 12:06:07 GMT\n\
-				Transfer-Encoding: chunked\n\
-				Connection: keep-alive\n\
-				ETag: W/\"6450fcaf-264\"\n\
-				Content-Encoding: gzip\n";
+	std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
+							+ content_type
+							+ "\r\n\r\n";
 	std::ifstream ifs;
 	ifs.open (filename, std::ifstream::in);
 
@@ -212,17 +205,14 @@ const std::string mock_html_response(const char *filename,  const Request & requ
 	return response;
 }
 
-const std::string mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf )
+const std::string mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf
+									// , const std::string &content_type
+)
 {
-	std::string response;
-	response = "HTTP/1.1 200 OK\n\
-				Server: nginx/1.18.0\n\
-				Date: Sun, 21 May 2023 08:10:24 GMT\n\
-				Content-Type: text/html\n\
-				Last-Modified: Tue, 02 May 2023 12:06:07 GMT\n\
-				Transfer-Encoding: chunked\n\
-				Connection: keep-alive\n\
-				ETag: W/\"6450fcaf-264\"";
+	std::string response = "HTTP/1.1 200 OK\r\n";
+	// std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
+	// 					+ content_type
+	// 					+ "\r\n\r\n";
 	cgi aux(cgi_exec, cgi_script,request, conf);
 	response.append(aux.get_cgi_response());
 	return response;
@@ -230,12 +220,15 @@ const std::string mock_cgi_response( const std::string & cgi_exec, const std::st
 
 void server::_responder(int client_fd, const Request & request)
 {
-	std::string response = mock_html_response("test_files/post/newmessage.html", request);
-	// std::string response = mock_cgi_response("show_env.wexec", "",request, _conf);
-	// std::string response = mock_cgi_response("cpp_env.wexec", "",request, _conf);
+	std::string response = mock_html_response("test_files/post/php-example.html", request, "text/html");
+	// std::string response = mock_html_response("test_files/post/newmessage.html", request, "text/html");
+	// std::string response = mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
+	// std::string response = mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);
+	// std::string response = mock_cgi_response("cgi/bin/print_ls_la.sh", "",request, _conf);
+	// std::string response = mock_cgi_response("/bin/ls", "-la",request, _conf, "text/plain");
 	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/reply.py",request, _conf);
 	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/guestbook.py",request, _conf);
-	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf);
+	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);

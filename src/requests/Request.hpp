@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/22 20:39:48 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:40:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ class Request
 		const std::string &get_path_abs() const;
 		const std::map<std::string, std::string> get_headermap() const;
 		const std::string &get_body() const;
-		const std::map<std::string, ft::location>::const_iterator &get_dir_params() const;
+		const ft::location *get_location() const;
 
 		void set_redirect_path();
-		const ft::serverconf config;
+		const ft::serverconf &config;
 	private:
 		const std::string fullrequest;
 		int method;
 		s_path path;
 		std::map <std::string, std::string> header_map;
 		std::string body;
-		std::map<std::string, ft::location>::const_iterator it_location;
+		const ft::location					*location;
 };
 
 #endif
