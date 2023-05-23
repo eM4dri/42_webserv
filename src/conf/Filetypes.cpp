@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:30 by jvacaris          #+#    #+#             */
 /*   Updated: 2023/05/19 15:29:52 by emadriga         ###   ########.fr       */

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
+#    By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/20 16:22:31 by emadriga         ###   ########.fr        #
+#    Updated: 2023/05/23 14:10:09 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,11 +99,11 @@ re:			fclean all
 
 # gTest rule
 gTest:
-		@./gTest/pre_gTest.sh
-		@./src/conf/enableExceptions.sh
+		@./scripts/pre_gTest.sh
+		@./scripts/enableExceptions.sh
 		cmake $(MACHINE) -S ./gTest -B $(BUILD_DIR) # devs
 		cmake --build $(BUILD_DIR)
-		@./gTest/post_gTest.sh
+		@./scripts/post_gTest.sh
 
 MACHINE= -Wno-dev
 # MACHINE=

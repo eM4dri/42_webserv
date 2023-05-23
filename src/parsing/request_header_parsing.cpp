@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   request_header_parsing.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
 /*   Updated: 2023/05/10 15:45:47 by jvacaris         ###   ########.fr       */
