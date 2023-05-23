@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 15:31:45 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:46:46 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,12 @@ class serverconf{
 		~serverconf();
 
 		//Copy constructor
-		serverconf(const ft::serverconf & tocopy);
+	private:
+		//serverconf musn't be updated after creation readonly copy or assign would worse performance
+		serverconf();
+		serverconf( const serverconf& copy );
+		serverconf & operator=( const serverconf& assign );
+
 
 };
 

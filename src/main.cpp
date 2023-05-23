@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 11:43:56 by emadriga         ###   ########.fr       */
-=======
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 17:14:43 by jvacaris         ###   ########.fr       */
->>>>>>> master
+/*   Updated: 2023/05/23 15:38:23 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +82,7 @@ int main(int argc, char **argv)
 		ft::Filetypes aux(NULL);
 		ft::conf newconf("conf/example.conf", aux);
 		// std::vector<ft::serverconf>::iterator it = newconf.server;
-		
+
 
 		Request newrequest(file_reader("test_files/get_request", &read_status), newconf.servers[0]);
 

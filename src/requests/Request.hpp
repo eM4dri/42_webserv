@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/22 20:39:48 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:24:15 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ class Request
 		const std::map<std::string, ft::location>::const_iterator &get_dir_params() const;
 
 		void set_redirect_path();
-		const ft::serverconf config;
+		const ft::serverconf &config;
 	private:
 		const std::string fullrequest;
 		int method;
