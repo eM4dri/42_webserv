@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/20 11:26:01 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:43:56 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,15 @@ int main(int argc, char **argv)
 		{
 			ft::Filetypes aux(NULL);
 			ft::conf newconf("conf/example.conf", aux);
+			int port = 0;
+			if (argc == 3)
+				port = std::atoi(argv[2]);
 			for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
+			{
+				if ( port != 0 )
+					it->port = port++;
 				ft::server server(*it);
+			}
 		}
 		catch(const std::exception& e)
 		{

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-05-22 - Edu
 ### Changed
+- Added newParam for main `serverconf` test to hardcode port, to avoid so long waits between rebindings example of use `./webserv serveconf 8081`
+
+## 2023-05-22 - Edu
+### Changed
 - Simplifying `server` response mockups
 
 ## 2023-05-21 - Edu
