@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-23 - Jorge
+### Added
+- We now go through the CGI if appliable.
+
 ## 2023-05-23 - Edu
 ### Added
 - New directory `scripts` to store some bash scripts to automate somw works, including new scripts `fix_header.sh` to set 42 madrid termination mails
