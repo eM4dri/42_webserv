@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/20 20:36:01 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:37:42 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,4 @@ class serverconf{
 }//Namespace ft
 
 #endif
+

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   server.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:41 by emadriga          #+#    #+#             */
 /*   Updated: 2023/04/11 19:11:10 by emadriga         ###   ########.fr       */
