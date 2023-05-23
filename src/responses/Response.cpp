@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/22 21:01:29 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 11:51:44 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ std::string get_file(std::string filename, std::string &mod_date, int *status)
 	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
-	int			is_dir;
+	// int			is_dir;
 
 	file_content = file_reader(filename, &file_status);
-	is_dir = stat(filename.c_str(), &file_info);
+	// is_dir = stat(filename.c_str(), &file_info);
 	if (file_status)
 	{
 		*status = file_status;
@@ -137,7 +137,7 @@ void Response::file_status_custom_error(int file_status)
 		else if (!request.get_dir_params()->second.index.empty())
 		{
 			std::string file_to_get = request.get_path_abs();
-			
+
 			file_to_get.append("/");
 			file_to_get.append(request.get_dir_params()->second.index);
 			std::string get_body = get_file(file_to_get, mod_date, &file_read_status);
@@ -159,7 +159,7 @@ void Response::file_status_custom_error(int file_status)
 		{
 			status_code = 501;
 		}
-		
+
 
 
 	}
