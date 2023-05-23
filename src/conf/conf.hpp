@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   conf.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 18:28:18 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 15:44:36 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class Filetypes;
 class conf{
 	public:
 	    //Constructor
-		conf() {};  // Should be private or better desgin patern
 		conf( const char *filename, const Filetypes & types );
 
 	    //Destructor
@@ -39,7 +38,6 @@ class conf{
 		void print_loaded_conf();
 
 	private:
-		// conf();  // Should be private or better desgin patern
 		conf( const conf& copy );
 		conf & operator=( const conf& assign );
 
@@ -71,6 +69,7 @@ class conf{
 		void push_back_server(serverconf &server);
 
 	// public:	//	gTest public
+		conf() {};  // Default constructor for unit test
 		bool _valid_path(const std::string &path);
 		bool _valid_redirect_url(const std::string &url);
 		bool _valid_redirect(const std::string &redirect);

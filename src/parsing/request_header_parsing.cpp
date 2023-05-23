@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request_header_parsing.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/20 20:50:16 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:09:29 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 	*	Valid method ("GET", "POST" and "DELETE").
 	*	The verison is "HTTP1.1".
 
-!	UPDATE:	The formatting won't be transfered into the error page, so the formatting is 
+!	UPDATE:	The formatting won't be transfered into the error page, so the formatting is
 !			useless for now (except for debugging purposes). Most of it has been commented.
 !			If there's time, we can pass some explanation about the error to the returned page.
 */
@@ -93,15 +93,16 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 		return (false);
 	}
 	path.unparsed = params[1];
-	
-	
+
+
 	std::string path_iter;
 	path_iter = correct_path(params[1]);
 	std::vector<std::string> split_path = cpp_split(path_iter, '/');
 	unsigned int level = split_path.size();
+	std::map<std::string, ft::location>::const_iterator it_location;
 	while (path_iter.size() >= 0)	//!		Might enter an infinite loop. Check it out later.
 	{
-		it_location = _config.locations.find(path_iter);
+		 it_location = _config.locations.find(path_iter);
 		if (it_location == _config.locations.end())
 		{
 			size_t last_slash = path_iter.find_last_of('/');
@@ -112,10 +113,13 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 			level--;
 		}
 		else
-			break;	
+		{
+			location = &it_location->second;
+			break;
+		}
 	}
 
-	path.relative = correct_path(it_location->second.file_root);
+	path.relative = correct_path(location->file_root);
 
 	while (level < split_path.size())
 	{
@@ -139,7 +143,7 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 {
 	std::vector <std::string> pair;
 	std::string body;
-	for (std::vector<std::string>::iterator vector_iter = line_vector.begin() + 1; vector_iter != line_vector.end(); vector_iter++) 
+	for (std::vector<std::string>::iterator vector_iter = line_vector.begin() + 1; vector_iter != line_vector.end(); vector_iter++)
 	{
 		body = "";
 		pair = cpp_split(*vector_iter, ':');
@@ -167,11 +171,10 @@ bool	Request::check_request_validity(std::string fullheader, const ft::servercon
 	if (!check_header_validity(line_vector, header_map))
 		return (false);
 	return (true);
-	
 }
 
 /*
-?	Fills out the stuct of the request's first line, the map of the rest of 
+?	Fills out the stuct of the request's first line, the map of the rest of
 ?	the header and the body into a string.
 !	If there's no body, it will be left as an empty string ("").
 */

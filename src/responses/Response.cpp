@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 15:21:54 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:10:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include <errno.h>	//	error codes
+#include "utils/log.hpp"
 
 /*Response::Response(): request(Request())
 {
@@ -27,10 +28,10 @@ Response::Response(const Request &_request): request(_request)
 			return_error_message(505);
 		head_params["Content-Type"] = "text/html";
 	}
-	else if (request.get_dir_params()->second.redirect.first != 0)
+	else if (request.get_location()->redirect.first != 0)
 	{
-		return_error_message(request.get_dir_params()->second.redirect.first);
-		head_params["Location"] = request.get_dir_params()->second.redirect.second;
+		return_error_message(request.get_location()->redirect.first);
+		head_params["Location"] = request.get_location()->redirect.second;
 	}
 	else
 	{
@@ -126,19 +127,21 @@ void Response::file_status_custom_error(int file_status)
 		status_code = 500;
 	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been checked previously so there should be no errors from now on.
 	{
-		if (request.get_dir_params()->second.autoindex)
+		const ft::location *location = request.get_location();
+
+		if (location->autoindex)
 		{
 			status_code = 200;
 			retval = create_directory_index();
 			body = retval;
 			return ;
 		}
-		else if (!request.get_dir_params()->second.index.empty())
+		else if (!location->index.empty())
 		{
 			std::string file_to_get = request.get_path_abs();
 
 			file_to_get.append("/");
-			file_to_get.append(request.get_dir_params()->second.index);
+			file_to_get.append(location->index);
 			std::string get_body = get_file(file_to_get, mod_date, &file_read_status);
 			if (file_read_status == ENOENT)								//?	File Not found
 				status_code = 404;
@@ -148,7 +151,7 @@ void Response::file_status_custom_error(int file_status)
 			{
 				status_code = 200;
 				head_params["Last-Modified"] = mod_date;
-				head_params["Content-Type"] = request.config.filetypes.get_suffix(request.get_dir_params()->second.index);
+				head_params["Content-Type"] = request.config.filetypes.get_suffix(location->index);
 				body = get_body;
 			}
 			else

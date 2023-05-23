@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   methods.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 19:10:46 by jvacaris          #+#    #+#             */
 /*   Updated: 2023/05/03 20:28:28 by jvacaris         ###   ########.fr       */
