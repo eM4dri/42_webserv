@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:10 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 17:18:52 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:50:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CGI_HPP
 # include <string>	//	std::string
 # include <vector>	//	std::vector
-#include "requests/Request.hpp"
+# include "requests/Request.hpp"
 # include "conf/conf.hpp"
 
 namespace ft
@@ -28,6 +28,7 @@ class cgi {
 	    //Destructor
 		~cgi();
 		std::string const & get_cgi_response() const;
+		int const & get_cgi_response_status() const;
 
 	private:
 		cgi(); // not necesary
@@ -43,6 +44,7 @@ class cgi {
 		const Request &				_request;
 		const serverconf &			_conf;
 		std::string					_cgi_response;
+		int							_cgi_response_status;
 
 };
 
