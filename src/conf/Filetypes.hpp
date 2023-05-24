@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Filetypes.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 20:55:36 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/19 15:14:45 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:58:58 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "../general.hpp"
 #define FILETYPES "conf/mime.types"
-#define DEFAULT_VALUE ""
+#define DEFAULT_VALUE "text/plain"
 
 namespace ft
 {

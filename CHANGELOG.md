@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `Response` is now linked to the server's request reciever.
 - Allowed methods are now controlled.
+- First implementation of a **POST** request.
 
 ## 2023-05-23 - Jorge
 ### Added
