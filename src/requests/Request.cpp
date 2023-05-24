@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 17:10:08 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:23:33 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-/*Request::Request(const ft::serverconf &_config): fullrequest(""), config(_config)
+namespace ft
+{
+
+/*Request::Request(const serverconf &_config): fullrequest(""), config(_config)
 {
 	method = -2;
 	path.absolute = "";
@@ -21,27 +24,27 @@
 	body = "";
 }*/
 
-Request::Request(const std::string &_input, const ft::serverconf &_config): config(_config), fullrequest(_input)
+Request::Request(const std::string &input, const serverconf &config): config(config), _fullrequest(input)
 {
-	header_parser(_config);
+	header_parser(config);
 }
 
-Request::Request(Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), location(tocopy.location)
+Request::Request(Request &tocopy): config(tocopy.config), _fullrequest(tocopy._fullrequest), \
+_method(tocopy._method), _path(tocopy._path), _header_map(tocopy._header_map), _body(tocopy._body), _location(tocopy._location)
 {
 }
 
-Request::Request(const Request &tocopy): config(tocopy.config), fullrequest(tocopy.fullrequest), \
-method(tocopy.method), path(tocopy.path), header_map(tocopy.header_map), body(tocopy.body), location(tocopy.location)
+Request::Request(const Request &tocopy): config(tocopy.config), _fullrequest(tocopy._fullrequest), \
+_method(tocopy._method), _path(tocopy._path), _header_map(tocopy._header_map), _body(tocopy._body), _location(tocopy._location)
 {
 }
 
 Request::~Request()
 {
-	if (header_map.size())
-		header_map.clear();
-	if (path.vec_relative.size())
-		path.vec_relative.clear();
+	if (_header_map.size())
+		_header_map.clear();
+	if (_path.vec_relative.size())
+		_path.vec_relative.clear();
 }
 
 /*
@@ -50,15 +53,15 @@ TODO		Hasn't been tested yet.
 void Request::set_redirect_path()
 {
 	std::string try_path;
-	std::vector<std::string>::iterator ending = path.vec_relative.end();
+	std::vector<std::string>::iterator ending = _path.vec_relative.end();
 
 
 	while (true)
 	{
 		try_path = "";
-		for (std::vector<std::string>::iterator it = path.vec_relative.begin(); it != ending; it++)
+		for (std::vector<std::string>::iterator it = _path.vec_relative.begin(); it != ending; it++)
 		{
-			if (it != path.vec_relative.begin())
+			if (it != _path.vec_relative.begin())
 				try_path.append("/");
 			try_path.append(*it);
 		}
@@ -68,33 +71,33 @@ void Request::set_redirect_path()
 		}
 		else
 		{
-			if (ending == path.vec_relative.begin())
+			if (ending == _path.vec_relative.begin())
 				return ;
 			else
 				ending--;
 		}
 	}
-	path.absolute = path.absolute.replace(path.absolute.find(try_path), try_path.length(), config.locations.find(try_path)->second.file_root);
-	path.relative = path.absolute;
+	_path.absolute = _path.absolute.replace(_path.absolute.find(try_path), try_path.length(), config.locations.find(try_path)->second.file_root);
+	_path.relative = _path.absolute;
 }
 
 const std::string &Request::get_fullrequest() const
 {
-	return (fullrequest);
+	return (_fullrequest);
 }
 
 int Request::get_method() const
 {
-	return (method);
+	return (_method);
 }
 
 const std::string Request::get_method_txt() const
 {
-	if (method == GET)
+	if (_method == GET)
 		return ("GET");
-	else if (method == POST)
+	else if (_method == POST)
 		return ("POST");
-	else if (method == DELETE)
+	else if (_method == DELETE)
 		return ("DELETE");
 	else
 		return ("ERROR");
@@ -103,31 +106,32 @@ const std::string Request::get_method_txt() const
 
 const std::string &Request::get_path_raw() const
 {
-	return (path.unparsed);
+	return (_path.unparsed);
 }
 
 const std::string &Request::get_path_rel() const
 {
-	return (path.relative);
+	return (_path.relative);
 }
 
 const std::string &Request::get_path_abs() const
 {
-	return (path.absolute);
+	return (_path.absolute);
 }
 
 const std::map<std::string, std::string> Request::get_headermap() const
 {
-	return(header_map);
+	return(_header_map);
 }
 
 const std::string &Request::get_body() const
 {
-	return(body);
+	return(_body);
 }
 
-const ft::location *Request::get_location() const
+const location *Request::get_location() const
 {
-	return (location);
+	return (_location);
 }
 
+}	// Nammespace ft

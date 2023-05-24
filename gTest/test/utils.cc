@@ -10,19 +10,19 @@ protected:
 };
 
 TEST(CorrectPathFixtureTest, EmptyString_ShouldBeEqual) {
-    EXPECT_EQ("",correct_path(""));
-    EXPECT_EQ(std::string(),correct_path(std::string()));
-	EXPECT_EQ("42",correct_path("42"));
+    EXPECT_EQ("", ft::correct_path(""));
+    EXPECT_EQ(std::string(), ft::correct_path(std::string()));
+	EXPECT_EQ("42", ft::correct_path("42"));
 }
 
 TEST(CorrectPathFixtureTest, SingleBackLash_ShouldNotBeEqual) {
-    EXPECT_NE("/",correct_path("/"));
+    EXPECT_NE("/", ft::correct_path("/"));
 }
 
 // Parameterized tests
 class CorrectPathMultipleParametersTests :public ::testing::TestWithParam<std::tuple<std::string, bool>> {
 protected:
-    std::string corrected_input = correct_path(std::get<0>(GetParam()));
+    std::string corrected_input =  ft::correct_path(std::get<0>(GetParam()));
 };
 
 TEST_P(CorrectPathMultipleParametersTests, ChecksIfPathIsCorrected) {
