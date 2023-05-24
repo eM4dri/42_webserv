@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 16:24:48 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:33:17 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 namespace ft
 {
-// enum e_accepted_methods
-// { GET = 0x1, POST = 0x2, DELETE = 0x4 };
+enum e_accepted_methods
+{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
 
 /**
  * @param methods	(unsigned short) usage (methods & GET/POST/DELETE)

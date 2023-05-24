@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:08:43 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:33:31 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 #include <dirent.h>
 #include <cstring>			// std::strcmp
 #include <iomanip>			// std::setprecision
+#include "utils/log.hpp"
+#include "conf/location.hpp"
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //*		~~~~~~~ Text coloring ~~~~~~~
@@ -54,14 +56,9 @@
 //#define ERROR_TEMPLATE "conf/error_template"
 #define SERVER_NAME "IDK 4.2"
 
-enum e_accepted_methods
-{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
-/*enum e_methods
+
+namespace ft
 {
-	GET,
-	POST,
-	DELETE
-};*/
 
 /**
 *	@param method short
@@ -88,5 +85,7 @@ std::string get_date();
 std::string correct_path(const std::string &orig_path);
 std::string correct_path(const std::string &orig_path, std::vector <std::string> routes);
 void checkpoint(char *text); //! Debugging purposes, please delete before evaluating.
+
+}//Namespace ft
 
 #endif
