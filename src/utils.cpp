@@ -6,12 +6,16 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 15:31:37 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:55:48 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "general.hpp"
 #include <errno.h>	//	errno
+#include "requests/Request.hpp"
+
+namespace ft
+{
 
 /*
 ?	Function will split an std::string into new strings contained in an
@@ -51,7 +55,6 @@ std::vector <std::string> cpp_split(std::string full_line, char splitter)
 */
 std::string file_reader(const std::string &filename, int *status)
 {
-	std::string		body;
 	std::ifstream	file_instream;
 	std::string		file_content_buff;
 	file_instream.open(filename.c_str());
@@ -67,13 +70,11 @@ std::string file_reader(const std::string &filename, int *status)
 	}
 	else
 	{
-		if (status)
-			*status = 0;
-		while(std::getline(file_instream, file_content_buff))
-		{
-			body.append(file_content_buff);
-			body.append("\n");
-		}
+		std::string		body;
+		file_instream.seekg(0, std::ios::end);
+		body.resize(file_instream.tellg());
+		file_instream.seekg(0, std::ios::beg);
+		file_instream.read(&body[0], body.size());
 		file_instream.close();
 		return (body);
 	}
@@ -382,3 +383,5 @@ void checkpoint(char *text)
 {
 	std::cout << text << std::endl;
 }
+
+}	// Nammespace ft

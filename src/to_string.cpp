@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   to_string.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/21 17:39:12 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/04/21 19:25:01 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:43:12 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "general.hpp"
 
+
+namespace ft
+{
 
 /*
 ?	This is a recreation of the std::to_string() function, that's only
@@ -30,3 +33,5 @@ std::string to_string(int number)
 *	variable type as input (long, const x, unsigned x...).
 ?	Remember to add the function prototype on ./general.hpp.
 */
+
+}	// Namespace ft
