@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 15:44:36 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:21:00 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class conf{
 		//	parse server directives
 		void _parse_server_directive(const std::pair <std::string,std::string> &directive, serverconf *server);
 		void _parse_listen(const std::string &listen, serverconf *server);
+		void _parse_server_name(const std::string &server_name, serverconf *server);
 		void _parse_default_root(const std::string &default_root, serverconf *server);
 
 		//	parse location directives

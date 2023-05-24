@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 18:53:41 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:02:52 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 #define WRONG_LOCATION "wrong location "
 #define WRONG_METHOD "wrong method "
 #define WRONG_PATH "wrong path "
+#define WRONG_SERVER_NAME "wrong server_name "
 #define WRONG_REDIRECTION "wrong redirection "
 #define WRONG_INDEX "wrong index "
 
@@ -45,6 +46,7 @@
 #define THROW_WRONG_LOCATION "Invalid configuration file, wrong location "
 #define THROW_WRONG_METHOD "Invalid configuration file, wrong method "
 #define THROW_WRONG_PATH "Invalid configuration file, wrong path "
+#define THROW_WRONG_SERVER_NAME "Invalid configuration file, wrong server_name "
 #define THROW_WRONG_REDIRECTION "Invalid configuration file, wrong redirection "
 #define THROW_WRONG_INDEX "Invalid configuration file, wrong index "
 
@@ -405,6 +407,16 @@ void conf::_parse_default_root(const std::string &default_root, serverconf *serv
 	server->default_root = default_root;
 }
 
+void conf::_parse_server_name(const std::string &server_name, serverconf *server)
+{
+	for (size_t i = 0; i != server_name.size() ; i++ ){
+		if ( !std::isalpha(server_name[i]) )
+			// throw std::invalid_argument(THROW_WRONG_SERVER_NAME + server_name);
+			LOG_ERROR_CONF(WRONG_SERVER_NAME << COLOR(RED, server_name));
+	}
+	server->server_name = server_name;
+}
+
 void conf::_parse_server_directive(const std::pair<std::string,std::string> &directive, serverconf *server)
 {
 	std::stringstream ss(directive.second);
@@ -412,8 +424,10 @@ void conf::_parse_server_directive(const std::pair<std::string,std::string> &dir
 	std::getline(ss, directive_val, ';');
 	if (directive.first == "listen")
 		_parse_listen(directive_val, server);
-	if (directive.first == "root")
+	else if (directive.first == "root")
 		_parse_default_root(directive_val, server);
+	else if (directive.first == "server_name")
+		_parse_server_name(directive_val, server);
 }
 
 void conf::_set_location_defaults(location *location)
@@ -433,6 +447,7 @@ void conf::_set_server_defaults(serverconf *server, location *location)
 	server->address = DEFAULT_ADDRESS;
 	server->port = DEFAULT_PORT;
 	server->default_root = DEFAULT_ROOT;
+	server->server_name = DEFAULT_SERVER_NAME;
 	if (server->locations.size())
 		server->locations.clear();
 
@@ -487,6 +502,7 @@ void conf::print_loaded_conf()
 	for (std::vector<serverconf>::iterator it= this->servers.begin(); it!= this->servers.end(); ++it){
 		LOG("Listen\t"<<it->address <<":"<< it->port );
 		LOG("Default_Root\t"<<it->default_root);
+		LOG("Server_name\t"<<it->server_name);
 
 		for (std::map<std::string, location>::iterator it2=it->locations.begin(); it2!=it->locations.end(); ++it2){
 			LOG("\tLocation " << it2->first);

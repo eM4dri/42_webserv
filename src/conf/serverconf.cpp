@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:28:53 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:34:09 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:37:02 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,14 @@ serverconf::~serverconf()
 		locations.clear();
 }
 
-serverconf::serverconf(const serverconf & tocopy): address(tocopy.address), port(tocopy.port), default_root(tocopy.default_root), locations(tocopy.locations), filetypes(tocopy.filetypes)
+serverconf::serverconf(const serverconf & tocopy):	address(tocopy.address),
+													port(tocopy.port),
+													default_root(tocopy.default_root),
+													locations(tocopy.locations),
+													filetypes(tocopy.filetypes),
+													server_name(tocopy.server_name)
 {
+	LOG_COLOR(CYAN,"serverconf constructor copy");
 }
 
 }	// Nammespace ft
