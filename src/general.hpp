@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 13:26:51 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:08:43 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@
 //#define ERROR_TEMPLATE "conf/error_template"
 #define SERVER_NAME "IDK 4.2"
 
-enum e_methods
+enum e_accepted_methods
+{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
+/*enum e_methods
 {
 	GET,
 	POST,
 	DELETE
-};
+};*/
 
 /**
 *	@param method short

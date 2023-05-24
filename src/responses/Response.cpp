@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 13:45:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:20:57 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ Response::Response(const Request &_request): request(_request)
 			return_error_message(400);
 		else if (_request.get_method() == -2)
 			return_error_message(505);
+		head_params["Content-Type"] = "text/html";
+	}
+	else if (!(_request.get_location()->methods % _request.get_method()))
+	{
+		return_error_message(405);
 		head_params["Content-Type"] = "text/html";
 	}
 	else if (request.get_location()->redirect.first != 0)
