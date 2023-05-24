@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/21 17:52:49 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 18:49:31 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ namespace ft
 
 //Constructor
 cgi::cgi( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf )
-	: _cgi_exec(cgi_exec), _cgi_script(cgi_script), _request(request), _conf(conf)
+	: _cgi_exec(cgi_exec), _cgi_script(cgi_script), _request(request), _conf(conf), _cgi_response_status(0)
 {
 	_populate_env();
 	_execute();
@@ -107,17 +107,30 @@ void cgi::_execute(void)
 		close(fd[READ_END]);
 		waitpid(pid, &status, 0);
 		if (WIFEXITED(status))
+		{
 			if (WEXITSTATUS(status))
+			{
 				LOG_ERROR("CGI exits with status " << status);
+				_cgi_response_status = 500;
+			}
+		}
 		std::ostringstream ss;
 		ss << buff;
 		_cgi_response = ss.str();
+		if (_cgi_response_status != 500)
+			_cgi_response_status = (_cgi_response.find("Location") != std::string::npos) ? 302 : 200;
+		LOG_COLOR(YELLOW, "_cgi_response_status " << _cgi_response_status);
 	}
 }
 
 std::string const & cgi::get_cgi_response() const
 {
 	return _cgi_response;
+}
+
+int const & cgi::get_cgi_response_status() const
+{
+	return _cgi_response_status;
 }
 
 }	// Nammespace ft
