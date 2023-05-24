@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 19:54:17 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:02:52 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,7 +411,7 @@ void conf::_parse_server_name(const std::string &server_name, serverconf *server
 {
 	for (size_t i = 0; i != server_name.size() ; i++ ){
 		if ( !std::isalpha(server_name[i]) )
-			// throw std::invalid_argument(THROW_WRONG_SERVER_NAME + default_root);
+			// throw std::invalid_argument(THROW_WRONG_SERVER_NAME + server_name);
 			LOG_ERROR_CONF(WRONG_SERVER_NAME << COLOR(RED, server_name));
 	}
 	server->server_name = server_name;
