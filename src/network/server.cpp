@@ -220,7 +220,9 @@ const std::string mock_cgi_response( const std::string & cgi_exec, const std::st
 
 void server::_responder(int client_fd, const Request & request)
 {
-	std::string response = mock_html_response("test_files/post/php-example.html", request, "text/html");
+	Response the_response(request);
+	std::string response = the_response.generate_response();
+	// std::string response = mock_html_response("test_files/post/php-example.html", request, "text/html");
 	// std::string response = mock_html_response("test_files/post/newmessage.html", request, "text/html");
 	// std::string response = mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
 	// std::string response = mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);

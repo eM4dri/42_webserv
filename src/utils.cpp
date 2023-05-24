@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 15:55:48 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:06:29 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,44 @@ std::vector <std::string> cpp_split(std::string full_line, char splitter)
 		}
 		else
 			line_vector.push_back(std::string(begin, end));
+		begin = end;
+	}
+	return (line_vector);
+}
+/*
+?	Function will split an std::string into new strings contained in an
+?	std::vector, splitting every time a char is found.
+*	Consecutive splitting characters are ignored, so they don't create extra strings.
+*	This function removes the last character if it matches the parameter `remove`.
+*/
+std::vector <std::string> cpp_splitNremove(std::string full_line, char splitter, char remove)
+{
+	std::vector <std::string> line_vector;
+	std::string::iterator begin = full_line.begin();
+	std::string::iterator end = full_line.begin();
+
+	while (end != full_line.end() && *end == splitter)
+		end++;
+	begin = end;
+	while (end != full_line.end())
+	{
+		while (end != full_line.end() && *end != splitter)
+			end++;
+		if (end != full_line.end())
+		{
+			if (end != begin + 1 && *(end - 1) == remove)
+				end--;
+			line_vector.push_back(std::string(begin, end));
+			while (*end == splitter)
+				end++;
+		}
+		else
+		{
+			if (end != begin + 1 && *(end - 1) == remove)
+				end--;
+			line_vector.push_back(std::string(begin, end));
+		}
+
 		begin = end;
 	}
 	return (line_vector);

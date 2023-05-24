@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 14:35:25 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:19:53 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		try
 		{
 			ft::Filetypes aux(NULL);
-			ft::conf newconf("conf/example.conf", aux);
+			ft::conf newconf("conf/jvacaris.conf", aux);
 			int port = 0;
 			if (argc == 3)
 				port = std::atoi(argv[2]);

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 15:08:39 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:09:43 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 		if (params[0] == "DELETE")
 			_method = DELETE;
 	}
+
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
 		// std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
@@ -167,7 +168,7 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 */
 bool	Request::check_request_validity(std::string fullheader, const serverconf &config)
 {
-	std::vector <std::string> line_vector = cpp_split(fullheader, '\n');
+	std::vector <std::string> line_vector = cpp_splitNremove(fullheader, '\n', '\r');
 	if (!check_first_line_validity(line_vector[0], config))
 		return (false);
 	if (!check_header_validity(line_vector, _header_map))

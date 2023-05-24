@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Namespace `ft` to missing namespace cpp & hpp
 - Normalize usage of _ for privates
 - Improve performance of `utils.file_reader` based on [How to read a file in C++](https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
+## 2023-05-24- Jorge
+### Added
+- `Response` is now linked to the server's request reciever.
+
+## 2023-05-23 - Jorge
+### Added
+- We now go through the CGI if appliable.
 
 ## 2023-05-23 - Edu
 ### Added

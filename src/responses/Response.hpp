@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 14:51:09 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:08:22 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define RESPONSE_HPP
 
 #include "../requests/Request.hpp"
+#include "../actuators/cgi.hpp"
 
 namespace ft
 {

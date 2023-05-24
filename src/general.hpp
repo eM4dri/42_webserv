@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 15:43:12 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:06:15 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ struct s_request_info
 };
 
 std::vector <std::string> cpp_split(std::string full_line, char splitter);
+std::vector <std::string> cpp_splitNremove(std::string full_line, char splitter, char remove);
 std::string file_reader(const std::string &filename, int *status);
 std::string to_string(int number);
 std::string bytes_metric_formatting(long size);
