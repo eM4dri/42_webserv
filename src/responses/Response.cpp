@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 20:34:44 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:44:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ void Response::post_content()
 	int			file_status = 0;
 	std::ofstream open_file;
 
-	open_file.open(_request.get_path_abs());
+	open_file.open(_request.get_path_abs().c_str());
 	stat(_request.get_path_abs().c_str(), &file_info);
 	if (open_file.fail())
 		file_status = errno;
