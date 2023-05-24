@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 16:46:44 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:45:37 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,6 @@ void Response::file_status_custom_error(int file_status)
 	else if (file_status == EISDIR)		//?	Is a directory. Permissions have been checked previously so there should be no errors from now on.
 	{
 		const ft::location *location = request.get_location();
-		LOG_COLOR(YELLOW, location->index);
-		LOG_COLOR(YELLOW, location->request_path);
-		LOG_COLOR(YELLOW, location->methods);
-
 		if (location->autoindex)
 		{
 			status_code = 200;
@@ -156,6 +152,7 @@ void Response::file_status_custom_error(int file_status)
 				head_params["Last-Modified"] = mod_date;
 				head_params["Content-Type"] = request.config.filetypes.get_suffix(location->index);
 				body = get_body;
+				return ;
 			}
 			else
 				status_code = 501;
@@ -195,8 +192,39 @@ void Response::return_content()
 		if (status_code != 200)
 			head_params["Content-Type"] = get_filetype.get("html");
 	}
-	else
+	else							//*	The file exists, has permissions and it's not a directory.
 	{
+		std::string file_extension;
+		size_t last_period = request.get_path_rel().find_last_of('.');
+		if (last_period != std::string::npos)
+		{
+			file_extension = request.get_path_rel().substr(last_period + 1, request.get_path_rel().size());
+			std::map<std::string, std::string>::const_iterator cgi_item = request.get_location()->cgi_execs.find(file_extension);
+			if (cgi_item != request.get_location()->cgi_execs.end())				//*		The file IS part of the CGI list.
+			{
+				ft::cgi real_cgi(cgi_item->second, request.get_path_abs(), request, request.config);				//*		Creating a cgi class.
+				//!		Can the class `cgi` fail to construct? (Wrong path controlled by exceptions or status variables...)
+					//?	No can''t fail to answer on execve behaviour or similar funcions.
+				//!		If so, does it need to be controlled here or does the `get_cgi_response()` method handle it?
+					//?	All this errors must be handleded inside cgi class and shouldn't stop the server,
+					//? but the conected client has to receive an appropiate respnse, so we need to figure out a way do this
+					//? since the server.ccp get a request.cpp, to get a response.cpp wich calls cgi.cpp,
+					//?	and we need to return this answer back to the client throught server.cpp,
+					//? maybe we need some agreed return variable to left the response on response.ccp,
+					//? or just call a formated error response
+
+				status_code = 200;
+				body = real_cgi.get_cgi_response();
+////				head_params["Content-Type"] = get_filetype.get("html");				//!		How do we know the file type outputted by the CGI?
+				head_params["Last-Modified"] = mod_date;
+				//!		Is this the last modification of the CGI file itself or the date of creation of the CGI's output?
+					//? This is one of the HTTP Header wich could be returned by cgi https://www.tutorialspoint.com/cplusplus/cpp_web_programming.htm
+					//? so I guess we can left at cgi will
+					//? by the way cgi returns this HTTP Headers with correct format, no need to do more work
+				return ;
+			}
+		}
+						//*		vvv    The file is not part of the CGI    vvv
 		status_code = 200;
 		body = get_body;
 		head_params["Content-Type"] = get_filetype.get_suffix(request.get_path_rel());

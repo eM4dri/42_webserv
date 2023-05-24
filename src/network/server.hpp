@@ -17,6 +17,7 @@
 # include <vector>			// std::vector
 # include "conf/conf.hpp"
 # include "requests/Request.hpp"
+# include "responses/Response.hpp"
 namespace ft
 {
 
