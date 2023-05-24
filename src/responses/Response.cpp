@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 12:23:19 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 13:45:37 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ void Response::file_status_custom_error(int file_status)
 				head_params["Last-Modified"] = mod_date;
 				head_params["Content-Type"] = request.config.filetypes.get_suffix(location->index);
 				body = get_body;
+				return ;
 			}
 			else
 				status_code = 501;

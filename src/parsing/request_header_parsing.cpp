@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 17:09:29 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:53:41 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,12 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 		if (params[0] == "DELETE")
 			method = DELETE;
 	}
+	// 	// std::cout << "BBBBB    >"<< std::endl;
+	// 	// std::cout << "AAAAAAAAAAAAAA    >"  << std::endl;
+	// 	// std::cout << "$" << params[2] << "$" << std::endl;
+	// 	// std::cout<<  "< vs >HTTP/1.1<" << std::endl;
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
+	// // if (params[2] != "HTTP1.1" && params[2] != "HTTP1.1\r" && params[2] != "HTTP/1.1\r" && params[2] != "HTTP/1.1")
 	{
 		// std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
 		// for (unsigned long i = 0; i < params.size(); i++)
@@ -89,6 +94,7 @@ bool	Request::check_first_line_validity(std::string firstline, const ft::serverc
 		// 	std::cerr << params[i] << " ";
 		// }
 		// std::cerr << TXT_RESET << std::endl;
+		// // std::cout << "bolean " <<  (params[2] != "HTTP/1.1") << " compare " <<  params[2].compare( "HTTP/1.1") << std::endl;
 		method = -2;
 		return (false);
 	}
@@ -165,7 +171,7 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 */
 bool	Request::check_request_validity(std::string fullheader, const ft::serverconf &_config)
 {
-	std::vector <std::string> line_vector = cpp_split(fullheader, '\n');
+	std::vector <std::string> line_vector = cpp_splitNremove(fullheader, '\n', '\r');
 	if (!check_first_line_validity(line_vector[0], _config))
 		return (false);
 	if (!check_header_validity(line_vector, header_map))
