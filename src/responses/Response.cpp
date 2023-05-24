@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:13:42 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:44:33 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ Response::Response(const Request &_request): _request(_request)
 			return_error_message(505);
 		_head_params["Content-Type"] = "text/html";
 	}
+	else if (!(_request.get_location()->methods & _request.get_method()))
+	{
+		return_error_message(405);
+		_head_params["Content-Type"] = "text/html";
+	}
 	else if (_request.get_location()->redirect.first != 0)
 	{
 		return_error_message(_request.get_location()->redirect.first);
@@ -38,7 +43,11 @@ Response::Response(const Request &_request): _request(_request)
 	}
 	else
 	{
-		return_content();
+		if (_request.get_method() == GET)
+			return_content();
+		else if (_request.get_method() == POST)
+			post_content();
+
 	}
 	std::cout << std::endl << generate_response() << std::endl;	//! Delete when testing ends.
 }
@@ -173,6 +182,58 @@ void Response::file_status_custom_error(int file_status)
 	return_error_message(_status_code);
 }
 
+void Response::post_content()
+{
+	struct stat file_info;
+	int			file_status = 0;
+	std::ofstream open_file;
+
+	open_file.open(_request.get_path_abs().c_str());
+	stat(_request.get_path_abs().c_str(), &file_info);
+	if (open_file.fail())
+		file_status = errno;
+	if (file_status)			//TODO		404 or unauthorized
+	{
+		if (file_status == ENOENT)			//?	File Not found
+		{
+			return_error_message(404);
+			_status_code = 404;
+		}
+		else if (file_status == EACCES)		//?	Permission denied
+		{
+			return_error_message(500);
+			_status_code = 500;
+		}
+		else								//?	Unknown error
+		{
+			return_error_message(501);
+			_status_code = 501;
+		}
+	}
+	else if (file_info.st_mode & S_IFDIR)		//TODO		File is a dir
+	{
+		return_error_message(500, "Resource is a directory.");
+		_status_code = 500;
+	}
+	else
+	{
+		std::string file_extension;
+		size_t last_period = _request.get_path_rel().find_last_of('.');
+		if (last_period != std::string::npos)
+		{
+			file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
+			std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
+			if (cgi_item != _request.get_location()->cgi_execs.end())
+			{
+				ft::cgi real_cgi(cgi_item->second, _request.get_path_abs(), _request, _request.config);
+				return_error_message(200, "Content posted successfully");		//! 	Well we don't know that yet.
+				_status_code = 200;
+				return ;
+			}
+		}
+	}
+	//*		All good
+}
 
 void Response::return_content()
 {

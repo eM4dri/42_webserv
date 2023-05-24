@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 12:52:08 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:33:17 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

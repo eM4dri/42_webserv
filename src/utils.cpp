@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:30:58 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:06:29 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:33:56 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ std::vector <std::string> cpp_splitNremove(std::string full_line, char splitter,
 				end--;
 			line_vector.push_back(std::string(begin, end));
 		}
-
+			
 		begin = end;
 	}
 	return (line_vector);

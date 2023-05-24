@@ -16,10 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-24- Jorge
 ### Added
 - `Response` is now linked to the server's request reciever.
+- Allowed methods are now controlled.
+- First implementation of a **POST** request.
 
 ## 2023-05-23 - Jorge
 ### Added
-- We now go through the CGI if appliable.
+- We now go through the CGI if applicable.
 
 ## 2023-05-23 - Edu
 ### Added
@@ -34,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-22 - Edu
 ### Changed
 - Simplifying `server` response mockups
+
 ## 2023-05-22 - Jorge
 ### Added
 - In case a directory is requested and autoindex is disabled, a given index is used.

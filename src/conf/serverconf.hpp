@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 19:51:32 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:37:22 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

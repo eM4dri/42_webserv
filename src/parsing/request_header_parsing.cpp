@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request_header_parsing.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:09:43 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:35:05 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 		if (params[0] == "DELETE")
 			_method = DELETE;
 	}
-
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
 		// std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
