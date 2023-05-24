@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 21:05:49 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 12:23:19 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,12 +202,24 @@ void Response::return_content()
 			if (cgi_item != request.get_location()->cgi_execs.end())				//*		The file IS part of the CGI list.
 			{
 				ft::cgi real_cgi(cgi_item->second, request.get_path_abs(), request, request.config);				//*		Creating a cgi class.
-																													//!		Can the class `cgi` fail to construct? (Wrong path controlled by exceptions or status variables...)
-																													//!		If so, does it need to be controlled here or does the `get_cgi_response()` method handle it?
+				//!		Can the class `cgi` fail to construct? (Wrong path controlled by exceptions or status variables...)
+					//?	No can''t fail to answer on execve behaviour or similar funcions.
+				//!		If so, does it need to be controlled here or does the `get_cgi_response()` method handle it?
+					//?	All this errors must be handleded inside cgi class and shouldn't stop the server,
+					//? but the conected client has to receive an appropiate respnse, so we need to figure out a way do this
+					//? since the server.ccp get a request.cpp, to get a response.cpp wich calls cgi.cpp,
+					//?	and we need to return this answer back to the client throught server.cpp,
+					//? maybe we need some agreed return variable to left the response on response.ccp,
+					//? or just call a formated error response
+
 				status_code = 200;
 				body = real_cgi.get_cgi_response();
 ////				head_params["Content-Type"] = get_filetype.get("html");				//!		How do we know the file type outputted by the CGI?
-				head_params["Last-Modified"] = mod_date;				//!		Is this the last modification of the CGI file itself or the date of creation of the CGI's output?
+				head_params["Last-Modified"] = mod_date;
+				//!		Is this the last modification of the CGI file itself or the date of creation of the CGI's output?
+					//? This is one of the HTTP Header wich could be returned by cgi https://www.tutorialspoint.com/cplusplus/cpp_web_programming.htm
+					//? so I guess we can left at cgi will
+					//? by the way cgi returns this HTTP Headers with correct format, no need to do more work
 				return ;
 			}
 		}
@@ -216,7 +228,7 @@ void Response::return_content()
 		body = get_body;
 		head_params["Content-Type"] = get_filetype.get_suffix(request.get_path_rel());
 		head_params["Last-Modified"] = mod_date;
-	}				
+	}
 }
 
 std::string Response::generate_response()
