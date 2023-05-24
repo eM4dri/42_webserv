@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-24 - Edu
+### Changed
+- Added Namespace `ft` to missing namespace cpp & hpp
+- Normalize usage of _ for privates
+- Improve performance of `utils.file_reader` based on [How to read a file in C++](https://insanecoding.blogspot.com/2011/11/how-to-read-in-file-in-c.html)
 ## 2023-05-24- Jorge
 ### Added
 - `Response` is now linked to the server's request reciever.
@@ -26,7 +31,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-05-22 - Edu
 ### Changed
 - Simplifying `server` response mockups
-
 ## 2023-05-22 - Jorge
 ### Added
 - In case a directory is requested and autoindex is disabled, a given index is used.

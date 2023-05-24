@@ -6,6 +6,9 @@
 #endif
 #endif
 
+namespace ft
+{
+
 std::string Response::create_directory_index()
 {
 	DIR			*directorylist;
@@ -14,7 +17,7 @@ std::string Response::create_directory_index()
 	struct stat fileinfo;
 	std::string fullpath;
 
-	directorylist = opendir(request.get_path_abs().c_str());
+	directorylist = opendir(_request.get_path_abs().c_str());
 
 	directoryitem = readdir(directorylist);
 	directoryitem = readdir(directorylist);
@@ -22,10 +25,10 @@ std::string Response::create_directory_index()
 	retval.append("<head><title>Webserv</title></head>\n");
 	retval.append("<body>\n");
 	retval.append("\t<h1>Index of /");
-	retval.append(request.get_path_rel());
+	retval.append(_request.get_path_rel());
 	retval.append("</h1>\n<hr>");
 
-	if (request.get_path_rel().size() > 1)
+	if (_request.get_path_rel().size() > 1)
 	{
 		retval.append("\t<table>\n");
 		retval.append("\t\t<tbody>\n");
@@ -46,7 +49,7 @@ std::string Response::create_directory_index()
 	{
 		if (std::strcmp(directoryitem->d_name, ".."))
 		{
-			fullpath = request.get_path_abs();
+			fullpath = _request.get_path_abs();
 			fullpath.append("/");
 			fullpath.append(directoryitem->d_name);
 			if (stat(fullpath.c_str(), &fileinfo))
@@ -61,7 +64,7 @@ std::string Response::create_directory_index()
 				retval.append("❌ THIS SHOULD NOT BE PRINTED ❌");
 			retval.append("</td><td>");
 			retval.append("<a href=\"./");
-			retval.append(SERVER_ROOT);		//!		Delete when we are able to make GET 
+			retval.append(SERVER_ROOT);		//!		Delete when we are able to make GET
 			retval.append("/");				//! 	requests directly from a browser
 			retval.append(directoryitem->d_name);
 			retval.append("\">");
@@ -84,3 +87,5 @@ std::string Response::create_directory_index()
 	closedir(directorylist);
 	return (retval);
 }
+
+}	// Nammespace ft

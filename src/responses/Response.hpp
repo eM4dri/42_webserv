@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/23 20:36:13 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:08:22 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,23 @@
 #include "../requests/Request.hpp"
 #include "../actuators/cgi.hpp"
 
+namespace ft
+{
+
 /**
- * @param request (const Request)
- * @param status_code (int)
- * @param head_params (std::map <std::string, std::string>)
- * @param body (std::String)
+ * @param _request (const Request)
+ * @param _status_code (int)
+ * @param _head_params (std::map <std::string, std::string>)
+ * @param _body (std::String)
  *
 */
 class Response
 {
 	private:
-		const Request &request;
-		int status_code;
-		std::map<std::string, std::string> head_params;
-		std::string body;
+		const Request &_request;
+		int _status_code;
+		std::map<std::string, std::string> _head_params;
+		std::string _body;
 		Response();
 
 	public:
@@ -42,6 +45,6 @@ class Response
 		std::string create_directory_index();
 };
 
-
+}// Nammespace ft
 
 #endif
