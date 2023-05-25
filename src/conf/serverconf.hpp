@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 16:37:42 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/24 20:37:22 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define DEFAULT_ADDRESS "localhost"
 # define DEFAULT_PORT 8080
 # define DEFAULT_ROOT "www"
+# define DEFAULT_SERVER_NAME "webserv v4.2"
 
 namespace ft
 {
@@ -38,6 +39,7 @@ class serverconf{
 		std::string							default_root;
 		std::map<std::string, location>		locations;
 		const Filetypes &					filetypes;
+		std::string							server_name;
 
 		//Constructor
 		serverconf(const Filetypes & types);
