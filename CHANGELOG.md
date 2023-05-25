@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-25 - Edu
+### Added
+- Some file to make a demo about cgi, post & redirect
+
+### Changed
+- Parsed HTTPHeaders into env in `cgi`
+- Included `Response._is_cgi_response` to format body on `generate_response`
+### Fixed
+- Remove some `LOG_COLOR` traces and parsing errors due to not properly set up default for every new location, adding MACROS for readability
+
 ## 2023-05-24 - Edu
 ### Changed
 - Added Namespace `ft` to missing namespace cpp & hpp

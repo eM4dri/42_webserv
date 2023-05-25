@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 18:49:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/25 18:26:11 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,29 +43,52 @@ cgi::~cgi() {
 	}
 }
 
+void cgi::_add_header_to_env(const std::string &env_var, const std::string & header)
+{
+	if (_request.get_headermap().find(header) != _request.get_headermap().end())
+		_env.push_back(env_var);
+	// else
+	// 	_env.push_back(env_var + "=" + header);
+
+}
+
 void cgi::_populate_env(  )
 {
-	_env.push_back("AUTH_TYPE");
-	_env.push_back("CONTENT_LENGTH");
-	_env.push_back("CONTENT-TYPE");
 	_env.push_back("GATEWAY_INTERFACE=CGI/1.1");
-	_env.push_back("PATH_INFO");
-	_env.push_back("PATH_TRANSLATED");
-	// _env.push_back("QUERY_STRING");
-	_env.push_back("QUERY_STRING=user_login=cmarcu&user_message=Hola+mundo+CRUEL%21");
-	_env.push_back("REMOTE_ADDR=" + _conf.address);
-	_env.push_back("REMOTE_HOST");
-	_env.push_back("REQUEST_METHOD=" + _request.get_method_txt());
-	_env.push_back("SCRIPT_NAME=./tests/www/localhost/reply.py");
-	_env.push_back("SERVER_NAME=localhost");
-	_env.push_back("SERVER_PORT=" + to_string(_conf.port) );
 	_env.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	_env.push_back("SERVER_SOFTWARE=42WebServer/1.0");
-	_env.push_back("HTTP_ACCEPT=text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
-	_env.push_back("HTTP_ACCEPT_ENCODING=gzip, deflate, br");
-	_env.push_back("HTTP_ACCEPT_LANGUAGE=en_US,en;q=0.5");
-	_env.push_back("HTTP_COOKIE=HIPPIE_COOKIE=42");
-	_env.push_back("HTTP_USER_AGENT=Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0) Gecko/20100101 Firefox/108.0");
+
+	_env.push_back("REMOTE_ADDR=" + _conf.address);
+	_env.push_back("REQUEST_METHOD=" + _request.get_method_txt());
+	_env.push_back("SERVER_NAME=" + _conf.server_name);
+	_env.push_back("SERVER_PORT=" + to_string(_conf.port) );
+	// if (_request.get_method_txt() == "POST")
+	// 	_env.push_back("QUERY_STRING=user_login=marvin&user_message=marvin+al+habla");
+	if (!_request.get_body().empty())
+	// 	_env.push_back("QUERY_STRING");
+	// else
+		_env.push_back("QUERY_STRING=" + _request.get_body());
+	// _env.push_back("PATH_INFO");
+	// _env.push_back("PATH_TRANSLATED");
+	if (_cgi_script.length())
+	{
+		_env.push_back("SCRIPT_FILENAME=" + _cgi_script);
+		std::size_t name_pos = _cgi_script.find_last_of('/');
+		if (name_pos != std::string::npos)
+			_env.push_back("SCRIPT_NAME=" + _cgi_script.substr(_cgi_script.find_last_of('/')));
+	}
+	_add_header_to_env("AUTH_TYPE", "Authorization");
+	_add_header_to_env("CONTENT_LENGTH", "Content-Length");
+	_add_header_to_env("CONTENT-TYPE", "Content-Type");
+	_add_header_to_env("HTTP_ACCEPT", "Accept");
+	_add_header_to_env("HTTP_ACCEPT_ENCODING", "Accept-Encoding");
+	_add_header_to_env("HTTP_ACCEPT_LANGUAGE", "Accept-Language");
+	_add_header_to_env("HTTP_USER_AGENT", "User-Agent");
+	_add_header_to_env("HTTP_COOKIE", "Cookie");
+	_add_header_to_env("HTTP_HOST", "Host");
+	_add_header_to_env("HTTP_FORWARDED", "Forwarded");
+	_add_header_to_env("HTTP_ACCEPT_CHARSET", "Accept-Charset");
+	_add_header_to_env("HTTP_PROXY_AUTHORIZATION", "Proxy-Authorization");
 }
 
 void cgi::_execute(void)
