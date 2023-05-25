@@ -1,12 +1,12 @@
 **To keep tracking everything we acknowledge as TODO**
 - [ ] Validate route path of request
-- [ ] Integrate conf with request
+- [X] Integrate conf with request
 - [X] Use albgarci's ubuntu docker
 > Included section on `NOTES.md` explaining how to use this
-- [ ] Formats unifing passing (`const &`, private var and methods,...)
+- [X] Formats unifing passing (`const &`, private var and methods,...)
 > About `const &` https://42born2code.slack.com/archives/CNA2Z8RBP/p1680868478345079
 - [ ] Validate multiple locations on same level on loading `.conf` example `location	/file /hola	`
-- [ ] Parse index on `conf` default page
+- [X] Parse index on `conf` default page
 - [X] Parse `conf` configure root in every location, apeeding server root
 - [X] Create default `/` location
 - [X] Cgi
@@ -17,3 +17,4 @@
 - [ ] Agreed Cgi comunications between Request or responses
 - [ ] Unit test parsed redirect to test circular references, using mock methods for valid redirect
 - [ ] use `curl` verbose to review  HTTP header response  curl -v localhost:8080
+- [ ] Review why main cannot launch two servers at the same time

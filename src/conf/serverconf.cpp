@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:28:53 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 20:37:02 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/25 10:42:55 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ serverconf::serverconf(const serverconf & tocopy):	address(tocopy.address),
 													filetypes(tocopy.filetypes),
 													server_name(tocopy.server_name)
 {
-	LOG_COLOR(CYAN,"serverconf constructor copy");
 }
 
 }	// Nammespace ft
