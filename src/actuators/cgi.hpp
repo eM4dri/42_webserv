@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:10 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 18:50:35 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/25 16:42:13 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class cgi {
 
 		void _execute(void);
 		void _populate_env();
+		void _add_header_to_env(const std::string &env_var, const std::string & header);
 
 		std::vector<std::string>	_env;
 		const std::string &			_cgi_exec;
