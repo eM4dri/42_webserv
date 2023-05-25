@@ -17,4 +17,8 @@
 - [ ] Agreed Cgi comunications between Request or responses
 - [ ] Unit test parsed redirect to test circular references, using mock methods for valid redirect
 - [ ] use `curl` verbose to review  HTTP header response  curl -v localhost:8080
-- [ ] Review why main cannot launch two servers at the same time
+- [ ] Review why main cannot launch two servers at the same time (edu)
+- [ ] Parse body on `POST`
+- [ ] Review `POST` removing files contents
+- [ ] Disable validate directory on redirects
+> [ ] Find out if a return location/file should redirect (edu)
