@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 20:44:33 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/26 18:45:22 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 {
 }*/
 
-Response::Response(const Request &_request): _request(_request)
+Response::Response(const Request &_request): _request(_request),_is_cgi_response(false)
 {
 	if (_request.get_method() < 0)
 	{
@@ -185,32 +185,9 @@ void Response::file_status_custom_error(int file_status)
 void Response::post_content()
 {
 	struct stat file_info;
-	int			file_status = 0;
-	std::ofstream open_file;
 
-	open_file.open(_request.get_path_abs().c_str());
 	stat(_request.get_path_abs().c_str(), &file_info);
-	if (open_file.fail())
-		file_status = errno;
-	if (file_status)			//TODO		404 or unauthorized
-	{
-		if (file_status == ENOENT)			//?	File Not found
-		{
-			return_error_message(404);
-			_status_code = 404;
-		}
-		else if (file_status == EACCES)		//?	Permission denied
-		{
-			return_error_message(500);
-			_status_code = 500;
-		}
-		else								//?	Unknown error
-		{
-			return_error_message(501);
-			_status_code = 501;
-		}
-	}
-	else if (file_info.st_mode & S_IFDIR)		//TODO		File is a dir
+	if (file_info.st_mode & S_IFDIR)		//TODO		File is a dir
 	{
 		return_error_message(500, "Resource is a directory.");
 		_status_code = 500;
@@ -226,8 +203,13 @@ void Response::post_content()
 			if (cgi_item != _request.get_location()->cgi_execs.end())
 			{
 				ft::cgi real_cgi(cgi_item->second, _request.get_path_abs(), _request, _request.config);
-				return_error_message(200, "Content posted successfully");		//! 	Well we don't know that yet.
-				_status_code = 200;
+					//? or just call a formated error response
+				_status_code = real_cgi.get_cgi_response_status();
+				_body = real_cgi.get_cgi_response();
+				LOG_COLOR(CYAN,"get_cgi_response_status" << real_cgi.get_cgi_response_status() << " " << _status_code );
+				if (_status_code == 200 || _status_code == 302)
+					_is_cgi_response = true;
+
 				return ;
 			}
 		}
@@ -235,7 +217,7 @@ void Response::post_content()
 	//*		All good
 }
 
-void Response::return_content()
+void Response::return_content()		//?		GET request
 {
 	std::cout << "";					//?	Fixes a Sanitizer error somehow.
 	std::string mod_date;
@@ -277,10 +259,13 @@ void Response::return_content()
 					//? maybe we need some agreed return variable to left the response on response.ccp,
 					//? or just call a formated error response
 
-				_status_code = 200;
+				_status_code = real_cgi.get_cgi_response_status();
 				_body = real_cgi.get_cgi_response();
+				LOG_COLOR(CYAN,"get_cgi_response_status" << real_cgi.get_cgi_response_status() << " " << _status_code );
+				if (_status_code == 200 || _status_code == 302)
+					_is_cgi_response = true;
 ////				_head_params["Content-Type"] = get_filetype.get("html");				//!		How do we know the file type outputted by the CGI?
-				_head_params["Last-Modified"] = mod_date;
+				// _head_params["Last-Modified"] = mod_date;
 				//!		Is this the last modification of the CGI file itself or the date of creation of the CGI's output?
 					//? This is one of the HTTP Header wich could be returned by cgi https://www.tutorialspoint.com/cplusplus/cpp_web_programming.htm
 					//? so I guess we can left at cgi will
@@ -310,12 +295,16 @@ std::string Response::generate_response()
 	_head_params["Date"] = get_date();
 	for (std::map<std::string, std::string>::const_iterator it = _head_params.begin(); it != _head_params.end(); it++)
 	{
-		retval.append(it->first);
-		retval.append(": ");
-		retval.append(it->second);
-		retval.append("\n");
+		if (!(it->first == "Content-Type" && _is_cgi_response == true))
+		{
+			retval.append(it->first);
+			retval.append(": ");
+			retval.append(it->second);
+			retval.append("\n");
+		}
 	}
-	retval.append("\n");
+	if (_is_cgi_response == false)
+		retval.append("\n");
 	retval.append(_body);
 	return (retval);
 }

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 20:02:52 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/25 11:56:48 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -437,9 +437,11 @@ void conf::_set_location_defaults(location *location)
 	location->request_path = DEFAULT_PATH;
 	location->client_max_body_size = DEFAULT_CLIENT_MAX_BODY_SIZE;
 	location->index = DEFAULT_INDEX;
-	location->redirect.first = 0;
-	location->redirect.second = "";
-	location->upload_store = "";
+	location->redirect = DEFAULT_REDIRECT;
+	location->upload_store = DEFAULT_UPLOAD_STORE;
+	location->file_root = DEFAULT_FILE_ROOT;
+	if (!location->cgi_execs.empty())
+		location->cgi_execs.clear();
 }
 
 void conf::_set_server_defaults(serverconf *server, location *location)

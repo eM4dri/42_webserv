@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 16:33:17 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/25 18:59:59 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 # include <string>		// std::string
 # include <map>			// std::map
 # define DEFAULT_PATH ""
+# define DEFAULT_UPLOAD_STORE ""
+# define DEFAULT_FILE_ROOT ""
+# define DEFAULT_REDIRECT std::pair<unsigned short,std::string>(0, "")
 # define DEFAULT_INDEX "index.html"
 # define DEFAULT_CLIENT_MAX_BODY_SIZE 1024
 # define DEFAULT_AUTOINDEX false
