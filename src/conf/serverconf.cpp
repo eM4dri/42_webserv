@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:28:53 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/25 10:42:55 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:00:05 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
