@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:35:05 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/26 19:18:53 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 
 	std::string path_iter;
 	path_iter = correct_path(params[1]);
+	if (get_method_txt() == "GET" && path_iter.find_last_of('?') != std::string::npos)
+    {
+        _header_map.insert(std::make_pair<std::string, std::string> ("Query-String", path_iter.substr(path_iter.find_last_of('?') + 1)));
+        path_iter.erase(path_iter.find_last_of('?'));
+    }
 	std::vector<std::string> split_path = cpp_split(path_iter, '/');
 	unsigned int level = split_path.size();
 	std::map<std::string, location>::const_iterator it_location;
@@ -182,7 +187,7 @@ bool	Request::check_request_validity(std::string fullheader, const serverconf &c
 */
 void Request::header_parser(const serverconf &config)
 {
-	size_t head_body_separation = _fullrequest.find("\n\n");
+	size_t head_body_separation = _fullrequest.find("\r\n\r\n");
 	if (!check_request_validity(_fullrequest.substr(0, head_body_separation), config))
 	{
 		if (_method != -2)
@@ -190,9 +195,10 @@ void Request::header_parser(const serverconf &config)
 		return ;
 	}
 	if (head_body_separation != std::string::npos)
-		_body = _fullrequest.substr(head_body_separation + 2, std::string::npos);
+		_body = _fullrequest.substr(head_body_separation + 4, std::string::npos);
 	else
 		_body = "";
+	std::cout << ">>>" << _body << "<<<" << std::endl;
 }
 
 }	// Nammespace ft
