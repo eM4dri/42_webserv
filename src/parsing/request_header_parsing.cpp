@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/26 19:18:53 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/26 20:42:56 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,6 @@ void Request::header_parser(const serverconf &config)
 		_body = _fullrequest.substr(head_body_separation + 4, std::string::npos);
 	else
 		_body = "";
-	std::cout << ">>>" << _body << "<<<" << std::endl;
 }
 
 }	// Nammespace ft
