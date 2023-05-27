@@ -5,6 +5,7 @@ import json
 with open('cgi/comments.json') as file:
     json_data = json.load(file)
 
+print("Location:/post/new")
 print("Content-type:text/html")
 print()
 

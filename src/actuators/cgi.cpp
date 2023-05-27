@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/25 18:26:11 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/27 12:51:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <sys/types.h>	//	waitpid
 #include <sys/wait.h>	//	waitpid
 
-enum e_pipe_fd
+enum e__cgi_pipe_fd
 {
 	READ_END,
 	WRITE_END
@@ -45,15 +45,16 @@ cgi::~cgi() {
 
 void cgi::_add_header_to_env(const std::string &env_var, const std::string & header)
 {
-	if (_request.get_headermap().find(header) != _request.get_headermap().end())
-		_env.push_back(env_var);
+	std::map<std::string, std::string>::const_iterator found  = _request.get_headermap().find(header);
+	if (found != _request.get_headermap().end())
+	 	_env.push_back(env_var + "=" + found->second);
 	// else
-	// 	_env.push_back(env_var + "=" + header);
-
+	// _env.push_back(env_var);
 }
 
 void cgi::_populate_env(  )
 {
+	print_map(_request.get_headermap());
 	_env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	_env.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	_env.push_back("SERVER_SOFTWARE=42WebServer/1.0");
@@ -62,12 +63,6 @@ void cgi::_populate_env(  )
 	_env.push_back("REQUEST_METHOD=" + _request.get_method_txt());
 	_env.push_back("SERVER_NAME=" + _conf.server_name);
 	_env.push_back("SERVER_PORT=" + to_string(_conf.port) );
-	// if (_request.get_method_txt() == "POST")
-	// 	_env.push_back("QUERY_STRING=user_login=marvin&user_message=marvin+al+habla");
-	if (!_request.get_body().empty())
-	// 	_env.push_back("QUERY_STRING");
-	// else
-		_env.push_back("QUERY_STRING=" + _request.get_body());
 	// _env.push_back("PATH_INFO");
 	// _env.push_back("PATH_TRANSLATED");
 	if (_cgi_script.length())
@@ -77,6 +72,8 @@ void cgi::_populate_env(  )
 		if (name_pos != std::string::npos)
 			_env.push_back("SCRIPT_NAME=" + _cgi_script.substr(_cgi_script.find_last_of('/')));
 	}
+	_add_header_to_env("POSTDATA", "Query-String");
+	_add_header_to_env("QUERY_STRING", "Query-String");
 	_add_header_to_env("AUTH_TYPE", "Authorization");
 	_add_header_to_env("CONTENT_LENGTH", "Content-Length");
 	_add_header_to_env("CONTENT-TYPE", "Content-Type");
@@ -95,12 +92,27 @@ void cgi::_execute(void)
 {
 	const char *argv[] = {_cgi_exec.c_str(), _cgi_script.c_str(), NULL};
 	int			status;
-	pid_t		pid;
-	int			fd[2];
+	pid_t		pid_write_body;
+	pid_t		pid_read_and_execve;
+	int			fd_write_body[2];
+	int			fd_read_and_execve[2];
 
-	pipe(fd);
-	pid = fork();
-	if (!pid)	//	son
+	pipe(fd_write_body);
+	pipe(fd_read_and_execve);
+	pid_write_body = fork();
+	pid_read_and_execve = fork();
+
+	LOG_COLOR(MAGENTA, _request.get_body());
+	if (!pid_write_body)	//	son write body
+	{
+		close(fd_read_and_execve[READ_END]);
+		close(fd_read_and_execve[WRITE_END]);
+		close(fd_write_body[READ_END]);
+		dup2(fd_write_body[WRITE_END], STDOUT_FILENO);
+		write(fd_write_body[WRITE_END], _request.get_body().c_str(), _request.get_body().length());
+		close(fd_write_body[WRITE_END]);
+	}
+	if (!pid_read_and_execve)	//	son execve
 	{
 		// print_vector(_env);
 		char **envp = new char *[_env.size() + 1];
@@ -110,10 +122,13 @@ void cgi::_execute(void)
 			std::strcpy (envp[i], _env[i].c_str());
 		}
 		envp[_env.size()] = NULL;
-		// print_array_null_ending(envp);
-		close(fd[READ_END]);
-		dup2(fd[WRITE_END], STDOUT_FILENO);
-		close(fd[WRITE_END]);
+		print_array_null_ending(envp);
+		close(fd_write_body[WRITE_END]);
+		dup2(fd_write_body[READ_END], STDIN_FILENO);
+		close(fd_write_body[READ_END]);
+		close(fd_read_and_execve[READ_END]);
+		dup2(fd_read_and_execve[WRITE_END], STDOUT_FILENO);
+		close(fd_read_and_execve[WRITE_END]);
 		if (_cgi_exec == "")
 			execve(argv[1], const_cast<char **>(&argv[1]), envp);
 		else
@@ -123,12 +138,14 @@ void cgi::_execute(void)
 	}
 	else	//	father
 	{
-		close(fd[WRITE_END]);
+		close(fd_write_body[READ_END]);
+		close(fd_write_body[WRITE_END]);
+		close(fd_read_and_execve[WRITE_END]);
 		char	buff[USHRT_MAX]={0};
 		std::memset(buff, 0, USHRT_MAX);
-		read(fd[READ_END], buff, USHRT_MAX);
-		close(fd[READ_END]);
-		waitpid(pid, &status, 0);
+		read(fd_read_and_execve[READ_END], buff, USHRT_MAX);
+		close(fd_read_and_execve[READ_END]);
+		waitpid(pid_read_and_execve, &status, 0);
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status))

@@ -1,5 +1,13 @@
 
 import json
+import os
+from urllib.parse import parse_qs
+
+# Get the value of the QUERY_STRING environment variable
+query_string = os.environ.get('QUERY_STRING')
+
+# Parse the query string into JSON
+query_params = parse_qs(query_string)
 
 # Read JSON data from a file
 with open('cgi/comments.json') as file:
@@ -34,11 +42,22 @@ print("<h2>Guest book</h2>")
 
 comments = json_data['comments']
 
-for comment in comments:
-    print("<div class=\"card\">")
-    print("<h3>", comment['user_login'],"</h3>")
-    print("<p>", comment['user_message'],"</p>")
-    print("</div>")
+if query_params:
+    # Convert the parsed query parameters into JSON format
+    new_object = {key: value[0] for key, value in query_params.items()}
+    filtercomments = [x for x in comments if x['user_login'] == new_object['login']]
+    for comment in filtercomments:
+        print("<div class=\"card\">")
+        print("<h3>", comment['user_login'],"</h3>")
+        print("<p>", comment['user_message'],"</p>")
+        print("</div>")
+
+else :
+    for comment in comments:
+        print("<div class=\"card\">")
+        print("<h3>", comment['user_login'],"</h3>")
+        print("<p>", comment['user_message'],"</p>")
+        print("</div>")
 
 print("<button onclick=\"redirectToURL()\">New message</button>")
 
