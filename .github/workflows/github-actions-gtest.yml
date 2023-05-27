@@ -6,8 +6,13 @@ on:
      paths-ignore:
       - 'README.md'
       - 'CHANGELOG.md'
-      - '.github/**'
+      - 'TODO.md'
+      - 'FAQ.md'
+      - '.github/*'
       - '.gitignore'
+      - 'src/sandbox/*'
+      - 'cgi/*'
+      - 'test_files/*'
 jobs:
   Perform-Unit-Test:
     runs-on: ubuntu-latest
