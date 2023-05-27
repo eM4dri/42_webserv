@@ -22,7 +22,7 @@
 - [ ] Review `POST` removing files contents
 - [ ] Disable validate directory on redirects
 	> [ ] Find out if a return location/file should redirect (edu)
-- [ ] Add guestbook demo card detail and delete workflow
+- [ ] Add guestbook demo card detail and delete workflow (Must be handleled with POST, HTTP delete not used for cgi)
 	> Add id json DataBase like Primary key, auto incremental with every new message
 	> Add Url on every card with redirects to the same path with ?id=id
 	> Filter Guestbook for id when query string comes with it
