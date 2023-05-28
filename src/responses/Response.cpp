@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 20:00:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/28 20:08:13 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ void Response::post_content()
 		else															//* No CGI found
 		{
 			std::ofstream created_file;
-			created_file.open(_request.get_path_abs());
+			created_file.open(_request.get_path_abs().c_str());
 			if (created_file.fail())
 			{
 				return_error_message(500, "The file couldn't be created.");
