@@ -177,11 +177,11 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		Request request(buffer, _conf);
 		_responder(it->fd, request);
 		// _echo(it->fd, buffer, nbytes);
-		close(it->fd);
+		// close(it->fd);
 	}
 }
 
-const std::string mock_html_response(const char *filename,  const Request & request, const std::string &content_type)
+const std::string _mock_html_response(const char *filename,  const Request & request, const std::string &content_type)
 {
 	(void)request;
 	std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
@@ -205,7 +205,7 @@ const std::string mock_html_response(const char *filename,  const Request & requ
 	return response;
 }
 
-const std::string mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf
+const std::string _mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf
 									// , const std::string &content_type
 )
 {
@@ -222,15 +222,15 @@ void server::_responder(int client_fd, const Request & request)
 {
 	Response the_response(request);
 	std::string response = the_response.generate_response();
-	// std::string response = mock_html_response("test_files/post/php-example.html", request, "text/html");
-	// std::string response = mock_html_response("test_files/post/newmessage.html", request, "text/html");
-	// std::string response = mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
-	// std::string response = mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);
-	// std::string response = mock_cgi_response("cgi/bin/print_ls_la.sh", "",request, _conf);
-	// std::string response = mock_cgi_response("/bin/ls", "-la",request, _conf, "text/plain");
-	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/reply.py",request, _conf);
-	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/guestbook.py",request, _conf);
-	// std::string response = mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
+	// std::string response = _mock_html_response("test_files/post/php-example.html", request, "text/html");
+	// std::string response = _mock_html_response("test_files/post/newmessage.html", request, "text/html");
+	// std::string response = _mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
+	// std::string response = _mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);
+	// std::string response = _mock_cgi_response("cgi/bin/print_ls_la.sh", "",request, _conf);
+	// std::string response = _mock_cgi_response("/bin/ls", "-la",request, _conf, "text/plain");
+	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/reply.py",request, _conf);
+	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/guestbook.py",request, _conf);
+	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);

@@ -32,6 +32,6 @@ array_data.append(new_object)
 with open('cgi/comments.json', 'w') as file:
     json.dump(json_data, file, indent=4)
 
-print("Location:guestbook.py\r\n")
-
+print("Location: guestbook.py")
+print()
 print("Object added to the array in the JSON file.")
