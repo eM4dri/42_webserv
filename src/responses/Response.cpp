@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 12:22:50 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:59:46 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,6 @@ void Response::return_content()		//?		GET request
 void Response::_cgi_content(const std::string &cgi_exec){
 	ft::cgi real_cgi(cgi_exec, _request.get_path_abs(), _request, _request.config);				//*		Creating a cgi class.
 	_status_code = real_cgi.get_cgi_response_status();
-	LOG_COLOR(MAGENTA, "status code is" << _status_code);
 	if (_status_code == 200 || _status_code == 302)
 	{
 		const std::string &cgi_response = real_cgi.get_cgi_response();
@@ -277,9 +276,6 @@ void Response::_cgi_content(const std::string &cgi_exec){
 			if (body_start!= std::string::npos)
 				_body = cgi_response.substr(body_start + SIZE_BODY_DELIMITER2);
 		}
-		LOG_COLOR(CYAN, "cgi_response is\n" << cgi_response);
-
-		LOG_COLOR(CYAN, "_body is\n" << _body);
 		std::stringstream ss(real_cgi.get_cgi_response());
 		size_t header_start = 0;
 		while (header_start < body_start)
@@ -303,7 +299,7 @@ void Response::_cgi_content(const std::string &cgi_exec){
 	}
 	else
 	{
-		;//handle errors
+		return_error_message(_status_code);
 	}
 }
 
