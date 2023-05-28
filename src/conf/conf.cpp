@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   conf.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/25 11:56:48 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/27 20:39:09 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,22 @@ void conf::_parse_autoindex(const std::string &autoindex, location *location)
 }
 void conf::_parse_client_max_body_size(const std::string &client_max_body_size, location *location)
 {
-	//TODO validate format
+	char	units[] = {'k', 'M', 'G', 'T', 'P', 'E'};
+	std::string::const_iterator str_ptr = client_max_body_size.begin();
+	while (str_ptr != client_max_body_size.end() && *str_ptr >= '0' && *str_ptr <= '9')
+		str_ptr++;
 	location->client_max_body_size = std::atoi(client_max_body_size.c_str());
+	if (str_ptr != client_max_body_size.end())
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			if (*str_ptr == units[i])
+			{
+				location->client_max_body_size = location->client_max_body_size * pow(1024, i + 1);
+				break;
+			}
+		}
+	}
 }
 
 bool conf::_valid_index(const std::string &index, const Filetypes &types)

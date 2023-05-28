@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/27 16:23:16 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/28 19:42:56 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,37 +184,52 @@ void Response::file_status_custom_error(int file_status)
 
 void Response::post_content()
 {
-	struct stat file_info;
-
-	stat(_request.get_path_abs().c_str(), &file_info);
-	if (file_info.st_mode & S_IFDIR)		//TODO		File is a dir
+//	struct stat file_info;
+	std::map<std::string, std::string>::const_iterator item = _request.get_headermap().find("Transfer-Encoding");
+	if (item != _request.get_headermap().end() && item->second == "chunked")
 	{
-		return_error_message(500, "Resource is a directory.");
-		_status_code = 500;
+		return_error_message(501, "Attempted to make a POST request encoded as \"chunked\".");
+		_status_code = 501;
+		return ;
 	}
-	else
+	item = _request.get_headermap().find("Content-Length");
+	if (std::strtoul(item->second.c_str(), NULL, 10) > _request.get_location()->client_max_body_size)
 	{
-		std::string file_extension;
-		size_t last_period = _request.get_path_rel().find_last_of('.');
-		if (last_period != std::string::npos)
+		return_error_message(413);
+		_status_code = 413;
+		return ;
+	}
+//	stat(_request.get_path_abs().c_str(), &file_info);
+	std::string file_extension;
+	size_t last_period = _request.get_path_rel().find_last_of('.');
+	if (last_period != std::string::npos)
+	{
+		file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
+		std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
+		if (cgi_item != _request.get_location()->cgi_execs.end())		//*	There's a CGI.
 		{
-			file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
-			std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
-			if (cgi_item != _request.get_location()->cgi_execs.end())
-			{
-				ft::cgi real_cgi(cgi_item->second, _request.get_path_abs(), _request, _request.config);
-					//? or just call a formated error response
-				_status_code = real_cgi.get_cgi_response_status();
-				_body = real_cgi.get_cgi_response();
-				LOG_COLOR(CYAN,"get_cgi_response_status" << real_cgi.get_cgi_response_status() << " " << _status_code );
-				if (_status_code == 200 || _status_code == 302)
-					_is_cgi_response = true;
+			ft::cgi real_cgi(cgi_item->second, _request.get_path_abs(), _request, _request.config);
+				//? or just call a formated error response
+			_status_code = real_cgi.get_cgi_response_status();
+			_body = real_cgi.get_cgi_response();
+			LOG_COLOR(CYAN,"get_cgi_response_status" << real_cgi.get_cgi_response_status() << " " << _status_code );
+			if (_status_code == 200 || _status_code == 302)
+				_is_cgi_response = true;
 
+			return ;
+		}
+		else															//* No CGI found
+		{
+			std::ofstream created_file;
+			created_file.open(_request.get_path_abs());
+			if (created_file.fail())
+			{
+				return_error_message(500, "The file couldn't be created.");
+				_status_code = 500;
 				return ;
 			}
 		}
 	}
-	//*		All good
 }
 
 void Response::return_content()		//?		GET request
@@ -249,27 +264,11 @@ void Response::return_content()		//?		GET request
 			if (cgi_item != _request.get_location()->cgi_execs.end())				//*		The file IS part of the CGI list.
 			{
 				ft::cgi real_cgi(cgi_item->second, _request.get_path_abs(), _request, _request.config);				//*		Creating a cgi class.
-				//!		Can the class `cgi` fail to construct? (Wrong path controlled by exceptions or status variables...)
-					//?	No can''t fail to answer on execve behaviour or similar funcions.
-				//!		If so, does it need to be controlled here or does the `get_cgi_response()` method handle it?
-					//?	All this errors must be handleded inside cgi class and shouldn't stop the server,
-					//? but the conected client has to receive an appropiate respnse, so we need to figure out a way do this
-					//? since the server.ccp get a request.cpp, to get a response.cpp wich calls cgi.cpp,
-					//?	and we need to return this answer back to the client throught server.cpp,
-					//? maybe we need some agreed return variable to left the response on response.ccp,
-					//? or just call a formated error response
-
 				_status_code = real_cgi.get_cgi_response_status();
 				_body = real_cgi.get_cgi_response();
 				LOG_COLOR(CYAN,"get_cgi_response_status" << real_cgi.get_cgi_response_status() << " " << _status_code );
 				if (_status_code == 200 || _status_code == 302)
 					_is_cgi_response = true;
-////				_head_params["Content-Type"] = get_filetype.get("html");				//!		How do we know the file type outputted by the CGI?
-				// _head_params["Last-Modified"] = mod_date;
-				//!		Is this the last modification of the CGI file itself or the date of creation of the CGI's output?
-					//? This is one of the HTTP Header wich could be returned by cgi https://www.tutorialspoint.com/cplusplus/cpp_web_programming.htm
-					//? so I guess we can left at cgi will
-					//? by the way cgi returns this HTTP Headers with correct format, no need to do more work
 				return ;
 			}
 		}
