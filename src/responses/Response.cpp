@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/26 18:45:22 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/27 12:18:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,7 @@ std::string Response::generate_response()
 	retval.append(getMessageFromCode(_status_code));
 	retval.append("\n");
 
-	_head_params["Server"] = SERVER_NAME;
+	_head_params["Server"] = _request.config.server_name;
 	_head_params["Content-Length"] = to_string(_body.length());
 	_head_params["Date"] = get_date();
 	for (std::map<std::string, std::string>::const_iterator it = _head_params.begin(); it != _head_params.end(); it++)

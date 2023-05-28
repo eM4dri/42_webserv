@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   log.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/11 17:24:29 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/23 17:10:43 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/26 12:25:39 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,19 @@ void print_vector(std::vector<T> & vector)
 		LOG(*it);
 }
 
-
-template <typename T1, typename T2>
-void print_map(std::map<T1,T2> & map)
+template <typename T>
+static void	printPair(const T &iterator)
 {
-	for (typename std::map<T1, T2>::const_iterator it = map.begin(); it != map.end(); it++)
-		LOG(it->first << "\t" << it->second);
+	LOG(iterator->first << "\t" << iterator->second);
+}
+
+
+template <typename T_MAP>
+void print_map(T_MAP & map)
+{
+	typename T_MAP::const_iterator it = map.begin(), ite = map.end();
+	for (; it != ite; ++it)
+		 printPair(it);
 }
 
 template <typename T>

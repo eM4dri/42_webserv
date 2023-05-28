@@ -5,10 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-27 - Edu
+### Added
+- Cookie cgi demo redirected from `/welcome` on `perl`
+- Show env cgi demo redirected from `/showenv` on `commpiled cpp`
+### Changed
+- GuestBook cgi demo now supports boyd `POST` and query-string `GET`
+- Improve `cgi` env parsed, and pass bodys through write pipe son as it should be
+- Set `response` header server_name properly
+- Pass reference on `Request.get_headermap()` instead of a copy
+### Fixed
+- Fixed `utils/log` printmap
+
 ## 2023-05-25 - Edu
 ### Added
 - Some file to make a demo about cgi, post & redirect
-
 ### Changed
 - Parsed HTTPHeaders into env in `cgi`
 - Included `Response._is_cgi_response` to format body on `generate_response`
