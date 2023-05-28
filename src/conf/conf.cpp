@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/27 20:39:09 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/28 20:03:36 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <cstdlib>		// std::exit
 #include <cstring>		// std::strcpy
 #include <limits.h>		// UCHAR_MAX, USHRT_MAX
+#include <math.h>		// pow() function
 
 #define ERROR_OPENING_FILE "Error opening file"
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
@@ -202,11 +203,11 @@ void conf::_parse_client_max_body_size(const std::string &client_max_body_size, 
 	location->client_max_body_size = std::atoi(client_max_body_size.c_str());
 	if (str_ptr != client_max_body_size.end())
 	{
-		for (int i = 0; i < 6; i++)
+		for (unsigned int i = 0; i < 6; i++)
 		{
 			if (*str_ptr == units[i])
 			{
-				location->client_max_body_size = location->client_max_body_size * pow(1024, i + 1);
+				location->client_max_body_size = location->client_max_body_size * (size_t)(pow(1024, i + 1));
 				break;
 			}
 		}

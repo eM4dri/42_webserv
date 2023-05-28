@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 19:55:39 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/28 20:00:37 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,8 @@ void Response::post_content()
 				_status_code = 500;
 				return ;
 			}
+			created_file << _request.get_body();
+			created_file.close();
 		}
 	}
 }
