@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/27 12:51:35 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:15:36 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void cgi::_execute(void)
 	pid_write_body = fork();
 	pid_read_and_execve = fork();
 
-	LOG_COLOR(MAGENTA, _request.get_body());
 	if (!pid_write_body)	//	son write body
 	{
 		close(fd_read_and_execve[READ_END]);
@@ -122,7 +121,6 @@ void cgi::_execute(void)
 			std::strcpy (envp[i], _env[i].c_str());
 		}
 		envp[_env.size()] = NULL;
-		print_array_null_ending(envp);
 		close(fd_write_body[WRITE_END]);
 		dup2(fd_write_body[READ_END], STDIN_FILENO);
 		close(fd_write_body[READ_END]);

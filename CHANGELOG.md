@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-05-28 - Edu
+### Added
+- Returned `500` responses to `cgi reponse` errors, to test edit conf cgi with a wrong path for binary system executable.
+### Changed
+- Standarize cgi content on `Response`, both GET & POST share the same method to retrieve cgi into the actual Response class, in order to be able to create response by itself without booleam patches `_is_cgi_response`to alienate `generate_response`
+- Moved `Response` FAQs about handling CGI to `FAQ.md`
+### Fixed
+- `server.cpp` shouldn't close connection (close(fd)) after develivering, client should close this instead, then server can close
+
 ## 2023-05-27 - Edu
 ### Added
 - Cookie cgi demo redirected from `/welcome` on `perl`
