@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/25 19:00:54 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/05/28 12:14:32 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ class Response
 		int _status_code;
 		std::map<std::string, std::string> _head_params;
 		std::string _body;
-		bool _is_cgi_response;
 		Response();
+		void _cgi_content(const std::string &cgi_exec);
 
 	public:
 		Response(const Request &_request);
