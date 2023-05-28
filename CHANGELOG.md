@@ -10,8 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Order of the **POST** request instructions.
 - `max_client_body_size` is now parsed.
 
-### Unresolved bug
-- Segfault when doing an empty **POST** request (missing body) through `curl` (`curl -X POST localhost:8080 bye.html`)
+## 2023-05-28 - Edu
+### Added
+- Returned `500` responses to `cgi reponse` errors, to test edit conf cgi with a wrong path for binary system executable.
+### Changed
+- Standarize cgi content on `Response`, both GET & POST share the same method to retrieve cgi into the actual Response class, in order to be able to create response by itself without booleam patches `_is_cgi_response`to alienate `generate_response`
+- Moved `Response` FAQs about handling CGI to `FAQ.md`
+### Fixed
+- `server.cpp` shouldn't close connection (close(fd)) after develivering, client should close this instead, then server can close
 
 ## 2023-05-27 - Edu
 ### Added
