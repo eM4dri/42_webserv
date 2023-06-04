@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+         #
+#    By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/05/23 17:08:20 by jvacaris         ###   ########.fr        #
+#    Updated: 2023/06/04 17:53:54 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ NAMESPACE =
 # Header files
 INCLUDES_FILES =	utils/log.hpp							\
 					network/server.hpp						\
+					network/listen_sockets.hpp				\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
@@ -46,6 +47,7 @@ INCLUDES_FILES =	utils/log.hpp							\
 # Source and object files
 SRC_FILES	= 	main.cpp								\
 				network/server.cpp						\
+				network/listen_sockets.cpp				\
 				parsing/request_header_parsing.cpp		\
 				conf/conf.cpp							\
 				conf/Filetypes.cpp						\

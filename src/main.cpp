@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 16:33:40 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/04 21:37:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,14 @@ int main(int argc, char **argv)
 	{
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
 		ft::Filetypes filetypes(NULL);
-		ft::conf newconf("conf/example.conf", filetypes);
+		ft::conf newconf("conf/jvacaris.conf", filetypes);
 		newconf.print_loaded_conf();
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "serverconf"))
 	{
 		try
 		{
-			ft::Filetypes aux(NULL);
-			ft::conf newconf("conf/jvacaris.conf", aux);
-			int port = 0;
-			if (argc == 3)
-				port = std::atoi(argv[2]);
-			for(std::vector<ft::serverconf>::iterator it = newconf.servers.begin(); it != newconf.servers.end(); it++)
-			{
-				if ( port != 0 )
-					it->port = port++;
-				ft::server server(*it);
-			}
+			ft::server server("conf/jvacaris.conf");
 		}
 		catch(const std::exception& e)
 		{
@@ -82,7 +72,7 @@ int main(int argc, char **argv)
 		ft::Filetypes aux(NULL);
 		ft::conf newconf("conf/example.conf", aux);
 		// std::vector<ft::serverconf>::iterator it = newconf.server;
-		
+
 
 
 		ft::Request newrequest(ft::file_reader("test_files/get_request", &read_status), newconf.servers[0]);
