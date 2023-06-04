@@ -11,46 +11,43 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
-#include <fcntl.h>						//	fcntl
-#include <cstring>						//	std::memset
-#include <unistd.h>						//	close, sleep
+#include "responses/Response.hpp"
+// #include "actuators/cgi.hpp"
+#include <unistd.h>						//	close
 #include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
-#include "actuators/cgi.hpp"
-
-// #include <iostream>						//	std::cout, std::endl
-// #include "responses/responses.hpp"
-// #include "general.hpp"
-// #include "actuators/methods.hpp"
+#include <signal.h>						//	signal, sig_atomic_t
 
 #define BUFFER_SIZE 1024
-#define BINDING_RETRYS 10
-#define TIME_TO_RETRY 5
-#define RETRY_BIND_MSG "Retry bind ..."
-#define NOT_BINDED_MSG "socket_fd could not be binded on"
+
 #define WELCOME_MESSAGE "Hello from server\n"
 #define NEW_CONNECTION "webserver: new client connects on socket "
 #define CLIENT_HUNGUP "client hung up"
 #define CLIENT_SAYS(Client) "client " << Client << ": "
 #define SERVER_REPONSE "server response:"
-#define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << _server_fd << " is listening on " << address << ":" << port
-#define BACKLOG 256
 
 namespace ft
 {
 
 //Public
 //Constructor
-server::server(const serverconf &conf)
-	: _server_fd(-1), _listening(false), _conf(conf)
+server::server(const char* filename)
 {
-	_listening = _init_server(conf.address.c_str(), conf.port, BACKLOG);
-	if (_listening == false)
-		_stop();
+	bool status= false;
+
+	LOG("Loading MimeTypes");
+	Filetypes types(&status);	//	loading Mimetypes
+	if (!status)
+		throw std::invalid_argument("Error loading MimeTypes");
+	LOG("Loading Configuration file");
+	conf config_file(filename, types);
+	listen_sockets	listening_sockets(config_file);
+	if (listening_sockets._get_sockets().empty())
+		LOG_ERROR("There is no listening socket");
 	else
 	{
-		LOG(SEVER_LISTENING(_server_fd, conf.address, conf.port));
-		_start();
+		_add_listening_sockets_to_poll(listening_sockets);
+		_start(listening_sockets);
 	}
 }
 
@@ -60,60 +57,52 @@ server::~server()
 }
 
 //Private
-//Function to init server
-bool server::_init_server(const char *address, int port, int backlog)
+//Add listening Soxckets to poll
+void server::_add_listening_sockets_to_poll(const listen_sockets &listening_sockets)
 {
-	size_t address_sizeof = sizeof(_address);
-	std::memset(reinterpret_cast<void *>(&_address), 0, address_sizeof);
-	_address.sin_family = AF_INET;
-	_address.sin_addr.s_addr = inet_addr( address );
-	_address.sin_port = htons(port);
-	_address_len = static_cast<socklen_t>(address_sizeof);
+	std::map<int, socket_fd>::const_iterator it;
+	it = listening_sockets._get_sockets().begin();
+	for ( ; it != listening_sockets._get_sockets().end(); it++){
+		struct pollfd webServer;
+		webServer.fd = it->second.fd;
+		webServer.events = POLLIN;		// Check ready-to-read
+		_poll_fds.push_back(webServer);
+	}
+}
 
-	_server_fd = socket(PF_INET, SOCK_STREAM, 0);
 
-	short retrys = BINDING_RETRYS;
-	const struct sockaddr * ws_address =  reinterpret_cast<struct sockaddr *>(&_address);
-	while ( -1 == bind(_server_fd, ws_address, _address_len) && retrys-- ){
-		LOG(RETRY_BIND_MSG);
-		sleep(TIME_TO_RETRY);
-	}
-	if (retrys == 0){
-		close(_server_fd);
-		LOG_ERROR( _server_fd << NOT_BINDED_MSG << address << ":" << port);
-		return false;
-	}
-	if ( -1 == listen(_server_fd, backlog) ){
-		LOG_ERROR( "listen");
-		return false;
-	}
-	return true;
+bool stopServer = false;
+
+void signal_handler(int param)
+{
+	(void)param;
+	LOG( "SIGINT suthing down server" );
+	stopServer = true;
 }
 
 //Function to start server
-void server::_start()
+void server::_start(const listen_sockets &listening_sockets)
 {
-	struct pollfd webServer;
-	webServer.fd = _server_fd;
-	webServer.events = POLLIN;	 // Check ready-to-read
-	_poll_fds.push_back(webServer);
-	fcntl(webServer.fd, F_SETFL, O_NONBLOCK);
-	while (true)
+	signal(SIGINT, signal_handler);
+	while (!stopServer)
 	{
 		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) )
 		{
 			LOG_ERROR("poll");
-			std::exit(1);	//! I think we should not exit, just log some error
+			// std::exit(1);	//! I think we should not exit, just log some error
 		}
-		for(std::vector<struct pollfd>::iterator it = _poll_fds.begin(); it != _poll_fds.end(); it++)
+		std::vector<struct pollfd>::iterator it = _poll_fds.begin();
+		for( ; it != _poll_fds.end(); it++)
 		{
 			// Check if someone's ready to read
 			if (it->revents & POLLIN)   // We got one!!
 			{
-				if (it == _poll_fds.begin())  // If listener is ready to read, handle new connection
-					_accepter();
+				std::map<int, socket_fd>::const_iterator found;
+				found = listening_sockets._get_sockets().find(it->fd);
+				if (found != listening_sockets._get_sockets().end())  // If listener is ready to read, handle new connection
+					_accepter(found->second);
 				else	// If not the listener, we're just a regular client
-					_handler(it);
+					_handler(it, listening_sockets);
 				break;
 			}	 // END got ready-to-read from poll()
 		}	// END looping through file descriptors
@@ -125,21 +114,22 @@ void server::_stop(void)
 {
 	if (_poll_fds.size() > 0)
 	{
-		for(std::vector<struct pollfd>::iterator it = _poll_fds.begin(); it != _poll_fds.end(); it++)
+		std::vector<struct pollfd>::iterator it = _poll_fds.begin();
+		for( ; it != _poll_fds.end(); it++)
 			close(it->fd);
 		_poll_fds.clear();
 	}
-	if ( _listening == true )
-	{
-		close(_server_fd);
-		_listening = false;
-	}
+	if (!_client_server_conections.empty())
+		_client_server_conections.clear();
+	LOG("Server stopped properly");
 }
 
 //Functions to handle connections
-void server::_accepter()
+void server::_accepter(const socket_fd& listen_socket)
 {
-	int client_fd = accept(_server_fd, reinterpret_cast<struct sockaddr *>(&_address), &_address_len);
+	struct sockaddr_in	_address = listen_socket.address;
+	socklen_t	_address_len = listen_socket.address_len;
+	int client_fd = accept(listen_socket.fd, reinterpret_cast<struct sockaddr *>(&_address), &_address_len);
 	if (client_fd == -1)
 	{
 		LOG_ERROR("accept");
@@ -149,10 +139,11 @@ void server::_accepter()
 	client.fd = client_fd;
 	client.events = POLLIN;  // Check ready-to-read
 	_poll_fds.push_back(client);
+	_client_server_conections[client_fd] = listen_socket.fd;
 	LOG( NEW_CONNECTION << client.fd); //TODO -> molaría printear la IP si las funciones nos dejan
 }
 
-void server::_handler(std::vector<struct pollfd>::iterator it)
+void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets)
 {
 	char 	buffer[BUFFER_SIZE];
 	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof buffer, 0);
@@ -167,6 +158,7 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		// TODO Should we not close conection inmediatly, after he closes?
 		//?	I think we can close as soon as the response has properly ended following http
 		close(it->fd); // Bye!
+		_client_server_conections.erase(it->fd);
 		_poll_fds.erase(it);
 	}
 	else	// message from client
@@ -174,10 +166,13 @@ void server::_handler(std::vector<struct pollfd>::iterator it)
 		buffer[nbytes] = '\0';
 		LOG(CLIENT_SAYS(it->fd));
 		LOG_COLOR(RED, buffer );
-		Request request(buffer, _conf);
+		int fd = _client_server_conections.find(it->fd)->second;
+		const serverconf &server_config = *_listening_sockets._get_sockets().find(fd)->second.server_config;
+		Request request(buffer, server_config);
 		_responder(it->fd, request);
 		// _echo(it->fd, buffer, nbytes);
 		// close(it->fd);
+		_poll_fds.erase(it);
 	}
 }
 
@@ -234,15 +229,6 @@ void server::_responder(int client_fd, const Request & request)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
-}
-
-void server::_echo(int fd, char const *str, size_t nbytes)
-{
-	for(std::vector<struct pollfd>::iterator it = _poll_fds.begin(); it != _poll_fds.end(); ++it)
-	{
-		if (it->fd != fd && it->fd != _server_fd)
-			send(it->fd, str, nbytes, 0);
-	}
 }
 
 }	// Nammespace ft
