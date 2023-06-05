@@ -253,7 +253,7 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 			key.request = request.get_fullrequest();
 			cached_value  cache;
 			cache.response = response;
-			cache.expired = std::time(nullptr) + CACHED_TIME;
+			cache.expired = std::time(NULL) + CACHED_TIME;
 			_cached_responses[key] = cache;
 		}
 	}
@@ -279,7 +279,7 @@ void server::_expire_cached_responses()
 {
 	std::map<cached_key, cached_value>::iterator it = _cached_responses.begin();
 	for ( ; it != _cached_responses.end(); it++){
-		if (it->second.expired < std::time(nullptr))
+		if (it->second.expired < std::time(NULL))
 		{
 			_cached_responses.erase(it->first);
 			break;
