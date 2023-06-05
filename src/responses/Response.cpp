@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/05 18:07:26 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 18:52:26 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,7 @@ void Response::return_content()		//?		GET request
 
 void Response::_cgi_content(const std::string &cgi_exec){
 	ft::cgi real_cgi(cgi_exec, _request.get_path_abs(), _request, _request.config);				//*		Creating a cgi class.
+	_cgi_responses = true;
 	_status_code = real_cgi.get_cgi_response_status();
 	if (_status_code == 200 || _status_code == 302)
 	{
@@ -388,7 +389,17 @@ std::string Response::generate_response()
 	}
 	retval.append("\n");
 	retval.append(_body);
+	retval.append("\n");
 	return (retval);
+}
+
+const bool &Response::get_cgi_responses() const
+{
+	return _cgi_responses;
+}
+const int &Response::get_status_code() const
+{
+	return _status_code;
 }
 
 }	// Nammespace ft

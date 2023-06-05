@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/26 12:38:16 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:28:31 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,11 @@ const std::string &Request::get_body() const
 const location *Request::get_location() const
 {
 	return (_location);
+}
+
+const bool &Request::get_keep_connection_alive() const
+{
+	return (_keep_connection_alive);
 }
 
 }	// Nammespace ft

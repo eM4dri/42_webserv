@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:14:01 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/26 12:38:27 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/05 12:57:33 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Request
 		void header_parser(const serverconf &config);
 		bool check_request_validity(std::string fullheader, const serverconf &config);
 		bool check_first_line_validity(std::string firstline, const serverconf &config);
+		bool check_header_validity(std::vector <std::string> line_vector, std::map<std::string, std::string> &header_map);
 
 	//*	Getters
 		const std::string &get_fullrequest() const;
@@ -60,6 +61,7 @@ class Request
 		const std::map<std::string, std::string> &get_headermap() const;
 		const std::string &get_body() const;
 		const location *get_location() const;
+		const bool &get_keep_connection_alive() const;
 
 		void set_redirect_path();
 		const serverconf &config;
@@ -70,6 +72,7 @@ class Request
 		std::map <std::string, std::string> _header_map;
 		std::string _body;
 		const location	*_location;
+		bool _keep_connection_alive;
 };
 
 }// Nammespace ft

@@ -17,6 +17,7 @@
 #include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
 #include <signal.h>						//	signal, sig_atomic_t
+#include <ctime>						//	std::time
 
 #define BUFFER_SIZE 1024
 
@@ -25,6 +26,7 @@
 #define CLIENT_HUNGUP "client hung up"
 #define CLIENT_SAYS(Client) "client " << Client << ": "
 #define SERVER_REPONSE "server response:"
+#define CACHED_TIME 60
 
 namespace ft
 {
@@ -106,13 +108,14 @@ void server::_start(const listen_sockets &listening_sockets)
 				break;
 			}	 // END got ready-to-read from poll()
 		}	// END looping through file descriptors
+		_expire_cached_responses();
 	}
 }
 
 //Function to stop server
 void server::_stop(void)
 {
-	if (_poll_fds.size() > 0)
+	if (!_poll_fds.empty())
 	{
 		std::vector<struct pollfd>::iterator it = _poll_fds.begin();
 		for( ; it != _poll_fds.end(); it++)
@@ -121,6 +124,8 @@ void server::_stop(void)
 	}
 	if (!_client_server_conections.empty())
 		_client_server_conections.clear();
+	if (!_cached_responses.empty())
+		_cached_responses.clear();
 	LOG("Server stopped properly");
 }
 
@@ -164,15 +169,27 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 	else	// message from client
 	{
 		buffer[nbytes] = '\0';
-		LOG(CLIENT_SAYS(it->fd));
-		LOG_COLOR(RED, buffer );
-		int fd = _client_server_conections.find(it->fd)->second;
-		const serverconf &server_config = *_listening_sockets._get_sockets().find(fd)->second.server_config;
+		int listen_fd = _client_server_conections.find(it->fd)->second;
+		const serverconf &server_config = *_listening_sockets._get_sockets().find(listen_fd)->second.server_config;
 		Request request(buffer, server_config);
-		_responder(it->fd, request);
-		// _echo(it->fd, buffer, nbytes);
-		// close(it->fd);
-		_poll_fds.erase(it);
+		cached_key key;
+		key.fd = listen_fd;
+		key.request = buffer;
+		std::map<cached_key, cached_value>::iterator found = _cached_responses.find(key);
+		if (request.get_method() == GET && found != _cached_responses.end())
+			send(it->fd, reinterpret_cast<const void *>(found->second.response.c_str()), found->second.response.length(), 0);
+		else
+		{
+			LOG(CLIENT_SAYS(it->fd));
+			LOG_COLOR(RED, buffer);
+			_responder(it->fd, request, listen_fd);
+		}
+		if (!request.get_keep_connection_alive())
+		{
+			close(it->fd);
+			_client_server_conections.erase(it->fd);
+			_poll_fds.erase(it);
+		}
 	}
 }
 
@@ -212,8 +229,7 @@ const std::string _mock_cgi_response( const std::string & cgi_exec, const std::s
 	response.append(aux.get_cgi_response());
 	return response;
 }
-
-void server::_responder(int client_fd, const Request & request)
+void server::_responder(int client_fd, const Request & request, int listen_fd)
 {
 	Response the_response(request);
 	std::string response = the_response.generate_response();
@@ -228,7 +244,47 @@ void server::_responder(int client_fd, const Request & request)
 	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
+	if (request.get_method() == GET)
+	{
+		if (!the_response.get_cgi_responses())
+		{
+			cached_key key;
+			key.fd = listen_fd;
+			key.request = request.get_fullrequest();
+			cached_value  cache;
+			cache.response = response;
+			cache.expired = std::time(nullptr) + CACHED_TIME;
+			_cached_responses[key] = cache;
+		}
+	}
+	else if (!_cached_responses.empty() && (the_response.get_status_code() - 200) > 100 )
+	{
+		size_t count = 0;
+		while (count == _cached_responses.size())
+		{
+			count = _cached_responses.size();
+			std::map<cached_key, cached_value>::iterator it = _cached_responses.begin();
+			for ( ; it != _cached_responses.end(); it++){
+				if (it->first.fd == listen_fd){
+					_cached_responses.erase(it->first);
+					break;
+				}
+			}
+		}
+	}
 	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
+}
+
+void server::_expire_cached_responses()
+{
+	std::map<cached_key, cached_value>::iterator it = _cached_responses.begin();
+	for ( ; it != _cached_responses.end(); it++){
+		if (it->second.expired < std::time(nullptr))
+		{
+			_cached_responses.erase(it->first);
+			break;
+		}
+	}
 }
 
 }	// Nammespace ft
