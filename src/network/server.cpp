@@ -146,7 +146,7 @@ void server::_accepter(const socket_fd& listen_socket)
 void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets)
 {
 	char 	buffer[BUFFER_SIZE];
-	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof buffer, 0);
+	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof(buffer), 0);
 	if ( nbytes < 0 )   // got error
 	{
 		LOG_ERROR("recv");

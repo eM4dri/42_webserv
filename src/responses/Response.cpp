@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 20:08:13 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 18:07:26 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ Response::Response(const Request &_request): _request(_request)
 			return_content();
 		else if (_request.get_method() == POST)
 			post_content();
+		else if (_request.get_method() == DELETE)
+			delete_content();
+		else
+		{
+			return_error_message(400);
+			_head_params["Content-Type"] = "text/html";
+		}
 
 	}
 	generate_response();
@@ -188,6 +195,47 @@ void Response::file_status_custom_error(int file_status)
 	else
 		_status_code = 501;				//?	"Not implemented" error
 	return_error_message(_status_code);
+}
+
+void Response::delete_content()		//?		DELETE request
+{
+	std::fstream the_file;
+
+	the_file.open(_request.get_path_abs().c_str());
+	if (the_file.fail())
+	{
+		if (errno == EISDIR)		//?		File is a directory
+		{
+			return_error_message(403);
+			_status_code = 403;
+		}
+		else if (errno == ENOENT)	//?		File not found
+		{
+			return_error_message(404);
+			_status_code = 404;
+		}
+		else if (errno == EACCES)	//?		Permission denied
+		{
+			return_error_message(500, "Permission to the file was denied.");
+			_status_code = 500;
+		}
+		return ;
+	}
+	else
+	{
+		the_file.close();
+		if (std::remove(_request.get_path_abs().c_str()))
+		{
+			return_error_message(500);	//?		Error whie deleting
+			_status_code = 500;
+		}
+		else
+		{
+			return_error_message(200);	//?		All good
+			_status_code = 200;
+		}
+		return ;
+	}
 }
 
 void Response::post_content()

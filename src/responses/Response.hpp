@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 12:14:32 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/01 20:19:07 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Response
 		Response(const Request &_request);
 		void return_content();
 		void post_content();
+		void delete_content();
 		std::string generate_response();
 		void file_status_custom_error(int file_status);
 		void return_error_message(int error_code);
