@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/25 11:56:48 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/04 21:39:32 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <cstdlib>		// std::exit
 #include <cstring>		// std::strcpy
 #include <limits.h>		// UCHAR_MAX, USHRT_MAX
+#include <math.h>		// pow() function
 
 #define ERROR_OPENING_FILE "Error opening file"
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
@@ -195,8 +196,22 @@ void conf::_parse_autoindex(const std::string &autoindex, location *location)
 }
 void conf::_parse_client_max_body_size(const std::string &client_max_body_size, location *location)
 {
-	//TODO validate format
+	char	units[] = {'k', 'M', 'G', 'T', 'P', 'E'};
+	std::string::const_iterator str_ptr = client_max_body_size.begin();
+	while (str_ptr != client_max_body_size.end() && *str_ptr >= '0' && *str_ptr <= '9')
+		str_ptr++;
 	location->client_max_body_size = std::atoi(client_max_body_size.c_str());
+	if (str_ptr != client_max_body_size.end())
+	{
+		for (unsigned int i = 0; i < 6; i++)
+		{
+			if (*str_ptr == units[i])
+			{
+				location->client_max_body_size = location->client_max_body_size * (size_t)(pow(1024, i + 1));
+				break;
+			}
+		}
+	}
 }
 
 bool conf::_valid_index(const std::string &index, const Filetypes &types)
@@ -501,12 +516,13 @@ void conf::_load_configuration(const Filetypes & types)
 void conf::print_loaded_conf()
 {
 	LOG(this->servers.size() << " server configurations loaded");
-	for (std::vector<serverconf>::iterator it= this->servers.begin(); it!= this->servers.end(); ++it){
+	std::vector<serverconf>::iterator it= this->servers.begin();
+	for ( ; it!= this->servers.end(); ++it){
 		LOG("Listen\t"<<it->address <<":"<< it->port );
 		LOG("Default_Root\t"<<it->default_root);
 		LOG("Server_name\t"<<it->server_name);
-
-		for (std::map<std::string, location>::iterator it2=it->locations.begin(); it2!=it->locations.end(); ++it2){
+		std::map<std::string, location>::iterator it2=it->locations.begin();
+		for ( ; it2!=it->locations.end(); ++it2){
 			LOG("\tLocation " << it2->first);
 			LOG("\t\tpath\t " << it2->second.request_path);
 			LOG("\t\tautoindex\t " << it2->second.autoindex);
@@ -516,7 +532,8 @@ void conf::print_loaded_conf()
 			LOG("\t\tredirect\t " << it2->second.redirect.first <<  ", " << it2->second.redirect.second);
 			LOG("\t\tfile_root\t " << it2->second.file_root);
 			LOG("\t\tupload_store\t " << it2->second.upload_store);
-			for (std::map<std::string, std::string>::iterator it3 = it2->second.cgi_execs.begin(); it3!=it2->second.cgi_execs.end(); ++it3)
+			std::map<std::string, std::string>::iterator it3 = it2->second.cgi_execs.begin();
+			for ( ; it3!=it2->second.cgi_execs.end(); ++it3)
 				LOG("\t\tcgi\t " << it3->first << "\t"<< it3->second);
 		}
 	}

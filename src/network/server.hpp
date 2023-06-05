@@ -12,12 +12,13 @@
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
-# include <arpa/inet.h>		// sockaddr_in, socklen_t
-# include <poll.h>			// pollfd
-# include <vector>			// std::vector
+# include <poll.h>				// pollfd
+# include <vector>				// std::vector
+# include <map>					// std::map
 # include "conf/conf.hpp"
 # include "requests/Request.hpp"
-# include "responses/Response.hpp"
+# include "network/listen_sockets.hpp"
+
 namespace ft
 {
 
@@ -36,7 +37,7 @@ namespace ft
 class server{
 	public:
 		//Constructor
-		server(const serverconf &conf);
+		server(const char* filename);
 		~server();
 
 	private:
@@ -44,27 +45,22 @@ class server{
 		server( const server & copy );	// not necesary
 		server & operator=( const server & assign );	// not necesary
 
-		int								_server_fd;
-		struct sockaddr_in				_address;
-		socklen_t						_address_len;
 		std::vector<struct pollfd>		_poll_fds;
-		bool							_listening;
-		const serverconf				&_conf;
+		std::map<int,int>				_client_server_conections;
 
-		//Function to init server
-		bool _init_server(const char *address, int port, int backlog);
+		//Add listening Soxckets to poll
+		void _add_listening_sockets_to_poll(const listen_sockets &_listening_sockets);
 
 		//Function to start server
-		void _start();
+		void _start(const listen_sockets &_listening_sockets);
 
 		//Function to stop server
 		void _stop();
 
 		//Functions to handle connections
-		void _accepter();
-		void _handler(std::vector<struct pollfd>::iterator it);
+		void _accepter(const socket_fd& listen_socket);
+		void _handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets);
 		void _responder(int client_fd, const Request & request);
-		void _echo(int fd, char const *str, size_t nbytes);
 };
 
 

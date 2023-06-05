@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-06-04 - Edu
+### Added
+- `server` is now able to handle multiple listening ports.
+- new class `listen_sockets` to handle logic of server binding & listening sockets, it seems the need for rebinding is fixed with `setsockopt`
+### Changed
+- Changed server constructor to accepts just the configuration filename to open, and during constructor load Mimetypes, conf and listen_sockets prior to start server
+- Changed some `for` iterarors for readability, just getting out as a new variable the iterator before using for.
+
+## 2023-05-28 - Jorge
+### Changed
+- Order of the **POST** request instructions.
+- `max_client_body_size` is now parsed.
+
 ## 2023-05-28 - Edu
 ### Added
 - Returned `500` responses to `cgi reponse` errors, to test edit conf cgi with a wrong path for binary system executable.

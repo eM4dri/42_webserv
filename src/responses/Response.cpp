@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 12:59:46 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/05/28 20:08:13 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,30 +192,46 @@ void Response::file_status_custom_error(int file_status)
 
 void Response::post_content()
 {
-	struct stat file_info;
-
-	stat(_request.get_path_abs().c_str(), &file_info);
-	if (file_info.st_mode & S_IFDIR)		//TODO		File is a dir
+//	struct stat file_info;
+	std::map<std::string, std::string>::const_iterator item = _request.get_headermap().find("Transfer-Encoding");
+	if (item != _request.get_headermap().end() && item->second == "chunked")
 	{
-		return_error_message(500, "Resource is a directory.");
-		_status_code = 500;
+		return_error_message(501, "Attempted to make a POST request encoded as \"chunked\".");
+		_status_code = 501;
+		return ;
 	}
-	else
+	item = _request.get_headermap().find("Content-Length");
+	if (std::strtoul(item->second.c_str(), NULL, 10) > _request.get_location()->client_max_body_size)
 	{
-		std::string file_extension;
-		size_t last_period = _request.get_path_rel().find_last_of('.');
-		if (last_period != std::string::npos)
+		return_error_message(413);
+		_status_code = 413;
+		return ;
+	}
+//	stat(_request.get_path_abs().c_str(), &file_info);
+	std::string file_extension;
+	size_t last_period = _request.get_path_rel().find_last_of('.');
+	if (last_period != std::string::npos)
+	{
+		file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
+		std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
+		if (cgi_item != _request.get_location()->cgi_execs.end())		//*	There's a CGI.
 		{
-			file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
-			std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
-			if (cgi_item != _request.get_location()->cgi_execs.end())
+			_cgi_content(cgi_item->second);
+		}
+		else															//* No CGI found
+		{
+			std::ofstream created_file;
+			created_file.open(_request.get_path_abs().c_str());
+			if (created_file.fail())
 			{
-				_cgi_content(cgi_item->second);
+				return_error_message(500, "The file couldn't be created.");
+				_status_code = 500;
 				return ;
 			}
+			created_file << _request.get_body();
+			created_file.close();
 		}
 	}
-	//*		All good
 }
 
 void Response::return_content()		//?		GET request
