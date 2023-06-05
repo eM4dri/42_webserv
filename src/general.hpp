@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/24 16:33:31 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/03 17:29:23 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <cstdio>			// std::remove
 #include <cstring>			// std::strcmp
 #include <iomanip>			// std::setprecision
 #include "utils/log.hpp"

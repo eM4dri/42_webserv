@@ -155,7 +155,7 @@ void server::_accepter()
 void server::_handler(std::vector<struct pollfd>::iterator it)
 {
 	char 	buffer[BUFFER_SIZE];
-	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof buffer, 0);
+	size_t nbytes = recv(it->fd, reinterpret_cast<void *>(buffer), sizeof(buffer), 0);
 	if ( nbytes < 0 )   // got error
 	{
 		LOG_ERROR("recv");
