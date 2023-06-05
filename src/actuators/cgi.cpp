@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/28 12:15:36 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/05 17:24:43 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,6 @@ void cgi::_execute(void)
 		_cgi_response = ss.str();
 		if (_cgi_response_status != 500)
 			_cgi_response_status = (_cgi_response.find("Location") != std::string::npos) ? 302 : 200;
-		LOG_COLOR(YELLOW, "_cgi_response_status " << _cgi_response_status);
 	}
 }
 

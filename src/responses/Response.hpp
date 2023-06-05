@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:32 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/01 20:19:07 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 18:51:57 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class Response
 		std::string _body;
 		Response();
 		void _cgi_content(const std::string &cgi_exec);
+		bool _cgi_responses;
 
 	public:
 		Response(const Request &_request);
@@ -46,6 +47,8 @@ class Response
 		void return_error_message(int error_code);
 		void return_error_message(int error_code, std::string custom_reason);
 		std::string create_directory_index();
+		const bool &get_cgi_responses() const;
+		const int &get_status_code() const;
 };
 
 }// Nammespace ft
