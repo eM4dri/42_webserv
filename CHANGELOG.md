@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Implemented **DELETE** requests.
 
+## 2023-06-04 - Edu
+### Added
+- `server` is now able to handle multiple listening ports.
+- new class `listen_sockets` to handle logic of server binding & listening sockets, it seems the need for rebinding is fixed with `setsockopt`
+### Changed
+- Changed server constructor to accepts just the configuration filename to open, and during constructor load Mimetypes, conf and listen_sockets prior to start server
+- Changed some `for` iterarors for readability, just getting out as a new variable the iterator before using for.
+
 ## 2023-05-28 - Jorge
 ### Changed
 - Order of the **POST** request instructions.
