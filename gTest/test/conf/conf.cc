@@ -128,15 +128,15 @@ protected:
 		serverconf = new ft::serverconf(NULL);
 		location = new ft::location();
 		conf->_set_location_defaults(location);
-		location->request_path = "pathA";
+		location->request_path = "/pathA";
 		conf->_parse_redirect("301 /pathB", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
 		conf->_set_location_defaults(location);
-		location->request_path = "pathB";
+		location->request_path = "/pathB";
 		conf->_parse_redirect("301 /pathC", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
 		conf->_set_location_defaults(location);
-		location->request_path = "pathC";
+		location->request_path = "/pathC";
 		conf->_parse_redirect("301 /pathA", location, *serverconf);
 		serverconf->locations.insert(std::make_pair(location->request_path, *location));
 	}
@@ -152,10 +152,10 @@ protected:
 };
 
 TEST_F(ParseRedirectFixtureTests, CheckIfRedirectCantLoop) {
-    EXPECT_EQ(serverconf->locations["pathA"].redirect.second, "pathB" );
-    EXPECT_EQ(serverconf->locations["pathB"].redirect.second, "pathC" );
-    EXPECT_NE(serverconf->locations["pathC"].redirect.second, "pathA" );
-    EXPECT_EQ(serverconf->locations["pathC"].redirect.second, "" );
+    EXPECT_EQ(serverconf->locations["/pathA"].redirect.second, "/pathB" );
+    EXPECT_EQ(serverconf->locations["/pathB"].redirect.second, "/pathC" );
+    EXPECT_NE(serverconf->locations["/pathC"].redirect.second, "/pathA" );
+    EXPECT_EQ(serverconf->locations["/pathC"].redirect.second, "" );
 }
 
 struct sample_methods

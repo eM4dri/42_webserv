@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/25 18:59:59 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/06 15:49:52 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define LOCATION_HPP
 # include <string>		// std::string
 # include <map>			// std::map
-# define DEFAULT_PATH ""
+# define DEFAULT_PATH "/"
 # define DEFAULT_UPLOAD_STORE ""
 # define DEFAULT_FILE_ROOT ""
 # define DEFAULT_REDIRECT std::pair<unsigned short,std::string>(0, "")

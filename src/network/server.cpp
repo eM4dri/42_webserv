@@ -78,7 +78,7 @@ bool stopServer = false;
 void signal_handler(int param)
 {
 	(void)param;
-	LOG( "SIGINT suthing down server" );
+	LOG( "\nSIGINT shuting down server" );
 	stopServer = true;
 }
 
@@ -88,9 +88,10 @@ void server::_start(const listen_sockets &listening_sockets)
 	signal(SIGINT, signal_handler);
 	while (!stopServer)
 	{
-		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) )
+		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) && !stopServer)
 		{
-			LOG_ERROR("poll");
+			LOG_ERROR("poll shuting down server");
+			break;
 			// std::exit(1);	//! I think we should not exit, just log some error
 		}
 		std::vector<struct pollfd>::iterator it = _poll_fds.begin();
