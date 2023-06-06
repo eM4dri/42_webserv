@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   request_header_parsing.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/28 19:46:49 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 14:01:35 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 ?	This function will check whether the header (excluding the request line) is valid or not.
 ?	It also fills the std::map containing all of the header parameters.
 */
-bool check_header_validity(std::vector <std::string> line_vector, std::map<std::string, std::string> &header_map)
+bool Request::check_header_validity(std::vector <std::string> line_vector, std::map<std::string, std::string> &header_map)
 {
 	std::vector <std::string> pair;
 	std::string body;
@@ -163,6 +163,8 @@ bool check_header_validity(std::vector <std::string> line_vector, std::map<std::
 		if (body[0] == ' ')
 			body.erase(0, 1);
 		header_map[pair[0]] = body;
+		if( pair[0]== "Connection" && body.find("keep-alive") != std::string::npos )
+			_keep_connection_alive = true;
 	}
 	return (true);
 }

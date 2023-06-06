@@ -18,12 +18,11 @@
 # include "conf/conf.hpp"
 # include "requests/Request.hpp"
 # include "network/listen_sockets.hpp"
+# include "network/cached_response.hpp"
 
 namespace ft
 {
 
-// class serverconf;
-// class Request;
 
 /**
  * @param _server_fd	(int)
@@ -45,8 +44,9 @@ class server{
 		server( const server & copy );	// not necesary
 		server & operator=( const server & assign );	// not necesary
 
-		std::vector<struct pollfd>		_poll_fds;
-		std::map<int,int>				_client_server_conections;
+		std::vector<struct pollfd>							_poll_fds;
+		std::map<int,int>									_client_server_conections;
+		std::map<cached_key, cached_value, cache_cmp>	_cached_responses;
 
 		//Add listening Soxckets to poll
 		void _add_listening_sockets_to_poll(const listen_sockets &_listening_sockets);
@@ -60,7 +60,8 @@ class server{
 		//Functions to handle connections
 		void _accepter(const socket_fd& listen_socket);
 		void _handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets);
-		void _responder(int client_fd, const Request & request);
+		void _responder(int client_fd, const Request & request, int listen_fd);
+		void _expire_cached_responses();
 };
 
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 20:37:22 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:32:37 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ class serverconf{
 
 		//Copy constructor
 		serverconf(const ft::serverconf & tocopy);
-
 };
 
 }//Namespace ft

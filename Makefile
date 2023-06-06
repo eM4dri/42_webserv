@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/06/04 17:53:54 by emadriga         ###   ########.fr        #
+#    Updated: 2023/06/05 18:27:00 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ NAMESPACE =
 INCLUDES_FILES =	utils/log.hpp							\
 					network/server.hpp						\
 					network/listen_sockets.hpp				\
+					network/cached_response.hpp				\
 					conf/conf.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\

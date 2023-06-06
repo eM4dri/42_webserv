@@ -27,3 +27,4 @@
 	> Add Url on every card with redirects to the same path with ?id=id
 	> Filter Guestbook for id when query string comes with it
 	> Add a buton delete on this detail version to redirect a deletecomment.py -> get inspiration from newcomment.py
+- [ ] Review parse locations

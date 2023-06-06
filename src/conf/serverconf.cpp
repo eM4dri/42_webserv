@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   serverconf.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 20:28:53 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/05/25 19:00:05 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:31:55 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "serverconf.hpp"
+
 
 namespace ft
 {
@@ -33,5 +34,6 @@ serverconf::serverconf(const serverconf & tocopy):	address(tocopy.address),
 													server_name(tocopy.server_name)
 {
 }
+
 
 }	// Nammespace ft
