@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## 2023-06-06 - Edu
+### Changed
+- Changed some log errors and same port server multibinding evaluation subject
+
 ## 2023-06-05 - Edu
 ### Added
 - Added `cached_responses` to caches GET responses in order to avoid proccessing static responses again & again.

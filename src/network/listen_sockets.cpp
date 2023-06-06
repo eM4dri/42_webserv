@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 10:02:39 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/04 21:11:04 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/06 15:52:54 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@
 #include <unistd.h>						//	close, sleep
 #include "utils/log.hpp"
 
-#define BINDING_RETRYS 10
-#define TIME_TO_RETRY 5
-#define RETRY_BIND_MSG "Retry bind ..."
-#define NOT_BINDED_MSG "socket_fd could not be binded on"
+#define NOT_BINDED_MSG " socket_fd could not be binded on "
 #define SEVER_LISTENING(serverfd, address, port) "webserver: new server with socket_fd " << serverfd << " is listening on " << address << ":" << port
 #define BACKLOG 256
 
@@ -42,6 +39,7 @@ listen_sockets::~listen_sockets()
 
 void listen_sockets::_listen_socket(const serverconf &conf)
 {
+	bool error = false;
 	const char *address_c_str = conf.address.c_str();
 	int yes = 1;	//	for setsockopt() SO_REUSEADDR, below
 	socket_fd s;
@@ -58,21 +56,25 @@ void listen_sockets::_listen_socket(const serverconf &conf)
 	setsockopt(s.fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 	fcntl(s.fd, F_SETFL, O_NONBLOCK);
 
-	short retrys = BINDING_RETRYS;
 	const struct sockaddr * ws_address = reinterpret_cast<struct sockaddr *>(&s.address);
-	while ( -1 == bind(s.fd, ws_address, s.address_len) && retrys-- ){
-		LOG(RETRY_BIND_MSG);
-		sleep(TIME_TO_RETRY);
-	}
-	if (retrys == 0){
-		close(s.fd);
+	if ( -1 == bind(s.fd, ws_address, s.address_len) ){
+		error = true;
 		LOG_ERROR( s.fd << NOT_BINDED_MSG << address_c_str << ":" << conf.port);
 	}
 	if ( -1 == listen(s.fd, BACKLOG) ){
+		error = true;
 		LOG_ERROR( "listen");
 	}
-	LOG(SEVER_LISTENING(s.fd, address_c_str, conf.port));
-	_sockets[s.fd] = s;
+	if (error)
+	{
+		if ( 0 != close(s.fd))
+			LOG_ERROR("closing listening socket");
+	}
+	if (!error)
+	{
+		LOG(SEVER_LISTENING(s.fd, address_c_str, conf.port));
+		_sockets[s.fd] = s;
+	}
 }
 
 const std::map<int, socket_fd> &listen_sockets::_get_sockets() const

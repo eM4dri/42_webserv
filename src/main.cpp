@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:45 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/04 21:37:35 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:05:46 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 		LOG(std::endl << " *\t Test Load *.conf \t* ");
 		ft::Filetypes filetypes(NULL);
 		ft::conf newconf("conf/jvacaris.conf", filetypes);
-		newconf.print_loaded_conf();
+		newconf.print_loaded_conf(newconf.servers);
 	}
 	if (argc > 1 && !std::strcmp(argv[1], "serverconf"))
 	{
