@@ -88,7 +88,7 @@ void server::_start(const listen_sockets &listening_sockets)
 	signal(SIGINT, signal_handler);
 	while (!stopServer)
 	{
-		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) &&  !stopServer)
+		if ( -1 == poll(reinterpret_cast<pollfd *>(&_poll_fds[0]), static_cast<nfds_t>(_poll_fds.size()), -1) && !stopServer)
 		{
 			LOG_ERROR("poll shuting down server");
 			break;
