@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2023-06-06 - Edu
 ### Changed
-- Changed some log errors and same port server multibinding evaluation subject
+- Changed some log errors and same port server multi-binding evaluation subject
 ### Fixed
 - Fixed some parsing problems on paths and roots
 
