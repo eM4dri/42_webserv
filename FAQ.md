@@ -1,3 +1,9 @@
+- ¿s_path purpose?
+	?	absolute ->
+	?	relative ->
+	?	unparsed -> raw http header 1st line location?
+	?	vec_relative -> temporary tool to handle redirections?
+
 - ¿Delete remove directories?
 	> (pmira-pe) No, It doesn't, just files
 - Chunks
