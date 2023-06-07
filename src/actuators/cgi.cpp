@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/05 17:24:43 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/07 10:57:49 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void cgi::_execute(void)
 		dup2(fd_write_body[WRITE_END], STDOUT_FILENO);
 		write(fd_write_body[WRITE_END], _request.get_body().c_str(), _request.get_body().length());
 		close(fd_write_body[WRITE_END]);
+		exit(0);
 	}
 	if (!pid_read_and_execve)	//	son execve
 	{
@@ -143,6 +144,7 @@ void cgi::_execute(void)
 		std::memset(buff, 0, USHRT_MAX);
 		read(fd_read_and_execve[READ_END], buff, USHRT_MAX);
 		close(fd_read_and_execve[READ_END]);
+		waitpid(pid_write_body, &status, 0);
 		waitpid(pid_read_and_execve, &status, 0);
 		if (WIFEXITED(status))
 		{
