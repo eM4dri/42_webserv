@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-06-07 - Jorge
 ### Fixed
 - Case where `curl -X POST localhost:8080/boom_box/hi.txt` segfaulted, both with and without a body.
+- Large payloads controlled.
 
 ## 2023-06-07 - Edu
 ### Added

@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/07 18:45:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/07 20:12:19 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,9 +188,6 @@ void Response::file_status_custom_error(int file_status)
 		{
 			_status_code = 501;
 		}
-
-
-
 	}
 	else
 		_status_code = 501;				//?	"Not implemented" error
