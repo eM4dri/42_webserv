@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   conf.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/05 17:40:18 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:04:31 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,31 @@ conf::conf( const char* filename, const Filetypes & types )
 	_validate_processed_conf();
 	_load_configuration(types);
 	// print_loaded_conf();
+	std::vector<serverconf>::iterator it= this->_tmp_servers.begin();
+	for ( ; it!=_tmp_servers.end(); it++){
+		serverconf server(*it);
+		server.default_root = correct_path(server.default_root);
+		server.locations.clear();
+		std::map<std::string, location>::iterator it2= it->locations.begin();
+		for ( ; it2!=it->locations.end(); it2++){
+			location location;
+			// location._file_root = correct_path(it2->second._file_root);
+			location.request_path = correct_path(it2->second.request_path);
+			location.file_root = it2->second.file_root;
+			location.methods = it2->second.methods;
+			location.autoindex = it2->second.autoindex;
+			location.client_max_body_size = it2->second.client_max_body_size;
+			location.index = it2->second.index;
+			location.upload_store = it2->second.upload_store;
+			location.redirect = it2->second.redirect;
+			location.cgi_execs = it2->second.cgi_execs;
+			server.locations.insert(std::make_pair(location.request_path, location));
+		}
+		// print_serverconf(*it);
+		// print_serverconf(server);
+		servers.push_back(server);
+	}
+	_tmp_servers.clear();
 
 }
 
@@ -85,13 +110,13 @@ conf::~conf()
 {
 	if (_conf.size())
 		_conf.clear();
-	if (servers.size())
+	if (_tmp_servers.size())
 	{
-		for (std::vector<serverconf>::iterator it = servers.begin(); it != servers.end(); it++) {
+		for (std::vector<serverconf>::iterator it = _tmp_servers.begin(); it != _tmp_servers.end(); it++) {
 			if (it->locations.size())
 				it->locations.clear();
 		}
-		servers.clear();
+		_tmp_servers.clear();
 	}
 	// delete pimpl_;
 }
@@ -134,7 +159,7 @@ void conf::_parse_file_root(const std::string &file_root, location *location)
 	if (!_valid_path(file_root))
 		// throw std::invalid_argument(THROW_WRONG_PATH + file_root);
 		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, file_root));
-	location->file_root = std::string(&file_root[1]); // ltrim(str,'/')
+	location->file_root = std::string(file_root); // ltrim(str,'/')
 }
 
 void conf::_parse_upload_store(const std::string &upload_store, location *location)
@@ -142,7 +167,7 @@ void conf::_parse_upload_store(const std::string &upload_store, location *locati
 	if (!_valid_path(upload_store))
 		// throw std::invalid_argument(THROW_WRONG_PATH + upload_store);
 		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, upload_store));
-	location->upload_store = std::string(&upload_store[1]); // ltrim(str,'/')
+	location->upload_store = std::string(upload_store); // ltrim(str,'/')
 }
 
 void conf::_parse_request_path(const std::string &request_path, location *location)
@@ -150,7 +175,7 @@ void conf::_parse_request_path(const std::string &request_path, location *locati
 	if (!_valid_path(request_path))
 		// throw std::invalid_argument(THROW_WRONG_LOCATION + request_path);
 		LOG_ERROR_CONF(WRONG_LOCATION << COLOR(RED, request_path));
-	location->request_path = std::string(&request_path[1]); // ltrim(str,'/')
+	location->request_path = std::string(request_path); // ltrim(str,'/')
 }
 
 void conf::_parse_cgi(const std::string &cgi, location *location)
@@ -293,7 +318,7 @@ void conf::_parse_redirect(const std::string &redirect, location *location_, con
 			// throw std::invalid_argument(THROW_WRONG_REDIRECTION);
 			LOG_ERROR_CONF(WRONG_REDIRECTION << 3 << COLOR(RED, redirect));
 	}
-	std::string copy(&url[1]); // ltrim(str,'/')
+	std::string copy(url); // ltrim(str,'/')
 	std::map<std::string, location>::const_iterator it = server.locations.find(copy);
 	while (1)	//	Avoding circular references a > b, b > c & c > a -> c > ''
 	{
@@ -478,9 +503,14 @@ void conf::push_back_server(serverconf &server)
 	// Iterate thorugh locations to set file_root not setted previously
 	for (std::map<std::string, location>::iterator it = server.locations.begin(); it != server.locations.end(); it++ ){
 		if (it->second.file_root.empty())
-			it->second.file_root = server.default_root + it->first;
+		{
+			if (server.default_root != "/")
+				it->second.file_root += server.default_root;
+			if (it->first != "/" || it->second.file_root.empty())
+				it->second.file_root += it->first;
+		}
 	}
-	this->servers.push_back(server);
+	this->_tmp_servers.push_back(server);
 }
 
 void conf::_load_configuration(const Filetypes & types)
@@ -513,29 +543,34 @@ void conf::_load_configuration(const Filetypes & types)
 	}
 }
 
-void conf::print_loaded_conf()
+void conf::print_serverconf( const serverconf& serverconf ) const
 {
-	LOG(this->servers.size() << " server configurations loaded");
-	std::vector<serverconf>::iterator it= this->servers.begin();
-	for ( ; it!= this->servers.end(); ++it){
-		LOG("Listen\t"<<it->address <<":"<< it->port );
-		LOG("Default_Root\t"<<it->default_root);
-		LOG("Server_name\t"<<it->server_name);
-		std::map<std::string, location>::iterator it2=it->locations.begin();
-		for ( ; it2!=it->locations.end(); ++it2){
-			LOG("\tLocation " << it2->first);
-			LOG("\t\tpath\t " << it2->second.request_path);
-			LOG("\t\tautoindex\t " << it2->second.autoindex);
-			LOG("\t\tclient_max_body_size\t " << it2->second.client_max_body_size);
-			LOG("\t\tindex\t " << it2->second.index);
-			LOG("\t\tmethods\t " << it2->second.methods);
-			LOG("\t\tredirect\t " << it2->second.redirect.first <<  ", " << it2->second.redirect.second);
-			LOG("\t\tfile_root\t " << it2->second.file_root);
-			LOG("\t\tupload_store\t " << it2->second.upload_store);
-			std::map<std::string, std::string>::iterator it3 = it2->second.cgi_execs.begin();
-			for ( ; it3!=it2->second.cgi_execs.end(); ++it3)
-				LOG("\t\tcgi\t " << it3->first << "\t"<< it3->second);
-		}
+	LOG("Listen\t"<<serverconf.address <<":"<< serverconf.port );
+	LOG("Default_Root\t"<<serverconf.default_root);
+	LOG("Server_name\t"<<serverconf.server_name);
+	std::map<std::string, location>::const_iterator it = serverconf.locations.begin();
+	for ( ; it!=serverconf.locations.end(); ++it){
+		LOG("\tLocation " << it->first);
+		LOG("\t\tpath\t " << it->second.request_path);
+		LOG("\t\tautoindex\t " << it->second.autoindex);
+		LOG("\t\tclient_max_body_size\t " << it->second.client_max_body_size);
+		LOG("\t\tindex\t " << it->second.index);
+		LOG("\t\tmethods\t " << it->second.methods);
+		LOG("\t\tredirect\t " << it->second.redirect.first <<  ", " << it->second.redirect.second);
+		LOG("\t\tfile_root\t " << it->second.file_root);
+		LOG("\t\tupload_store\t " << it->second.upload_store);
+		std::map<std::string, std::string>::const_iterator it3 = it->second.cgi_execs.begin();
+		for ( ; it3!=it->second.cgi_execs.end(); ++it3)
+			LOG("\t\tcgi\t " << it3->first << "\t"<< it3->second);
+	}
+}
+
+void conf::print_loaded_conf(const std::vector<serverconf> & servers) const
+{
+	LOG(servers.size() << " server configurations loaded");
+	std::vector<serverconf>::const_iterator it= servers.begin();
+	for ( ; it!= servers.end(); ++it){
+		print_serverconf(*it);
 	}
 }
 
@@ -582,7 +617,7 @@ void conf::_validate_processed_conf()
 		second_back = (it->second.length() == 0) ? '\0' : it->second[it->second.length() - 1];
 		if (it->first != "}" && second_back != '{' && second_back != ';')
 			// Every directive ends with semicolon or cruly braces (simple/block directive)
-			// throw std::invalid_argument(INVALID_FILE_END);
+			// throw std::invalid_argument(THROW_INVALID_FILE_END);
 			LOG_ERROR_CONF(INVALID_FILE_END << COLOR(RED,it->first << " " << it->second));
 		else
 		{
@@ -592,13 +627,13 @@ void conf::_validate_processed_conf()
 				curly_braces_count++;
 			if (valid_conf_keys.find(it->first) == valid_conf_keys.end() )
 				// Unkown key directive
-				// throw std::invalid_argument(INVALID_UNKOWN_DIRECTIVE);
+				// throw std::invalid_argument(THROW_INVALID_UNKOWN_DIRECTIVE);
 				LOG_ERROR_CONF(INVALID_UNKOWN_DIRECTIVE << COLOR(RED,it->first));
 		}
 	}
 	if (curly_braces_count != 0)
 		// Curly braces must have start & end
-		// throw std::invalid_argument(INVALID_FILE_BRACES);
+		// throw std::invalid_argument(THROW_INVALID_FILE_BRACES);
 		LOG_ERROR_CONF(INVALID_FILE_BRACES);
 }
 

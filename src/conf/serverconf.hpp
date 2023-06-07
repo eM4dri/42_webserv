@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 17:15:18 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/05 19:32:37 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:31:16 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class serverconf{
 		~serverconf();
 
 		//Copy constructor
-		serverconf(const ft::serverconf & tocopy);
+		serverconf(const serverconf & tocopy);
 };
 
 }//Namespace ft

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/05/24 18:21:00 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:14:00 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ class conf{
 
 		//Getters
 		std::vector<serverconf>				servers;
-		void print_loaded_conf();
+		void print_loaded_conf(const std::vector<serverconf> & servers) const;
+		void print_serverconf( const serverconf& serverconf ) const;
 
 	private:
+		std::vector<serverconf>				_tmp_servers;
 		conf( const conf& copy );
 		conf & operator=( const conf& assign );
 
