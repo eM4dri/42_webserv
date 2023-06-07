@@ -11,13 +11,12 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
-#include "responses/Response.hpp"
-// #include "actuators/cgi.hpp"
 #include <unistd.h>						//	close
 #include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
 #include <signal.h>						//	signal, sig_atomic_t
 #include <ctime>						//	std::time
+#include <cstring>						//	std::time
 
 #define BUFFER_SIZE 1024
 
@@ -27,6 +26,10 @@
 #define CLIENT_SAYS(Client) "client " << Client << ": "
 #define SERVER_REPONSE "server response:"
 #define CACHED_TIME 60
+#define HTTP_HEADER_HOST "Host:"
+#define HTTP_HEADER_HOST_SIZE 5
+#define ISSPACE_CHARACTERS " \t\n\v\f\r"
+#define HTTP_HEADER_HOST_END_HOST_NAME ":\r\n"
 
 namespace ft
 {
@@ -171,8 +174,8 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 	{
 		buffer[nbytes] = '\0';
 		int listen_fd = _client_server_conections.find(it->fd)->second;
-		const serverconf &server_config = *_listening_sockets._get_sockets().find(listen_fd)->second.server_config;
-		Request request(buffer, server_config);
+		const serverconf *hosted_server_configuration = _get_hosted_server_configuration(listen_fd, buffer, _listening_sockets);
+		Request request(buffer, *hosted_server_configuration);
 		cached_key key;
 		key.fd = listen_fd;
 		key.request = buffer;
@@ -194,9 +197,30 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 	}
 }
 
-const std::string _mock_html_response(const char *filename,  const Request & request, const std::string &content_type)
+const serverconf *server::_get_hosted_server_configuration(int listen_fd, char *buffer, const listen_sockets &_listening_sockets)
 {
-	(void)request;
+	char * buffer_host = std::strstr(buffer, HTTP_HEADER_HOST);
+	std::string host;
+	if (buffer_host != NULL)
+	{
+		host = buffer_host;
+		host.erase(0, HTTP_HEADER_HOST_SIZE);
+		host.erase(0, host.find_first_not_of(ISSPACE_CHARACTERS));
+		host.erase(host.find_first_of(HTTP_HEADER_HOST_END_HOST_NAME));
+	}
+	std::map< int, socket_fd>::const_iterator listening_socket = _listening_sockets._get_sockets().find(listen_fd);
+	std::map< std::string,const serverconf	*>::const_iterator server_host;
+	if (listening_socket != _listening_sockets._get_sockets().end())
+	{
+		server_host = listening_socket->second.hosted_server_config.find(host);
+		if (server_host == listening_socket->second.hosted_server_config.end())
+			server_host = listening_socket->second.hosted_server_config.begin();
+	}
+	return server_host->second;
+}
+
+const std::string _mock_html_response(const char *filename, const std::string &content_type)
+{
 	std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
 							+ content_type
 							+ "\r\n\r\n";
@@ -234,8 +258,8 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 {
 	Response the_response(request);
 	std::string response = the_response.generate_response();
-	// std::string response = _mock_html_response("test_files/post/php-example.html", request, "text/html");
-	// std::string response = _mock_html_response("test_files/post/newmessage.html", request, "text/html");
+	// std::string response = _mock_html_response("test_files/post/php-example.html", "text/html");
+	// std::string response = _mock_html_response("test_files/post/newmessage.html", "text/html");
 	// std::string response = _mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
 	// std::string response = _mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);
 	// std::string response = _mock_cgi_response("cgi/bin/print_ls_la.sh", "",request, _conf);
@@ -245,6 +269,12 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
+	_cache_response(request,listen_fd, the_response, response);
+	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
+}
+
+void server::_cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response)
+{
 	if (request.get_method() == GET)
 	{
 		if (!the_response.get_cgi_responses())
@@ -273,7 +303,6 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 			}
 		}
 	}
-	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
 }
 
 void server::_expire_cached_responses()
