@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/05 18:52:26 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:45:37 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,11 +249,14 @@ void Response::post_content()
 		return ;
 	}
 	item = _request.get_headermap().find("Content-Length");
-	if (std::strtoul(item->second.c_str(), NULL, 10) > _request.get_location()->client_max_body_size)
+	if (item != _request.get_headermap().end())
 	{
-		return_error_message(413);
-		_status_code = 413;
-		return ;
+		if (std::strtoul(item->second.c_str(), NULL, 10) > _request.get_location()->client_max_body_size)
+		{
+			return_error_message(413);
+			_status_code = 413;
+			return ;
+		}
 	}
 //	stat(_request.get_path_abs().c_str(), &file_info);
 	std::string file_extension;
@@ -263,9 +266,7 @@ void Response::post_content()
 		file_extension = _request.get_path_rel().substr(last_period + 1, _request.get_path_rel().size());
 		std::map<std::string, std::string>::const_iterator cgi_item = _request.get_location()->cgi_execs.find(file_extension);
 		if (cgi_item != _request.get_location()->cgi_execs.end())		//*	There's a CGI.
-		{
 			_cgi_content(cgi_item->second);
-		}
 		else															//* No CGI found
 		{
 			std::ofstream created_file;
@@ -276,6 +277,8 @@ void Response::post_content()
 				_status_code = 500;
 				return ;
 			}
+			else
+				_status_code = 200;
 			created_file << _request.get_body();
 			created_file.close();
 		}
