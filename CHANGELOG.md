@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Case where `curl -X POST localhost:8080/boom_box/hi.txt` segfaulted, both with and without a body.
 
 ## 2023-06-07 - Edu
+### Added
+- server now accepts several host names on the same ip
+
 ### Fixed
 - Fixed `cgi` wasn't exitings write body's son
 
