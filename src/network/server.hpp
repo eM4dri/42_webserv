@@ -17,6 +17,7 @@
 # include <map>					// std::map
 # include "conf/conf.hpp"
 # include "requests/Request.hpp"
+# include "responses/Response.hpp"
 # include "network/listen_sockets.hpp"
 # include "network/cached_response.hpp"
 
@@ -62,6 +63,8 @@ class server{
 		void _handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets);
 		void _responder(int client_fd, const Request & request, int listen_fd);
 		void _expire_cached_responses();
+		const serverconf *_get_hosted_server_configuration(int listen_fd, char *buffer, const listen_sockets &_listening_sockets);
+		void _cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response);
 };
 
 
