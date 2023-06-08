@@ -297,10 +297,10 @@ void server::_cache_response(const Request & request, const int &listen_fd, cons
 			_cached_responses[key] = cache;
 		}
 	}
-	else if (!_cached_responses.empty() && (the_response.get_status_code() - 200) > 100 )
+	else if (!_cached_responses.empty() && (the_response.get_status_code() - 200) < 100 )
 	{
 		size_t count = 0;
-		while (count == _cached_responses.size())
+		while (count != _cached_responses.size())
 		{
 			count = _cached_responses.size();
 			std::map<cached_key, cached_value>::iterator it = _cached_responses.begin();
