@@ -6,7 +6,7 @@
 /*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/07 18:45:37 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:03:38 by jvacaris         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,9 +188,6 @@ void Response::file_status_custom_error(int file_status)
 		{
 			_status_code = 501;
 		}
-
-
-
 	}
 	else
 		_status_code = 501;				//?	"Not implemented" error
@@ -245,6 +242,13 @@ void Response::post_content()
 	if (item != _request.get_headermap().end() && item->second == "chunked")
 	{
 		return_error_message(501, "Attempted to make a POST request encoded as \"chunked\".");
+		_status_code = 501;
+		return ;
+	}
+	item = _request.get_headermap().find("Content-Type");
+	if (item != _request.get_headermap().end() && item->second.find("multipart") != std::string::npos)
+	{
+		return_error_message(501, "Attempted to make a POST request as \"multipart\".");
 		_status_code = 501;
 		return ;
 	}

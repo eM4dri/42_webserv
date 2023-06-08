@@ -22,7 +22,7 @@ std::string Response::create_directory_index()
 	directoryitem = readdir(directorylist);
 	directoryitem = readdir(directorylist);
 	retval.append("<html>\n");
-	retval.append("<head><title>Webserv</title></head>\n");
+	retval.append("<head><title>Webserv</title><meta charset=\"UTF-8\"></head>\n");
 	retval.append("<body>\n");
 	retval.append("\t<h1>Index of /");
 	retval.append(_request.get_path_rel());
@@ -64,8 +64,6 @@ std::string Response::create_directory_index()
 				retval.append("❌ THIS SHOULD NOT BE PRINTED ❌");
 			retval.append("</td><td>");
 			retval.append("<a href=\"./");
-			retval.append(SERVER_ROOT);		//!		Delete when we are able to make GET
-			retval.append("/");				//! 	requests directly from a browser
 			retval.append(directoryitem->d_name);
 			retval.append("\">");
 			retval.append(directoryitem->d_name);
