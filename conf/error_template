@@ -1,8 +1,0 @@
-<html>
-	<head><title>{PAGE_TITLE}</title></head>
-	<body>
-		<h1><center>{H1_TITLE}</center></h1>
-		<hr>
-		<p><center>Webserv</center></p>
-	</body>
-</html>

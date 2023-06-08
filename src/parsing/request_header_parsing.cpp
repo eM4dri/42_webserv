@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/05 14:01:35 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:51:23 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,43 +31,12 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 {
 	std::vector <std::string> params = cpp_split(firstline, ' ');
 
-	if (params.size() < 3)
+	if (params.size() != 3)
 	{
-		// std::cerr << "Error: Too few arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
-		// std::cerr << TXT_COLOR_GREEN;
-		// for (unsigned long i = 0; i < params.size(); i++)
-		// {													//? Uncomment if necessary for testing
-		// 	std::cerr << params[i] << " ";
-		// }
-		// std::cerr << TXT_COLOR_YELLOW << ">>>" << TXT_RESET << std::endl;
-		return (false);
-	}
-	else if (params.size() > 3)
-	{
-		// std::cerr << "Error: Too many arguments (expected 3, got " << params.size() << ")." << std::endl << std::endl;
-		// for (unsigned long i = 0; i < params.size(); i++)
-		// {													//? Uncomment if necessary for testing
-		// 	if (i == 3)
-		// 		std::cerr << TXT_BOLD_RED;
-		// 	else if (!i)
-		// 		std::cerr << TXT_COLOR_GREEN;
-		// 	std::cerr << params[i] << " ";
-		// }
-		// std::cerr << TXT_RESET << std::endl;
 		return (false);
 	}
 	if (params[0] != "GET" && params[0] != "POST" && params[0] != "DELETE")
 	{
-		// std::cerr << "Error: Unrecognized method \"" << params[0] << "\"." << std::endl << std::endl;
-		// for (unsigned long i = 0; i < params.size(); i++)
-		// {													//? Uncomment if necessary for testing
-		// 	if (i == 0)
-		// 		std::cerr << TXT_BOLD_RED;
-		// 	else if (i)
-		// 		std::cerr << TXT_RESET;
-		// 	std::cerr << params[i] << " ";
-		// }
-		// std::cerr << std::endl;
 		return (false);
 	}
 	else
@@ -81,16 +50,6 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 	}
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
-		// std::cerr << "Error: HTTP version different to HTTP1.1" << std::endl << std::endl;
-		// for (unsigned long i = 0; i < params.size(); i++)
-		// {													//? Uncomment if necessary for testing
-		// 	if (i == 2)
-		// 		std::cerr << TXT_BOLD_RED;
-		// 	else
-		// 		std::cerr << TXT_RESET;
-		// 	std::cerr << params[i] << " ";
-		// }
-		// std::cerr << TXT_RESET << std::endl;
 		_method = -2;
 		return (false);
 	}
@@ -200,7 +159,6 @@ void Request::header_parser(const serverconf &config)
 		_body = _fullrequest.substr(head_body_separation + 4, std::string::npos);
 	else
 		_body = "";
-	// std::cout << ">>>" << _body << "<<<" << std::endl;
 }
 
 }	// Nammespace ft

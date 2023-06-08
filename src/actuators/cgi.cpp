@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:16:12 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/07 10:57:49 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 15:03:56 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,11 @@ void cgi::_add_header_to_env(const std::string &env_var, const std::string & hea
 	std::map<std::string, std::string>::const_iterator found  = _request.get_headermap().find(header);
 	if (found != _request.get_headermap().end())
 	 	_env.push_back(env_var + "=" + found->second);
-	// else
-	// _env.push_back(env_var);
 }
 
 void cgi::_populate_env(  )
 {
-	print_map(_request.get_headermap());
+	// print_map(_request.get_headermap());
 	_env.push_back("GATEWAY_INTERFACE=CGI/1.1");
 	_env.push_back("SERVER_PROTOCOL=HTTP/1.1");
 	_env.push_back("SERVER_SOFTWARE=42WebServer/1.0");
@@ -63,8 +61,6 @@ void cgi::_populate_env(  )
 	_env.push_back("REQUEST_METHOD=" + _request.get_method_txt());
 	_env.push_back("SERVER_NAME=" + _conf.server_name);
 	_env.push_back("SERVER_PORT=" + to_string(_conf.port) );
-	// _env.push_back("PATH_INFO");
-	// _env.push_back("PATH_TRANSLATED");
 	if (_cgi_script.length())
 	{
 		_env.push_back("SCRIPT_FILENAME=" + _cgi_script);

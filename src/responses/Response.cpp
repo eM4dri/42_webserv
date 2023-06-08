@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/08 13:03:38 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:57:10 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include <errno.h>	//	error codes
-#include "utils/log.hpp"
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
 #define NEWLINE_DELIMITER1 "\r\n"
 #define NEWLINE_DELIMITER2 "\n"
@@ -64,7 +63,6 @@ Response::Response(const Request &_request): _request(_request)
 
 	}
 	generate_response();
-	// std::cout << std::endl << generate_response() << std::endl;	//! Delete when testing ends.
 }
 
 void Response::return_error_message(int error_code)
@@ -389,10 +387,10 @@ std::string Response::generate_response()
 	_head_params["Date"] = get_date();
 	for (std::map<std::string, std::string>::const_iterator it = _head_params.begin(); it != _head_params.end(); it++)
 	{
-			retval.append(it->first);
-			retval.append(": ");
-			retval.append(it->second);
-			retval.append("\n");
+		retval.append(it->first);
+		retval.append(": ");
+		retval.append(it->second);
+		retval.append("\n");
 	}
 	retval.append("\n");
 	retval.append(_body);
