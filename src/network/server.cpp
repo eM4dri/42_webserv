@@ -19,7 +19,7 @@
 #include <cstring>			//	std::time
 #include <stdexcept>		//	std::invalid_argument
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 1045504
 
 #define WELCOME_MESSAGE "Hello from server\n"
 #define NEW_CONNECTION "webserver: new client connects on socket "
@@ -153,6 +153,45 @@ void server::_accepter(const socket_fd& listen_socket)
 	LOG( NEW_CONNECTION << client.fd); //TODO -> molaría printear la IP si las funciones nos dejan
 }
 
+static std::string mocked_error_message()
+{
+	std::string retval;
+	std::string the_body;
+	std::string error_reason = "413";
+	error_reason.append(" ");
+	error_reason.append(getMessageFromCode(413));
+
+
+	the_body.append("<html>\r\n");
+	the_body.append("\t<head><title>");
+	the_body.append(error_reason);
+	the_body.append("</title></head>\r\n");
+	the_body.append("\t<body>\r\n");
+	the_body.append("\t\t<h1><center>");
+	the_body.append(error_reason);
+	the_body.append("</center></h1>\r\n");
+	the_body.append("\t\t<hr>\r\n");
+	the_body.append("\t\t<p><center>Webserv</center></p>\r\n");
+	the_body.append("\t</body>\r\n");
+	the_body.append("</html>");
+
+
+
+	retval.append("HTTP/1.1 413 Payload Too Large\r\n");
+	retval.append("Content-Length: ");
+	retval.append(to_string(the_body.length()));
+	retval.append("\r\n");
+	retval.append("Date: ");
+	retval.append(get_date());
+	retval.append("\r\n");
+	retval.append("Server: webserv\r\n");
+	retval.append("\r\n");
+	retval.append(the_body);
+
+
+	return (retval);
+}
+
 void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets)
 {
 	char 	buffer[BUFFER_SIZE];
@@ -162,7 +201,17 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 		LOG_ERROR("recv");
 		std::exit(1);	//! I think we should not exit, just log some error
 	}
-	if ( nbytes == 0 )  // connection closed by client
+	if (nbytes > BUFFER_SIZE - 1)
+	{
+		std::string toolarge = mocked_error_message();
+
+		send(it->fd, reinterpret_cast<const void *>(toolarge.c_str()), toolarge.length(), 0);
+		close(it->fd);
+		_client_server_conections.erase(it->fd);
+		_poll_fds.erase(it);
+
+	}
+	else if ( nbytes == 0 )  // connection closed by client
 	{
 		LOG( CLIENT_SAYS(it->fd) << CLIENT_HUNGUP );
 		// TODO Should we not close conection inmediatly, after he closes?
@@ -181,7 +230,7 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 		key.fd = listen_fd;
 		key.request = buffer;
 		std::map<cached_key, cached_value>::iterator found = _cached_responses.find(key);
-		if (request.get_method() == GET && found != _cached_responses.end())
+		if (CACHED_TIME > 0 && request.get_method() == GET && found != _cached_responses.end())
 			send(it->fd, reinterpret_cast<const void *>(found->second.response.c_str()), found->second.response.length(), 0);
 		else
 		{
@@ -233,6 +282,8 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 
 void server::_cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response)
 {
+	if (CACHED_TIME < 1)
+		return ;
 	if (request.get_method() == GET)
 	{
 		if (!the_response.get_cgi_responses())

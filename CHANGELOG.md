@@ -8,10 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-06-08 - Edu
 ### Changed
 - Prepare some files for evaluation, removing comments, main for demo...
+## 2023-06-08 - Jorge
+### Fixed
+- Large POST bug fix.
+- Autoindex emoji rendering bug.
 
 ## 2023-06-07 - Jorge
 ### Fixed
 - Case where `curl -X POST localhost:8080/boom_box/hi.txt` segfaulted, both with and without a body.
+- Large payloads controlled.
 
 ## 2023-06-07 - Edu
 ### Added
