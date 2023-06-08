@@ -18,7 +18,7 @@
 #include <ctime>						//	std::time
 #include <cstring>						//	std::time
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 1045504
 
 #define WELCOME_MESSAGE "Hello from server\n"
 #define NEW_CONNECTION "webserver: new client connects on socket "
