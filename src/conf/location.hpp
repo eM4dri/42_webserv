@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/08 11:59:12 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:15:25 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 namespace ft
 {
 enum e_accepted_methods
-{ GET = 0x1, POST = 0x2, DELETE = 0x4 };
+{ GET = 0x1, POST = 0x2, DELETE = 0x4, UNKNOWN = 0x8 };
 
 /**
  * @param methods	(unsigned short) usage (methods & GET/POST/DELETE)

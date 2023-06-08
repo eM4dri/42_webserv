@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/06 20:31:03 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/08 14:51:23 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 16:16:39 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,16 @@ bool	Request::check_first_line_validity(std::string firstline, const serverconf 
 	{
 		return (false);
 	}
-	if (params[0] != "GET" && params[0] != "POST" && params[0] != "DELETE")
-	{
-		return (false);
-	}
 	else
 	{
 		if (params[0] == "GET")
 			_method = GET;
-		if (params[0] == "POST")
+		else if (params[0] == "POST")
 			_method = POST;
-		if (params[0] == "DELETE")
+		else if (params[0] == "DELETE")
 			_method = DELETE;
+		else
+			_method = UNKNOWN;
 	}
 	if (params[2] != "HTTP1.1" && params[2] != "HTTP/1.1")
 	{
