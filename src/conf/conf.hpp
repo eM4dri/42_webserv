@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:27 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/06 16:14:00 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 12:51:50 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define CONF_HPP
 # include <string>		// std::string
 # include <vector>		// std::vector
-# include <set>			// std::set
+# include <fstream>		// std::ifstream
+# include <utility>		// std::pair, std::make_pair
 # include "serverconf.hpp"
 
 namespace ft
@@ -75,7 +76,7 @@ class conf{
 		conf() {};  // Default constructor for unit test
 		bool _valid_path(const std::string &path);
 		bool _valid_redirect_url(const std::string &url);
-		bool _valid_redirect(const std::string &redirect);
+		// bool _valid_redirect(const std::string &redirect);
 		void _parse_redirect(const std::string &redirect, location *location, const serverconf &server);
 		void _parse_methods(const std::string &methods, location *location);
 		void _set_location_defaults(location *location);

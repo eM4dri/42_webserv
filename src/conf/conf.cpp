@@ -6,25 +6,21 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/06 17:04:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:31:53 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "conf.hpp"
 #include "../utils/log.hpp"
-#include <string>		// std::string, std::getline
-#include <vector>		// std::vector
 #include <set>			// std::set
-#include <fstream>		// std::ifstream
 #include <sstream>		// std::stringstream
-#include <iostream>		// std::out, std::endl
 #include <locale>		// std::locale, std::isspace
-#include <cstdlib>		// std::exit
-#include <cstring>		// std::strcpy
 #include <limits.h>		// UCHAR_MAX, USHRT_MAX
-#include <math.h>		// pow() function
+#include <cstring>		// std::strchr
+#include <cmath>		// std::pow()
+#include <stdexcept>	// std::invalid_argument
 
-#define ERROR_OPENING_FILE "Error opening file"
+#define ERROR_OPENING_FILE "error opening file "
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
 #define NUMBER_CHARACTERS "0123456789"
 
@@ -40,10 +36,11 @@
 #define WRONG_REDIRECTION "wrong redirection "
 #define WRONG_INDEX "wrong index "
 
-#define THROW_INVALID_FILE_END "Invalid configuration file, not allowed ending directory"
-#define THROW_INVALID_FILE_BRACES "Invalid configuration file, curly braces not closed"
-#define THROW_INVALID_UNKOWN_DIRECTIVE "Invalid configuration file, unknown key directive"
-#define THROW_INVALID_LISTEN "Invalid configuration file, only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT)"
+#define THROW_ERROR_OPENING_FILE "Invalid configuration file, error opening file "
+#define THROW_INVALID_FILE_END "Invalid configuration file, not allowed ending directory "
+#define THROW_INVALID_FILE_BRACES "Invalid configuration file, curly braces not closed "
+#define THROW_INVALID_UNKOWN_DIRECTIVE "Invalid configuration file, unknown key directive "
+#define THROW_INVALID_LISTEN "Invalid configuration file, only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT "
 #define THROW_WRONG_LOCATION "Invalid configuration file, wrong location "
 #define THROW_WRONG_METHOD "Invalid configuration file, wrong method "
 #define THROW_WRONG_PATH "Invalid configuration file, wrong path "
@@ -67,10 +64,8 @@ conf::conf( const char* filename, const Filetypes & types )
 	ifs.open (filename, std::ifstream::in);
 
 	if (ifs.is_open() == false)
-	{
-		LOG_ERROR(ERROR_OPENING_FILE);
-		std::exit(1);
-	}
+		throw std::invalid_argument(THROW_ERROR_OPENING_FILE + std::string(filename));
+		// LOG_ERROR_CONF(ERROR_OPENING_FILE << COLOR(RED, filename));
 
 	_process_conf_file(ifs);
 	// _print_processed_conf();
@@ -232,7 +227,7 @@ void conf::_parse_client_max_body_size(const std::string &client_max_body_size, 
 		{
 			if (*str_ptr == units[i])
 			{
-				location->client_max_body_size = location->client_max_body_size * (size_t)(pow(1024, i + 1));
+				location->client_max_body_size = location->client_max_body_size * (size_t)(std::pow(1024, i + 1));
 				break;
 			}
 		}
@@ -450,7 +445,7 @@ void conf::_parse_default_root(const std::string &default_root, serverconf *serv
 void conf::_parse_server_name(const std::string &server_name, serverconf *server)
 {
 	for (size_t i = 0; i != server_name.size() ; i++ ){
-		if ( !std::isalpha(server_name[i]) )
+		if ( !std::isalpha(server_name[i]) && !std::strchr(".", server_name[i])  )
 			throw std::invalid_argument(THROW_WRONG_SERVER_NAME + server_name);
 			// LOG_ERROR_CONF(WRONG_SERVER_NAME << COLOR(RED, server_name));
 	}

@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 14:24:37 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/06 15:49:52 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 11:59:12 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LOCATION_HPP
 # include <string>		// std::string
 # include <map>			// std::map
+# include <utility>		// std::pair, std::make_pair
 # define DEFAULT_PATH "/"
 # define DEFAULT_UPLOAD_STORE ""
 # define DEFAULT_FILE_ROOT ""
