@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 09:51:52 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/04 21:10:22 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/07 17:00:44 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 namespace ft
 {
 struct socket_fd{
-	int						fd;
-	struct sockaddr_in		address;
-	socklen_t				address_len;
-	const serverconf		*server_config;
+	int											fd;
+	struct sockaddr_in							address;
+	socklen_t									address_len;
+	std::map< std::string,const serverconf	*>	hosted_server_config;
 };
 
 class listen_sockets{
@@ -41,6 +41,7 @@ class listen_sockets{
 
 		//Function bind & listen a socket for a port in server directive of conf file
 		void _listen_socket(const serverconf &conf);
+		bool _ip_already_used(const serverconf &conf);
 };
 
 }//Namespace ft
