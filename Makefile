@@ -6,7 +6,7 @@
 #    By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/22 10:53:31 by emadriga          #+#    #+#              #
-#    Updated: 2023/06/05 18:27:00 by emadriga         ###   ########.fr        #
+#    Updated: 2023/06/08 12:57:19 by emadriga         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,6 @@ INCLUDES_FILES =	utils/log.hpp							\
 					conf/serverconf.hpp						\
 					conf/location.hpp						\
 					conf/Filetypes.hpp						\
-					actuators/methods.hpp					\
 					actuators/cgi.hpp						\
 					requests/Request.hpp					\
 					responses/Response.hpp					\

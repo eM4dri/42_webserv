@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "server.hpp"
-#include <unistd.h>						//	close
-#include <cstdlib>						//	std::exit
 #include "utils/log.hpp"
-#include <signal.h>						//	signal, sig_atomic_t
-#include <ctime>						//	std::time
-#include <cstring>						//	std::time
+#include <unistd.h>			//	close
+#include <cstdlib>			//	std::exit
+#include <signal.h>			//	signal, sig_atomic_t
+#include <ctime>			//	std::time
+#include <cstring>			//	std::time
+#include <stdexcept>		//	std::invalid_argument
 
 #define BUFFER_SIZE 1024
 
@@ -219,54 +220,11 @@ const serverconf *server::_get_hosted_server_configuration(int listen_fd, char *
 	return server_host->second;
 }
 
-const std::string _mock_html_response(const char *filename, const std::string &content_type)
-{
-	std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
-							+ content_type
-							+ "\r\n\r\n";
-	std::ifstream ifs;
-	ifs.open (filename, std::ifstream::in);
-
-	if (ifs.is_open() == false)
-	{
-		LOG_ERROR("ERROR_OPENING_FILE");
-		std::exit(1);
-	}
-	std::string contents;
-	ifs.seekg(0, std::ios::end);
-	contents.resize(ifs.tellg());
-	ifs.seekg(0, std::ios::beg);
-	ifs.read(&contents[0], contents.size());
-	ifs.close();
-	response.append(contents);
-	return response;
-}
-
-const std::string _mock_cgi_response( const std::string & cgi_exec, const std::string & cgi_script, const Request & request , const serverconf & conf
-									// , const std::string &content_type
-)
-{
-	std::string response = "HTTP/1.1 200 OK\r\n";
-	// std::string response = "HTTP/1.1 200 OK\r\nContent-Type: "
-	// 					+ content_type
-	// 					+ "\r\n\r\n";
-	cgi aux(cgi_exec, cgi_script,request, conf);
-	response.append(aux.get_cgi_response());
-	return response;
-}
 void server::_responder(int client_fd, const Request & request, int listen_fd)
 {
 	Response the_response(request);
 	std::string response = the_response.generate_response();
-	// std::string response = _mock_html_response("test_files/post/php-example.html", "text/html");
-	// std::string response = _mock_html_response("test_files/post/newmessage.html", "text/html");
-	// std::string response = _mock_cgi_response("cgi/bin/show_env.wexec", "",request, _conf);
-	// std::string response = _mock_cgi_response("cgi/bin/cpp_env.wexec", "",request, _conf);
-	// std::string response = _mock_cgi_response("cgi/bin/print_ls_la.sh", "",request, _conf);
-	// std::string response = _mock_cgi_response("/bin/ls", "-la",request, _conf, "text/plain");
-	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/reply.py",request, _conf);
-	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/guestbook.py",request, _conf);
-	// std::string response = _mock_cgi_response("/usr/local/bin/python3", "cgi/script/newcomment.py",request, _conf)
+
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	_cache_response(request,listen_fd, the_response, response);
