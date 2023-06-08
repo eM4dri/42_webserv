@@ -6,25 +6,21 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/15 17:32:30 by emadriga          #+#    #+#             */
-/*   Updated: 2023/06/06 17:04:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 13:25:24 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "conf.hpp"
 #include "../utils/log.hpp"
-#include <string>		// std::string, std::getline
-#include <vector>		// std::vector
 #include <set>			// std::set
-#include <fstream>		// std::ifstream
 #include <sstream>		// std::stringstream
-#include <iostream>		// std::out, std::endl
 #include <locale>		// std::locale, std::isspace
-#include <cstdlib>		// std::exit
-#include <cstring>		// std::strcpy
 #include <limits.h>		// UCHAR_MAX, USHRT_MAX
-#include <math.h>		// pow() function
+#include <cstring>		// std::strchr
+#include <cmath>		// std::pow()
+#include <stdexcept>	// std::invalid_argument
 
-#define ERROR_OPENING_FILE "Error opening file"
+#define ERROR_OPENING_FILE "error opening file "
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
 #define NUMBER_CHARACTERS "0123456789"
 
@@ -40,10 +36,11 @@
 #define WRONG_REDIRECTION "wrong redirection "
 #define WRONG_INDEX "wrong index "
 
-#define THROW_INVALID_FILE_END "Invalid configuration file, not allowed ending directory"
-#define THROW_INVALID_FILE_BRACES "Invalid configuration file, curly braces not closed"
-#define THROW_INVALID_UNKOWN_DIRECTIVE "Invalid configuration file, unknown key directive"
-#define THROW_INVALID_LISTEN "Invalid configuration file, only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT)"
+#define THROW_ERROR_OPENING_FILE "Invalid configuration file, error opening file "
+#define THROW_INVALID_FILE_END "Invalid configuration file, not allowed ending directory "
+#define THROW_INVALID_FILE_BRACES "Invalid configuration file, curly braces not closed "
+#define THROW_INVALID_UNKOWN_DIRECTIVE "Invalid configuration file, unknown key directive "
+#define THROW_INVALID_LISTEN "Invalid configuration file, only accepts IPv4 (BYTE.BYTE.BYTE.BYTE:PORT & PORT "
 #define THROW_WRONG_LOCATION "Invalid configuration file, wrong location "
 #define THROW_WRONG_METHOD "Invalid configuration file, wrong method "
 #define THROW_WRONG_PATH "Invalid configuration file, wrong path "
@@ -67,10 +64,8 @@ conf::conf( const char* filename, const Filetypes & types )
 	ifs.open (filename, std::ifstream::in);
 
 	if (ifs.is_open() == false)
-	{
-		LOG_ERROR(ERROR_OPENING_FILE);
-		std::exit(1);
-	}
+		throw std::invalid_argument(THROW_ERROR_OPENING_FILE + std::string(filename));
+		// LOG_ERROR_CONF(ERROR_OPENING_FILE << COLOR(RED, filename));
 
 	_process_conf_file(ifs);
 	// _print_processed_conf();
@@ -157,24 +152,24 @@ bool conf::_valid_path(const std::string &path)
 void conf::_parse_file_root(const std::string &file_root, location *location)
 {
 	if (!_valid_path(file_root))
-		// // // throw std::invalid_argument(THROW_WRONG_PATH + file_root);
-		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, file_root));
+		throw std::invalid_argument(THROW_WRONG_PATH + file_root);
+		// LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, file_root));
 	location->file_root = std::string(file_root); // ltrim(str,'/')
 }
 
 void conf::_parse_upload_store(const std::string &upload_store, location *location)
 {
 	if (!_valid_path(upload_store))
-		// // // throw std::invalid_argument(THROW_WRONG_PATH + upload_store);
-		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, upload_store));
+		throw std::invalid_argument(THROW_WRONG_PATH + upload_store);
+		// LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, upload_store));
 	location->upload_store = std::string(upload_store); // ltrim(str,'/')
 }
 
 void conf::_parse_request_path(const std::string &request_path, location *location)
 {
 	if (!_valid_path(request_path))
-		// // // throw std::invalid_argument(THROW_WRONG_LOCATION + request_path);
-		LOG_ERROR_CONF(WRONG_LOCATION << COLOR(RED, request_path));
+		throw std::invalid_argument(THROW_WRONG_LOCATION + request_path);
+		// LOG_ERROR_CONF(WRONG_LOCATION << COLOR(RED, request_path));
 	location->request_path = std::string(request_path); // ltrim(str,'/')
 }
 
@@ -210,8 +205,8 @@ void conf::_parse_methods(const std::string &methods, location *location)
 		else if (method == "DELETE")
 			location->methods |= DELETE;
 		else
-			// // // throw std::invalid_argument(THROW_WRONG_METHOD);
-			LOG_ERROR_CONF(WRONG_METHOD << COLOR(RED,method));//!Error or Warning
+			throw std::invalid_argument(THROW_WRONG_METHOD);
+			// LOG_ERROR_CONF(WRONG_METHOD << COLOR(RED,method));//!Error or Warning
 	}
 }
 void conf::_parse_autoindex(const std::string &autoindex, location *location)
@@ -232,7 +227,7 @@ void conf::_parse_client_max_body_size(const std::string &client_max_body_size, 
 		{
 			if (*str_ptr == units[i])
 			{
-				location->client_max_body_size = location->client_max_body_size * (size_t)(pow(1024, i + 1));
+				location->client_max_body_size = location->client_max_body_size * (size_t)(std::pow(1024, i + 1));
 				break;
 			}
 		}
@@ -255,8 +250,8 @@ bool conf::_valid_index(const std::string &index, const Filetypes &types)
 void conf::_parse_index(const std::string &index, location *location, const Filetypes &filetypes)
 {
 	if (!_valid_index(index, filetypes))
-		// // // throw std::invalid_argument(THROW_WRONG_INDEX);
-		LOG_ERROR_CONF(WRONG_INDEX << COLOR(RED, index));
+		throw std::invalid_argument(THROW_WRONG_INDEX);
+		// LOG_ERROR_CONF(WRONG_INDEX << COLOR(RED, index));
 	else
 		location->index = (index.find_last_of('.') == std::string::npos) ? index + ".hmtl" : index; //append html to non extenion files
 }
@@ -303,20 +298,20 @@ void conf::_parse_redirect(const std::string &redirect, location *location_, con
 	std::string url;
 	const size_t  key_end = redirect.find_first_of(ISSPACE_CHARACTERS, 0);
 	if (key_end == std::string::npos)
-		// // // throw std::invalid_argument(THROW_WRONG_REDIRECTION);
-		LOG_ERROR_CONF(WRONG_REDIRECTION << 1 << COLOR(RED, redirect));
+		throw std::invalid_argument(THROW_WRONG_REDIRECTION);
+		// LOG_ERROR_CONF(WRONG_REDIRECTION << 1 << COLOR(RED, redirect));
 	else
 	{
 		std::getline(ss, code, redirect[key_end]);
 		if (!_valid_redirect_code(code))
-			// // // throw std::invalid_argument(THROW_WRONG_REDIRECTION);
-			LOG_ERROR_CONF(WRONG_REDIRECTION << 2 << COLOR(RED, redirect));
+			throw std::invalid_argument(THROW_WRONG_REDIRECTION);
+			// LOG_ERROR_CONF(WRONG_REDIRECTION << 2 << COLOR(RED, redirect));
 
 		std::getline(ss, url, '\0');
 		url.erase(0, url.find_first_not_of(ISSPACE_CHARACTERS,0)); //ltrim isspace
 		if (!_valid_redirect_url(url))
-			// // // throw std::invalid_argument(THROW_WRONG_REDIRECTION);
-			LOG_ERROR_CONF(WRONG_REDIRECTION << 3 << COLOR(RED, redirect));
+			throw std::invalid_argument(THROW_WRONG_REDIRECTION);
+			// LOG_ERROR_CONF(WRONG_REDIRECTION << 3 << COLOR(RED, redirect));
 	}
 	std::string copy(url); // ltrim(str,'/')
 	std::map<std::string, location>::const_iterator it = server.locations.find(copy);
@@ -427,8 +422,8 @@ unsigned short _setPort(const std::string &str_port)
 void conf::_parse_listen(const std::string &listen, serverconf *server)
 {
 	if (!_validate_listen(listen))
-		// // // throw std::invalid_argument(THROW_INVALID_LISTEN + listen);
-		LOG_ERROR_CONF(INVALID_LISTEN << COLOR(RED, listen));
+		throw std::invalid_argument(THROW_INVALID_LISTEN + listen);
+		// LOG_ERROR_CONF(INVALID_LISTEN << COLOR(RED, listen));
 	size_t port_start = listen.find_first_of(":");
 	if (port_start == std::string::npos)
 		server->port = std::atoi(listen.c_str());
@@ -442,17 +437,17 @@ void conf::_parse_listen(const std::string &listen, serverconf *server)
 void conf::_parse_default_root(const std::string &default_root, serverconf *server)
 {
 	if (!_valid_path(default_root))
-		// // // throw std::invalid_argument(THROW_WRONG_PATH + default_root);
-		LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, default_root));
+		throw std::invalid_argument(THROW_WRONG_PATH + default_root);
+		// LOG_ERROR_CONF(WRONG_PATH << COLOR(RED, default_root));
 	server->default_root = default_root;
 }
 
 void conf::_parse_server_name(const std::string &server_name, serverconf *server)
 {
 	for (size_t i = 0; i != server_name.size() ; i++ ){
-		if ( !std::isalpha(server_name[i]) )
-			// // // throw std::invalid_argument(THROW_WRONG_SERVER_NAME + server_name);
-			LOG_ERROR_CONF(WRONG_SERVER_NAME << COLOR(RED, server_name));
+		if ( !std::isalpha(server_name[i]) && !std::strchr(".", server_name[i])  )
+			throw std::invalid_argument(THROW_WRONG_SERVER_NAME + server_name);
+			// LOG_ERROR_CONF(WRONG_SERVER_NAME << COLOR(RED, server_name));
 	}
 	server->server_name = server_name;
 }
@@ -617,8 +612,8 @@ void conf::_validate_processed_conf()
 		second_back = (it->second.length() == 0) ? '\0' : it->second[it->second.length() - 1];
 		if (it->first != "}" && second_back != '{' && second_back != ';')
 			// Every directive ends with semicolon or cruly braces (simple/block directive)
-			// // // throw std::invalid_argument(THROW_INVALID_FILE_END);
-			LOG_ERROR_CONF(INVALID_FILE_END << COLOR(RED,it->first << " " << it->second));
+			throw std::invalid_argument(THROW_INVALID_FILE_END);
+			// LOG_ERROR_CONF(INVALID_FILE_END << COLOR(RED,it->first << " " << it->second));
 		else
 		{
 			if (it->first == "}")
@@ -627,14 +622,14 @@ void conf::_validate_processed_conf()
 				curly_braces_count++;
 			if (valid_conf_keys.find(it->first) == valid_conf_keys.end() )
 				// Unkown key directive
-				// // // throw std::invalid_argument(THROW_INVALID_UNKOWN_DIRECTIVE);
-				LOG_ERROR_CONF(INVALID_UNKOWN_DIRECTIVE << COLOR(RED,it->first));
+				throw std::invalid_argument(THROW_INVALID_UNKOWN_DIRECTIVE);
+				// LOG_ERROR_CONF(INVALID_UNKOWN_DIRECTIVE << COLOR(RED,it->first));
 		}
 	}
 	if (curly_braces_count != 0)
 		// Curly braces must have start & end
-		// // // throw std::invalid_argument(THROW_INVALID_FILE_BRACES);
-		LOG_ERROR_CONF(INVALID_FILE_BRACES);
+		throw std::invalid_argument(THROW_INVALID_FILE_BRACES);
+		// LOG_ERROR_CONF(INVALID_FILE_BRACES);
 }
 
 void conf::_process_conf_line(std::string &line)
