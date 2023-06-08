@@ -205,6 +205,9 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 		std::string toolarge = mocked_error_message();
 
 		send(it->fd, reinterpret_cast<const void *>(toolarge.c_str()), toolarge.length(), 0);
+		close(it->fd);
+		_client_server_conections.erase(it->fd);
+		_poll_fds.erase(it);
 
 	}
 	else if ( nbytes == 0 )  // connection closed by client
@@ -226,7 +229,7 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 		key.fd = listen_fd;
 		key.request = buffer;
 		std::map<cached_key, cached_value>::iterator found = _cached_responses.find(key);
-		if (request.get_method() == GET && found != _cached_responses.end())
+		if (CACHED_TIME > 0 && request.get_method() == GET && found != _cached_responses.end())
 			send(it->fd, reinterpret_cast<const void *>(found->second.response.c_str()), found->second.response.length(), 0);
 		else
 		{
@@ -321,6 +324,8 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 
 void server::_cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response)
 {
+	if (CACHED_TIME < 1)
+		return ;
 	if (request.get_method() == GET)
 	{
 		if (!the_response.get_cgi_responses())
