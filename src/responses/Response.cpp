@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 20:44:23 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/08 14:57:10 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/11 21:29:03 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,28 +116,22 @@ void Response::return_error_message(int error_code, std::string custom_reason)
 
 std::string get_file(std::string filename, std::string &mod_date, int *status)
 {
-	std::string		file_content;
 	struct stat file_info;
 	int			file_status = 0;
 
-	file_content = file_reader(filename, &file_status);
 	stat(filename.c_str(), &file_info);
 	if (file_status)
-	{
 		*status = file_status;
-		return("");
-	}
 	else if (file_info.st_mode & S_IFDIR)
-	{
 		*status = EISDIR;
-		return("");
-	}
 	else
 	{
+		*status = 0;
+		std::string		file_content = file_reader(filename, &file_status);
 		mod_date = get_date(file_info.st_mtime, true);
+		return(file_content);
 	}
-	*status = 0;
-	return(file_content);
+	return("");
 }
 
 
