@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 2023-06-11 - Edu
 ### Fixed
 - Avoid reading content on `Response.get_file` when we get a directory, this fix improve performance, and avoid some linux basic_string exception at resizing string with a really big size (directory)
+- Check errno on stat to set status failed on `Response.get_file` instead or read in `file_reader`
 
 ## 2023-06-08 - Edu
 ### Changed
