@@ -6,7 +6,7 @@
 /*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 20:13:54 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/05 17:28:31 by emadriga         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:51:33 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,6 @@
 
 namespace ft
 {
-
-/*Request::Request(const serverconf &_config): fullrequest(""), config(_config)
-{
-	method = -2;
-	path.absolute = "";
-	path.relative = "";
-	path.unparsed = "";
-	body = "";
-}*/
 
 Request::Request(const std::string &input, const serverconf &config): config(config), _fullrequest(input)
 {

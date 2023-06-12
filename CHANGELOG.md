@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2023-06-11 - Edu
+### Changed
+- Added log on send failing to send data over socket(this should not happen), and force close connection.
+### Fixed
+- Avoid reading content on `Response.get_file` when we get a directory, this fix improve performance, and avoid some linux basic_string exception at resizing string with a really big size (directory)
+- Check errno on stat to set status failed on `Response.get_file` instead or read in `file_reader`
+
 ## 2023-06-08 - Edu
 ### Changed
 - Prepare some files for evaluation, removing comments, main for demo...

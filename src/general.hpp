@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   general.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvacaris <jvacaris@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: emadriga <emadriga@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 17:35:25 by jvacaris          #+#    #+#             */
-/*   Updated: 2023/06/03 17:29:23 by jvacaris         ###   ########.fr       */
+/*   Updated: 2023/06/08 14:41:11 by emadriga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@
 //*		~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #define SERVER_ROOT "test_files"
-//#define ERROR_TEMPLATE "conf/error_template"
 #define SERVER_NAME "IDK 4.2"
 
 

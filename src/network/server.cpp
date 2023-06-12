@@ -31,6 +31,7 @@
 #define HTTP_HEADER_HOST_SIZE 5
 #define ISSPACE_CHARACTERS " \t\n\v\f\r"
 #define HTTP_HEADER_HOST_END_HOST_NAME ":\r\n"
+#define SEND_SOCKET_FAILS "Send fails over socket "
 
 namespace ft
 {
@@ -205,7 +206,8 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 	{
 		std::string toolarge = mocked_error_message();
 
-		send(it->fd, reinterpret_cast<const void *>(toolarge.c_str()), toolarge.length(), 0);
+		if (send(it->fd, reinterpret_cast<const void *>(toolarge.c_str()), toolarge.length(), 0) == -1)
+			LOG_ERROR(SEND_SOCKET_FAILS << it->fd);
 		close(it->fd);
 		_client_server_conections.erase(it->fd);
 		_poll_fds.erase(it);
@@ -230,15 +232,23 @@ void server::_handler(std::vector<struct pollfd>::iterator it, const listen_sock
 		key.fd = listen_fd;
 		key.request = buffer;
 		std::map<cached_key, cached_value>::iterator found = _cached_responses.find(key);
+
+		bool send_socket_fails;
 		if (CACHED_TIME > 0 && request.get_method() == GET && found != _cached_responses.end())
-			send(it->fd, reinterpret_cast<const void *>(found->second.response.c_str()), found->second.response.length(), 0);
+		{
+			if (send(it->fd, reinterpret_cast<const void *>(found->second.response.c_str()), found->second.response.length(), 0) == -1)
+			{
+				LOG_ERROR(SEND_SOCKET_FAILS << it->fd);
+				send_socket_fails = true;
+			}
+		}
 		else
 		{
 			LOG(CLIENT_SAYS(it->fd));
 			LOG_COLOR(RED, buffer);
-			_responder(it->fd, request, listen_fd);
+			_responder(it->fd, request, listen_fd, &send_socket_fails);
 		}
-		if (!request.get_keep_connection_alive())
+		if (!request.get_keep_connection_alive() || send_socket_fails == true)
 		{
 			close(it->fd);
 			_client_server_conections.erase(it->fd);
@@ -269,7 +279,7 @@ const serverconf *server::_get_hosted_server_configuration(int listen_fd, char *
 	return server_host->second;
 }
 
-void server::_responder(int client_fd, const Request & request, int listen_fd)
+void server::_responder(int client_fd, const Request & request, int listen_fd, bool *send_socket_fails)
 {
 	Response the_response(request);
 	std::string response = the_response.generate_response();
@@ -277,7 +287,11 @@ void server::_responder(int client_fd, const Request & request, int listen_fd)
 	LOG(SERVER_REPONSE);
 	LOG_COLOR(GREEN, response);
 	_cache_response(request,listen_fd, the_response, response);
-	send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0);
+	if (send(client_fd, reinterpret_cast<const void *>(response.c_str()), response.length(), 0) == -1)
+	{
+		LOG_ERROR(SEND_SOCKET_FAILS << client_fd);
+		*send_socket_fails = true;
+	}
 }
 
 void server::_cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response)
@@ -297,10 +311,10 @@ void server::_cache_response(const Request & request, const int &listen_fd, cons
 			_cached_responses[key] = cache;
 		}
 	}
-	else if (!_cached_responses.empty() && (the_response.get_status_code() - 200) > 100 )
+	else if (!_cached_responses.empty() && (the_response.get_status_code() - 200) < 100 )
 	{
 		size_t count = 0;
-		while (count == _cached_responses.size())
+		while (count != _cached_responses.size())
 		{
 			count = _cached_responses.size();
 			std::map<cached_key, cached_value>::iterator it = _cached_responses.begin();

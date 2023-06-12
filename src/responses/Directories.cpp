@@ -52,7 +52,7 @@ std::string Response::create_directory_index()
 			fullpath = _request.get_path_abs();
 			fullpath.append("/");
 			fullpath.append(directoryitem->d_name);
-			if (stat(fullpath.c_str(), &fileinfo))
+			if (stat(fullpath.c_str(), &fileinfo) == -1)
 				perror(fullpath.c_str());
 			retval.append("<tr>");
 			retval.append("<td>");

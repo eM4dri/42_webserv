@@ -45,8 +45,8 @@ class server{
 		server( const server & copy );	// not necesary
 		server & operator=( const server & assign );	// not necesary
 
-		std::vector<struct pollfd>							_poll_fds;
-		std::map<int,int>									_client_server_conections;
+		std::vector<struct pollfd>						_poll_fds;
+		std::map<int,int>								_client_server_conections;
 		std::map<cached_key, cached_value, cache_cmp>	_cached_responses;
 
 		//Add listening Soxckets to poll
@@ -61,7 +61,7 @@ class server{
 		//Functions to handle connections
 		void _accepter(const socket_fd& listen_socket);
 		void _handler(std::vector<struct pollfd>::iterator it, const listen_sockets &_listening_sockets);
-		void _responder(int client_fd, const Request & request, int listen_fd);
+		void _responder(int client_fd, const Request & request, int listen_fd, bool *send_socket_fails);
 		void _expire_cached_responses();
 		const serverconf *_get_hosted_server_configuration(int listen_fd, char *buffer, const listen_sockets &_listening_sockets);
 		void _cache_response(const Request & request, const int &listen_fd, const Response &the_response, const std::string &response);
